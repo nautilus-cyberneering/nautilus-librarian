@@ -13,7 +13,7 @@ def pull():
     """
     Retrieves the images from the DVC remote storage.
     """
-    typer.echo(f"Importing images from DVC storage")
+    typer.echo("Importing images from DVC storage")
 
 
 if __name__ == "__main__":

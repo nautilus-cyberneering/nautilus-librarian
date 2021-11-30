@@ -9,13 +9,12 @@
     Current implementation is just a boilerplate to add logic, now only prints info through console.
 """
 
-import typer
-from typer.main import Typer
 import librarian_dvc
 import librarian_git
 import librarian_gpg
 import librarian_libvips
-
+import typer
+from typer.main import Typer
 
 app: Typer = typer.Typer()
 
@@ -35,4 +34,3 @@ def test(echo_string: str):
 if __name__ == "__main__":
     add_subcommands()
     app()
-    

@@ -1,5 +1,6 @@
-import typer
 from enum import Enum
+
+import typer
 
 app = typer.Typer()
 
@@ -34,9 +35,9 @@ def execute_pipeline():
 
 
 stepExecuters = {
-    'validate_size': validate_size,
-    'resize': resize,
-    'modify_icc_profile': icc_modify
+    "validate_size": validate_size,
+    "resize": resize,
+    "modify_icc_profile": icc_modify,
 }
 
 
