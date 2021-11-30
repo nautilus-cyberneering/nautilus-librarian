@@ -1,4 +1,4 @@
-FROM nautiluscyberneering/librarian-system-dockerfile AS builder
+FROM nautiluscyberneering/librarian-system-dockerfile:v1.0.0 AS builder
 
 WORKDIR /app
 ENV PATH="/opt/venv/bin:$PATH"
