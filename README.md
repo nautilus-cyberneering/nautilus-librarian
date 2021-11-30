@@ -28,4 +28,3 @@ Run:
 docker run --rm -it librarian [OPTIONS] COMMAND [ARGS]...
 docker run --rm -it librarian --help
 ```
-
