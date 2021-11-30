@@ -1,5 +1,5 @@
 """Launch App from Python Package"""
 
-from main import app
+from nautilus_librarian.main import app
 
-app(prog_name="nautilus_librarian")
+app(prog_name="nautilus-librarian")
