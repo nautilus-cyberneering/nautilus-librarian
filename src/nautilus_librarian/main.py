@@ -11,64 +11,28 @@
 
 import typer
 from typer.main import Typer
-from enum import Enum
+import librarian_dvc
+import librarian_git
+import librarian_gpg
+import librarian_libvips
 
 
 app: Typer = typer.Typer()
 
 
-class Step(Enum):
-    validate_size = "validate_size"
-    resize = "resize"
-    modify_icc_profile = "modify_icc_profile"
-
-
-def validate_size():
-    print("- Validating size of the images")
-
-
-def resize():
-    print("- Resizing images")
-
-
-def icc_modify():
-    print("- Modifying ICC color profiles")
-
-
-stepExecuters = {
-    'validate_size': validate_size,
-    'resize': resize,
-    'modify_icc_profile': icc_modify
-}
-
-
-def execute_pipeline():
-    validate_size()
-    resize()
-    icc_modify()
+def add_subcommands():
+    app.add_typer(librarian_dvc.app, name="dvc")
+    app.add_typer(librarian_git.app, name="git")
+    app.add_typer(librarian_gpg.app, name="gpg")
+    app.add_typer(librarian_libvips.app, name="libvips")
 
 
 @app.command()
-def process(step: Step = None):
-    """
-    Execute the image processing pipeline.
-
-    If --step is used, only specified step is executed.
-    """
-    if not step:
-        execute_pipeline()
-    else:
-        typer.echo(f"Processing images, using step {step}")
-        stepExecuters[step.value]()
-
-
-@app.command()
-def pull():
-    """
-    Retrieves the images from the DVC remote storage.
-    """
-    typer.echo(f"Importing images from DVC storage")
+def test(echo_string: str):
+    typer.echo(f"Testing main module: {echo_string}")
 
 
 if __name__ == "__main__":
+    add_subcommands()
     app()
+    
