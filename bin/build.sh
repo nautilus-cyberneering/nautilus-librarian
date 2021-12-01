@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker build -t librarian .
+docker build -t nautilus-librarian .
