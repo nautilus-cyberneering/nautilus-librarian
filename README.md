@@ -35,6 +35,15 @@ poetry install
 poetry run nautilus-librarian --help
 ```
 
+## Testing
+
+With Poetry:
+
+```shell
+poetry shell
+pytest
+```
+
 ## Lint
 
 ### Dockerfile
