@@ -8,8 +8,6 @@ name: Lint Code Base
 on:
   push:
     branches: [ main, develop, issue-* ]
-  pull_request:
-    branches: [ main, develop, issue-* ]
 
 jobs:
   build:
