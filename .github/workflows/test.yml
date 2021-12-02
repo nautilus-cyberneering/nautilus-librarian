@@ -38,21 +38,3 @@ jobs:
 
       - name: Run Pytest Test
         run: poetry run pytest --cov
-
-      - name: Run Black Checks
-        run: poetry run black --check --diff .
-
-      - name: Run MyPy Checks
-        run: poetry run mypy .
-
-      - name: Run Pylint Checks
-        run: poetry run pylint src tests
-
-      - name: Run Bandit Checks
-        run: poetry run bandit --recursive src tests
-
-      - name: Run isort Checks
-        run: poetry run isort --check-only .
-
-      - name: Run Sphinx Documentation Generation Test
-        run: poetry run sphinx-build -d docs/cached docs/source docs/dist -bhtml
