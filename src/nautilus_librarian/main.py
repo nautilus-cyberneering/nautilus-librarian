@@ -16,6 +16,7 @@ import nautilus_librarian.mods.dvc.typer.commands
 import nautilus_librarian.mods.git.typer.commands
 import nautilus_librarian.mods.gpg.typer.commands
 import nautilus_librarian.mods.libvips.typer.commands
+import nautilus_librarian.mods.namecodes.typer.commands
 
 app: Typer = typer.Typer()
 
