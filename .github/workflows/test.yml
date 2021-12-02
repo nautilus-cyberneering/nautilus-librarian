@@ -1,0 +1,58 @@
+name: Test
+
+on:
+  push:
+    branches: [ main, develop, issue-* ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.4.0
+
+      - name: Setup Python
+        uses: actions/setup-python@v2.3.1
+        with:
+          python-version: '3.9'
+
+      - name: Setup Poetry
+        run: pip3 install poetry poetry-dynamic-versioning
+
+      - name: Check Poetry
+        run: poetry --version
+
+      - name: Config Poetry for Cache
+        if: ${{ !env.ACT }}
+        run: poetry config virtualenvs.in-project true
+
+      - name: Cache the virtualenv
+        if: ${{ !env.ACT }}
+        uses: actions/cache@v2.1.6
+        with:
+          path: ./.venv
+          key: ${{ runner.os }}-venv-v0-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Install via Poetry
+        run: poetry install
+
+      - name: Run Pytest Test
+        run: poetry run pytest --cov
+
+      - name: Run Black Checks
+        run: poetry run black --check --diff .
+
+      - name: Run MyPy Checks
+        run: poetry run mypy .
+
+      - name: Run Pylint Checks
+        run: poetry run pylint src tests
+
+      - name: Run Bandit Checks
+        run: poetry run bandit --recursive src tests
+
+      - name: Run isort Checks
+        run: poetry run isort --check-only .
+
+      - name: Run Sphinx Documentation Generation Test
+        run: poetry run sphinx-build -d docs/cached docs/source docs/dist -bhtml
