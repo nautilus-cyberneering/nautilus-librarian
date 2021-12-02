@@ -36,6 +36,7 @@ def test(echo_string: str):
     typer.echo(f"Testing main module: {echo_string}")
 
 
+add_subcommands()
+
 if __name__ == "__main__":
-    add_subcommands()
     app()
