@@ -5,6 +5,6 @@ runner = CliRunner()
 
 
 def test_app():
-    result = runner.invoke(app, ["hello"])
+    result = runner.invoke(app, ["test", "hello"])
     assert result.exit_code == 0
     assert "Testing main module: hello" in result.stdout
