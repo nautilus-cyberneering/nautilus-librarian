@@ -4,38 +4,49 @@
 
 A Python Console application to handle media libraries like Git and [Dvc](https://github.com/iterative/dvc).
 
-## Run
+## Development
 
-### With docker
+### Run
+
+With docker:
 
 Build:
 
 ```shell
-./bin/build.sh
+./bin/docker/build.sh
 ```
 
-Run:
+Run pre-built docker image:
 
 ```shell
-docker run --rm -it nautilus-librarian [OPTIONS] COMMAND [ARGS]...
-docker run --rm -it nautilus-librarian --help
+./bin/docker/run.sh [OPTIONS] COMMAND [ARGS]...
+./bin/docker/run.sh --help
 ```
 
-Run for development:
+Run mounting current repo:
 
 ```shell
-./bin/run.sh [OPTIONS] COMMAND [ARGS]...
-./bin/run.sh --help
+./bin/docker/run-dev.sh [OPTIONS] COMMAND [ARGS]...
+./bin/docker/run-dev.sh --help
 ```
 
-### With Poetry
+With Poetry:
 
 ```shell
 poetry install
+poetry run nautilus-librarian [OPTIONS] COMMAND [ARGS]...
 poetry run nautilus-librarian --help
 ```
 
-## Testing
+> NOTE: With Poetry, you have to install the [Librarian system dependencies](https://github.com/Nautilus-Cyberneering/librarian-system-dockerfile).
+
+### Testing
+
+With docker:
+
+```shell
+./bin/docker/test.sh
+```
 
 With Poetry:
 
@@ -44,9 +55,15 @@ poetry shell
 pytest
 ```
 
-## Lint
+or:
 
-### Dockerfile
+```shell
+poetry run pytest --cov
+```
+
+### Linting
+
+For Dockerfile:
 
 We are using GitHub Action [super-linter](https://github.com/marketplace/actions/super-linter). If you want to check the `Dockerfile` linting before pushing, you can do it with:
 
