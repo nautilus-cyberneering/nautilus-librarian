@@ -70,3 +70,9 @@ We are using GitHub Action [super-linter](https://github.com/marketplace/actions
 ```shell
 docker run --rm -i hadolint/hadolint < Dockerfile
 ```
+
+Run super-linter locally with [act](https://github.com/nektos/act):
+
+```shell
+act -W .github/workflows/linter.yml -j build
+```
