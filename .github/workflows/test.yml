@@ -17,7 +17,7 @@ jobs:
           python-version: '3.9'
 
       - name: Setup Poetry
-        run: pip3 install poetry poetry-dynamic-versioning
+        run: pip3 install poetry
 
       - name: Check Poetry
         run: poetry --version
