@@ -1,0 +1,41 @@
+name: Publish to PyPI
+
+#
+# Package on PyPI: https://pypi.org/project/nautilus-librarian/
+#
+
+on:
+  release:
+    types: [ published ]
+
+jobs:
+  push_to_package_index:
+    name: Build Python package and
+    runs-on: ubuntu-latest
+    needs: test
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      
+      - name: Setup Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.9'
+
+      - name: Setup Poetry
+        uses: Gr1N/setup-poetry@v7
+
+      - name: Run Pytest Test
+        run: poetry run pytest
+
+      - name: Build Python package
+        run: poetry --version && poetry build
+    
+      - name: Publish a Python distribution to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
