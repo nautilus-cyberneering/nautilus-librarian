@@ -1,9 +1,17 @@
 [tool.poetry]
-name = "librarian"
+name = "nautilus-librarian"
 version = "0.1.0"
 description = "A Python Console application to handle media libraries like Git and DVC"
-authors = ["Nautilus Cyberneering <jose@nautilus-cyberneering.de>"]
+authors = ["Jose Celano <jose@nautilus-cyberneering.de>"]
+maintainers = ["Jose Celano <jose@nautilus-cyberneering.de>"]
 readme = "README.md"
+repository = "https://github.com/Nautilus-Cyberneering/librarian"
+classifiers = [
+    "Development Status :: 1 - Planning",
+    "Natural Language :: English",
+    "Operating System :: POSIX",
+    "Programming Language :: Python :: 3.9",
+]
 packages = [
     { include = "nautilus_librarian", from = "src" },
 ]
