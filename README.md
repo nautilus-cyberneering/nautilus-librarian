@@ -1,6 +1,6 @@
 # Nautilus Librarian
 
-[![Lint Code Base](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/linter.yml/badge.svg)](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/linter.yml) [![Publish Docker image](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/publish-docker-image.yml/badge.svg)](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/publish-docker-image.yml) [![Test](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/test.yml/badge.svg)](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/test.yml)
+[![Lint Code Base](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/linter.yml/badge.svg)](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/linter.yml)[![Publish Docker image](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/publish-docker-image.yml/badge.svg)](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/publish-docker-image.yml)[![Test](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/test.yml/badge.svg)](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/test.yml)
 
 A Python Console application to handle media libraries like Git and [Dvc](https://github.com/iterative/dvc).
 
