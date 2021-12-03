@@ -1,4 +1,4 @@
-class Filename():
+class Filename:
     def __init__(self, filename):
         self.parse(filename)
 

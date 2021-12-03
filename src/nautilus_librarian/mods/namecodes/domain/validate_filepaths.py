@@ -1,6 +1,4 @@
 import os
-import pathlib
-import sys
 
 from nautilus_librarian.mods.namecodes.domain.file_locator import file_locator
 from nautilus_librarian.mods.namecodes.domain.filename import Filename
@@ -8,6 +6,7 @@ from nautilus_librarian.mods.namecodes.domain.filename import Filename
 
 class InvalidImageFolderException(Exception):
     """Raised when the file is located in a wrong path"""
+
     pass
 
 
@@ -21,9 +20,10 @@ def validate_filepath(filepath):
 
     expected_folder = file_locator(filename)
 
-    if (expected_folder != actual_folder):
+    if expected_folder != actual_folder:
         raise InvalidImageFolderException(
-            f'Invalid folder for image. The file "{ filepath }" should be in the folder "{ expected_folder }"')
+            f'Invalid folder for image. The file "{ filepath }" should be in the folder "{ expected_folder }"'
+        )
 
 
 def validate_filepaths(filepaths):

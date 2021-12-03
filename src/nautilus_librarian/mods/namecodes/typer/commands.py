@@ -1,6 +1,8 @@
 import typer
 
-from nautilus_librarian.mods.namecodes.domain.validate_filenames import validate_filename
+from nautilus_librarian.mods.namecodes.domain.validate_filenames import (
+    validate_filename,
+)
 
 app = typer.Typer()
 
@@ -33,6 +35,7 @@ def validate_filename_command(filename: str):
         An invalid filename will throw an exception.
     """
     validate_filename(filename)
+
 
 if __name__ == "__main__":
     app()

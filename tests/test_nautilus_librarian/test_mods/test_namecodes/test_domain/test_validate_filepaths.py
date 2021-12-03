@@ -1,6 +1,8 @@
 import pytest
 from nautilus_librarian.mods.namecodes.domain.validate_filepaths import (
-    InvalidImageFolderException, validate_filepath)
+    InvalidImageFolderException,
+    validate_filepath,
+)
 
 
 def test_valid_folder_for_gold_image():
