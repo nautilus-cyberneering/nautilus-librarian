@@ -10,15 +10,44 @@ on:
     types: [ published ]
 
 jobs:
-  push_to_registries:
+  build:
     name: Push Docker image to multiple registries
     runs-on: ubuntu-latest
     permissions:
       packages: write
       contents: read
     steps:
-      - name: Check out the repo
+    
+      - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2.3.1
+        with:
+          python-version: '3.9'
+
+      - name: Setup Poetry
+        run: pip3 install poetry
+
+      - name: Check Poetry
+        run: poetry --version
+
+      - name: Config Poetry for Cache
+        if: ${{ !env.ACT }}
+        run: poetry config virtualenvs.in-project true
+
+      - name: Cache the virtualenv
+        if: ${{ !env.ACT }}
+        uses: actions/cache@v2.1.6
+        with:
+          path: ./.venv
+          key: ${{ runner.os }}-venv-v0-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Install via Poetry
+        run: poetry install
+
+      - name: Run Pytest Test
+        run: poetry run pytest --cov
       
       - name: Log in to Docker Hub
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
