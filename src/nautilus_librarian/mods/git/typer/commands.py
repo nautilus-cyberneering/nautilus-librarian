@@ -5,7 +5,10 @@ app = typer.Typer()
 
 @app.command()
 def test(echo_string: str):
-    typer.echo(f"Testing GIT module: {echo_string}")
+    """
+    It's only used for testing purposes
+    """
+    typer.echo(f"Testing Git module: {echo_string}")
 
 
 if __name__ == "__main__":

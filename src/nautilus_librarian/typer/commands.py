@@ -5,7 +5,10 @@ app = typer.Typer()
 
 @app.command()
 def test(echo_string: str):
-    typer.echo(f"Testing Nautilus Namecodes module: {echo_string}")
+    """
+    It's only used for testing purposes
+    """
+    typer.echo(f"Testing main module: {echo_string}")
 
 
 if __name__ == "__main__":

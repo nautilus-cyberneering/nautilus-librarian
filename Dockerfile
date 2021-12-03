@@ -1,16 +1,14 @@
-FROM  python:3.9 AS builder
+FROM nautiluscyberneering/librarian-system-dockerfile:v1.0.0 AS builder
 
-    # Pip
-ENV PIP_DISABLE_PIP_VERSION_CHECK=on \
-    PYTHONPATH=${PYTHONPATH}:${PWD} \
+WORKDIR /app
+
+    # Python
+ENV PYTHONPATH=${PYTHONPATH}:/app:/app/src \
     # Poetry
     POETRY_HOME="/opt/poetry"
 
-# prepend poetry and venv to path
+# Prepend poetry and venv to path
 ENV PATH="$POETRY_HOME/bin:$PATH"
-
-RUN mkdir /app
-WORKDIR /app
 
 # Install Poetry
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -18,10 +16,10 @@ RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-
     && poetry config virtualenvs.create false
 
 # Install dependencies
-COPY poetry.lock pyproject.toml /app/
+COPY pyproject.toml poetry.lock /app/
 RUN poetry install --no-interaction --no-root
 
-COPY ./src /app
+COPY . /app
 
 ENTRYPOINT ["python", "-m", "nautilus_librarian"]
 
