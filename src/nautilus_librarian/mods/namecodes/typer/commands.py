@@ -16,8 +16,21 @@ def test(echo_string: str):
 @app.command("validate-filename")
 def validate_filename_command(filename: str):
     """
-    It checks if a filename follow Nautilus Namecodes conventions (https://github.com/da2ce7/nautilus-namecodes).
-    Some filename examples: 000000-32.600.2.tif, 000001-42.600.2.tif.
+    Validate filename with Nautilus Namecodes Specification.
+
+    More information about the specification on: https://github.com/da2ce7/nautilus-namecodes.
+
+    Filename examples: 000000-32.600.2.tif, 000001-42.600.2.tif.
+
+    EXAMPLES:
+
+        nautilus-librarian namecodes validate-filename 000000-32.600.2.tif
+
+        A valid filename will show nothing.
+
+        nautilus-librarian namecodes validate-filename 00000032.600.2.tif
+
+        An invalid filename will throw an exception.
     """
     validate_filename(filename)
 

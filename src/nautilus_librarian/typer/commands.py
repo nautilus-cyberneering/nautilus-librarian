@@ -7,5 +7,9 @@ app = typer.Typer()
 def test(echo_string: str):
     """
     It's only used for testing purposes
-    """    
+    """
     typer.echo(f"Testing main module: {echo_string}")
+
+
+if __name__ == "__main__":
+    app()
