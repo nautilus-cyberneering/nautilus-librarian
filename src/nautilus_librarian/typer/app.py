@@ -1,9 +1,9 @@
-import nautilus_librarian.typer.commands
 import nautilus_librarian.mods.dvc.typer.commands
 import nautilus_librarian.mods.git.typer.commands
 import nautilus_librarian.mods.gpg.typer.commands
 import nautilus_librarian.mods.libvips.typer.commands
 import nautilus_librarian.mods.namecodes.typer.commands
+import nautilus_librarian.typer.commands
 
 
 def add_commands(app):
