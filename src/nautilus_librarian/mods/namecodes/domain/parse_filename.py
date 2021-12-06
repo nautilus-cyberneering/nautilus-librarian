@@ -1,6 +1,6 @@
 import os
 
-from filename import Filename
+from nautilus_librarian.mods.namecodes.domain.filename import Filename
 
 
 class FilepathException(Exception):
@@ -25,3 +25,4 @@ def parse_filename(filename):
     transformation_code, char, rest = rest.partition(".")
     type_code, char, rest = rest.partition(".")
     extension, char, rest = rest.partition(".")
+    return artwork_id, purpose_code, transformation_code, type_code, extension

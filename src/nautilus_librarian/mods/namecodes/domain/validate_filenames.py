@@ -1,6 +1,8 @@
 # We are not implementing multiple transformations yet.
 # {ARTWORK_ID}-{PURPOSE_CODE}.{TRANSFORMATION_CODE}.{TYPE_CODE}.{EXTENSION}
 
+from nautilus_librarian.mods.namecodes.domain.parse_filename import parse_filename
+
 
 class FilenameException(Exception):
     """Raised when the filename format is invalid"""
@@ -56,11 +58,7 @@ def validate_extension(extension):
 
 
 def validate_filename(filename):
-    artwork_id, char, rest = filename.partition("-")
-    purpose_code, char, rest = rest.partition(".")
-    transformation_code, char, rest = rest.partition(".")
-    type_code, char, rest = rest.partition(".")
-    extension, char, rest = rest.partition(".")
+    artwork_id, purpose_code, transformation_code, type_code, extension = parse_filename(filename)
 
     validate_artwork_id(artwork_id)
     validate_purpose_code(purpose_code)
