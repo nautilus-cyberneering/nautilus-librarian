@@ -106,13 +106,14 @@ With [MegaLinter](https://megalinter.github.io/latest/mega-linter-runner/#local-
 
 Install:
 
-```
+```shell
+npm install mega-linter-runner -g
 ```
 
-Run:
+Run with auto fix:
 
-```
-npx mega-linter-runner
+```shell
+mega-linter-runner -p myFolder --fix
 ```
 
 For Dockerfile:
