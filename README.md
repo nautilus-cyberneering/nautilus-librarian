@@ -110,10 +110,10 @@ Install:
 npm install mega-linter-runner -g
 ```
 
-Run with auto fix:
+Run with the auto fix:
 
 ```shell
-mega-linter-runner -p myFolder --fix
+mega-linter-runner --fix
 ```
 
 For Dockerfile:
