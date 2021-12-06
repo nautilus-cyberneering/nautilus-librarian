@@ -115,17 +115,3 @@ Run with the auto fix:
 ```shell
 mega-linter-runner --fix
 ```
-
-For Dockerfile:
-
-We are using GitHub Action [super-linter](https://github.com/marketplace/actions/super-linter). If you want to check the `Dockerfile` linting before pushing, you can do it with:
-
-```shell
-docker run --rm -i hadolint/hadolint < Dockerfile
-```
-
-Run super-linter locally with [act](https://github.com/nektos/act):
-
-```shell
-act -W .github/workflows/linter.yml -j build
-```
