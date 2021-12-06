@@ -10,5 +10,30 @@
     "package-lock.json",
     "report"
   ],
-  "words": []
+  "words": [
+    "megalinter",
+    "stefanzweifel",
+    "Libvips",
+    "PYPI",
+    "PYTHONPATH",
+    "Pytest",
+    "Typer",
+    "WORKDIR",
+    "cyberneering",
+    "hadolint",
+    "megalinter",
+    "namecodes",
+    "nautiluscyberneering",
+    "pipefail",
+    "pycache",
+    "pypa",
+    "pypi",
+    "pyproject",
+    "pytest",
+    "stefanzweifel",
+    "typer",
+    "venv",
+    "virtualenv",
+    "virtualenvs"
+  ]
 }

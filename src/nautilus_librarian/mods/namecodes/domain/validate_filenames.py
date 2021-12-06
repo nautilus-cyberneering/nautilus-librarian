@@ -30,14 +30,14 @@ def validate_purpose_code(purpose_code):
         raise ValueError("Wrong purpose code. Purpose code should be: 32 or 42")
 
 
-def validate_transformacion_code(transformacion_code):
-    if transformacion_code == "":
+def validate_transformation_code(transformation_code):
+    if transformation_code == "":
         raise ValueError(
-            "Missing transformacion code. Transformacion code should be: 600"
+            "Missing transformation code. Transformation code should be: 600"
         )
-    if int(transformacion_code) not in [600]:
+    if int(transformation_code) not in [600]:
         raise ValueError(
-            "Wrong transformacion code. Transformacion code should be: 600"
+            "Wrong transformation code. Transformation code should be: 600"
         )
 
 
@@ -50,21 +50,21 @@ def validate_type_code(type_code):
 
 def validate_extension(extension):
     if extension == "":
-        raise ValueError("Missing extention. Extension should be: tif")
+        raise ValueError("Missing extension. Extension should be: tif")
     if extension != "tif":
-        raise ValueError("Wrong extention. Extension should be: tif")
+        raise ValueError("Wrong extension. Extension should be: tif")
 
 
 def validate_filename(filename):
     artwork_id, char, rest = filename.partition("-")
     purpose_code, char, rest = rest.partition(".")
-    transformacion_code, char, rest = rest.partition(".")
+    transformation_code, char, rest = rest.partition(".")
     type_code, char, rest = rest.partition(".")
     extension, char, rest = rest.partition(".")
 
     validate_artwork_id(artwork_id)
     validate_purpose_code(purpose_code)
-    validate_transformacion_code(transformacion_code)
+    validate_transformation_code(transformation_code)
     validate_type_code(type_code)
     validate_extension(extension)
 

@@ -7,14 +7,13 @@ name: Lint Code Base
 
 on:
   push:
-    branches: [ main, develop, issue-* ]
+    branches: [main, develop, issue-*]
 
 jobs:
   build:
     name: Lint Code Base
     runs-on: ubuntu-latest
     steps:
-
       - name: Checkout Code
         uses: actions/checkout@v2
         with:

@@ -1,5 +1,6 @@
-from nautilus_librarian.main import app
 from typer.testing import CliRunner
+
+from nautilus_librarian.main import app
 
 runner = CliRunner()
 

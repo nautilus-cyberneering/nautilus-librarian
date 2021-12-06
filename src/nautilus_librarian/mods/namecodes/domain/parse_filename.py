@@ -22,6 +22,6 @@ def validate_filepath(filepath):
 def parse_filename(filename):
     artwork_id, char, rest = filename.partition("-")
     purpose_code, char, rest = rest.partition(".")
-    transformacion_code, char, rest = rest.partition(".")
+    transformation_code, char, rest = rest.partition(".")
     type_code, char, rest = rest.partition(".")
     extension, char, rest = rest.partition(".")
