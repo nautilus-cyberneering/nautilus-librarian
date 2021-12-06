@@ -33,6 +33,11 @@ black = "^21.11b1"
 pytest = "^6.2.5"
 pytest-cov = "^3.0.0"
 
+[tool.pytest.ini_options]
+testpaths = [
+    "tests"
+]
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
