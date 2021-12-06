@@ -58,7 +58,13 @@ def validate_extension(extension):
 
 
 def validate_filename(filename):
-    artwork_id, purpose_code, transformation_code, type_code, extension = parse_filename(filename)
+    (
+        artwork_id,
+        purpose_code,
+        transformation_code,
+        type_code,
+        extension,
+    ) = parse_filename(filename)
 
     validate_artwork_id(artwork_id)
     validate_purpose_code(purpose_code)
