@@ -10,3 +10,4 @@ DEFAULT_BRANCH: main # Usually master or main
 # - SPELL # Uncomment to disable checks of spelling mistakes
 SHOW_ELAPSED_TIME: true
 FILEIO_REPORTER: false
+PYTHON_BANDIT_CONFIG_FILE: .bandit.yml
