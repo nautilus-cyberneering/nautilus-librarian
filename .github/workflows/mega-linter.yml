@@ -2,9 +2,9 @@ name: Lint Code Base
 
 on:
   push:
-    branches: [main]
+    branches: [main, issue-*]
   pull_request:
-    branches: [issue-*]
+    branches: [main, issue-*]
 
 env: # Comment env block if you do not want to apply fixes
   # Apply linter fixes configuration
