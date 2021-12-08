@@ -1,9 +1,5 @@
 name: Publish to PyPI
 
-#
-# Package on PyPI: https://pypi.org/project/nautilus-librarian/
-#
-
 on:
   release:
     types: [published]
