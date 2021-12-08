@@ -1,6 +1,6 @@
 site_name: Librarian
 site_url: https://nautilus-cyberneering.github.io/librarian/
 nav:
-    - Home: index.md
-    - MkDocs: mkdocs.md
+  - Home: index.md
+  - MkDocs: mkdocs.md
 theme: readthedocs
