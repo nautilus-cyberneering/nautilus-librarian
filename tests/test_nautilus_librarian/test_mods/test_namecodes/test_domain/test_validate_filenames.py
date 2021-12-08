@@ -1,4 +1,5 @@
 import pytest
+
 from nautilus_librarian.mods.namecodes.domain.validate_filenames import (
     validate_filename,
 )
@@ -39,17 +40,17 @@ def test_invalid_purpose_code(filename):
         validate_filename(filename)
 
 
-def test_valid_transformacion_code():
+def test_valid_transformation_code():
     validate_filename("000001-32.600.2.tif")
 
 
-def test_missing_transformacion_code():
+def test_missing_transformation_code():
     with pytest.raises(ValueError):
         validate_filename("000001-32..2.tif")
 
 
 @pytest.mark.parametrize("filename", [("000001-32.599.2.tif"), ("000001-32.601.2.tif")])
-def test_invalid_transformacion_code(filename):
+def test_invalid_transformation_code(filename):
     with pytest.raises(ValueError):
         validate_filename(filename)
 

@@ -102,16 +102,16 @@ poetry run pytest --cov
 
 ### Linting
 
-For Dockerfile:
+With [MegaLinter](https://megalinter.github.io/latest/mega-linter-runner/#local-installation):
 
-We are using GitHub Action [super-linter](https://github.com/marketplace/actions/super-linter). If you want to check the `Dockerfile` linting before pushing, you can do it with:
+Install:
 
 ```shell
-docker run --rm -i hadolint/hadolint < Dockerfile
+npm install mega-linter-runner -g
 ```
 
-Run super-linter locally with [act](https://github.com/nektos/act):
+Run with the auto fix:
 
 ```shell
-act -W .github/workflows/linter.yml -j build
+mega-linter-runner --fix
 ```

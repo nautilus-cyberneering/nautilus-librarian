@@ -2,21 +2,20 @@ name: Test
 
 on:
   push:
-    branches: [ main, develop, issue-* ]
+    branches: [main, develop, issue-*]
 
 jobs:
   build:
     name: Test
     runs-on: ubuntu-latest
     steps:
-    
       - name: Checkout
         uses: actions/checkout@v2
 
       - name: Setup Python
         uses: actions/setup-python@v2.3.1
         with:
-          python-version: '3.9'
+          python-version: "3.9"
 
       - name: Setup Poetry
         run: pip3 install poetry
