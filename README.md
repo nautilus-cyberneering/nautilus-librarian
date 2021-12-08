@@ -1,11 +1,13 @@
 # Nautilus Librarian
 
-[![Lint Code Base](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/linter.yml/badge.svg)](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/linter.yml)
+[![Lint Code Base with MegaLinter](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/mega-linter.yml/badge.svg)](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/mega-linter.yml)
 [![Test](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/test.yml/badge.svg)](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/test.yml)
 [![Publish Docker image](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/publish-docker-image.yml/badge.svg)](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/publish-docker-image.yml)
 [![Publish to PyPI](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/publish-pypi.yml/badge.svg)](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/publish-pypi.yml)
 
 A Python Console application to handle media libraries like Git and [Dvc](https://github.com/iterative/dvc).
+
+Documentation: [https://nautilus-cyberneering.github.io/librarian/](https://nautilus-cyberneering.github.io/librarian/)
 
 ## Install
 
