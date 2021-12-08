@@ -7,6 +7,7 @@ We are using [MkDocs](https://www.mkdocs.org/) for this page.
 * `mkdocs serve` - Start the live-reloading docs server.
 * `mkdocs build` - Build the documentation site.
 * `mkdocs -h` - Print help message and exit.
+* `mkdocs gh-deploy` - Deploy to [GitHub Pages](https://pages.github.com/).
 
 ## Project layout
 
