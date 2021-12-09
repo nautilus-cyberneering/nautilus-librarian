@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nautilus-librarian"
-version = "0.1.0"
+version = "0.0.0"
 description = "A Python Console application to handle media libraries like Git and DVC"
 authors = ["Jose Celano <jose@nautilus-cyberneering.de>"]
 maintainers = ["Jose Celano <jose@nautilus-cyberneering.de>"]
@@ -39,6 +39,10 @@ testpaths = [
     "tests"
 ]
 
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
 build-backend = "poetry.core.masonry.api"

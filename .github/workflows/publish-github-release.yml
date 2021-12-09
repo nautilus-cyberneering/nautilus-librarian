@@ -1,12 +1,13 @@
-name: Publish to PyPI
+name: Publish GitHub Release
 
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - "*.*.*"
 
 jobs:
   build:
-    name: Publish to PyPI
+    name: Publish GitHub Release
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -21,7 +22,7 @@ jobs:
           python-version: "3.9"
 
       - name: Setup Poetry
-        run: pip3 install poetry
+        run: pip3 install poetry poetry-dynamic-versioning
 
       - name: Check Poetry
         run: poetry --version
@@ -46,8 +47,16 @@ jobs:
       - name: Build Python package
         run: poetry build
 
-      - name: Publish a Python distribution to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+      - name: Check Version
+        id: check-version
+        run: |
+          [[ "$(poetry version --short)" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] \
+            || echo ::set-output name=prerelease::true
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1
         with:
-          user: __token__
-          password: ${{ secrets.PYPI_API_TOKEN }}
+          artifacts: "dist/*"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          draft: false
+          prerelease: steps.check-version.outputs.prerelease == 'true'

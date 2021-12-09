@@ -1,4 +1,4 @@
-# Install
+# Development
 
 ## Run
 
@@ -70,3 +70,7 @@ Run with the auto fix:
 ```shell
 mega-linter-runner --fix
 ```
+
+## Releases
+
+We use [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html). To publish a new release, you only new to create the tag (for example, `v1.3.0`) and push it to [GitHub](https://github.com/Nautilus-Cyberneering/librarian/tags).

@@ -1,0 +1,53 @@
+name: Publish package to PyPI
+
+on:
+  push:
+    tags:
+      - "*.*.*"
+
+jobs:
+  build:
+    name: Publish package to PyPI
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2.3.1
+        with:
+          python-version: "3.9"
+
+      - name: Setup Poetry
+        run: pip3 install poetry poetry-dynamic-versioning
+
+      - name: Check Poetry
+        run: poetry --version
+
+      - name: Config Poetry for Cache
+        if: ${{ !env.ACT }}
+        run: poetry config virtualenvs.in-project true
+
+      - name: Cache the virtualenv
+        if: ${{ !env.ACT }}
+        uses: actions/cache@v2.1.6
+        with:
+          path: ./.venv
+          key: ${{ runner.os }}-venv-v0-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Install via Poetry
+        run: poetry install
+
+      - name: Run Pytest Test
+        run: poetry run pytest --cov
+
+      - name: Build Python package
+        run: poetry build
+
+      - name: Publish to PyPI
+        env:
+          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_API_TOKEN }}
+        run: poetry publish
