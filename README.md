@@ -1,9 +1,12 @@
 # Nautilus Librarian
 
-[![Lint Code Base with MegaLinter](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/mega-linter.yml/badge.svg)](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/mega-linter.yml)
-[![Test](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/test.yml/badge.svg)](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/test.yml)
+[![CodeQL](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/codeql-analysis.yml)
+[![Deploy Documentation](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/deploy-documentation.yml/badge.svg)](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/deploy-documentation.yml)
+[![Lint Code Base](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/mega-linter.yml/badge.svg)](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/mega-linter.yml)
 [![Publish Docker image](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/publish-docker-image.yml/badge.svg)](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/publish-docker-image.yml)
-[![Publish to PyPI](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/publish-pypi.yml/badge.svg)](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/publish-pypi.yml)
+[![Publish GitHub Release](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/publish-github-release.yml/badge.svg)](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/publish-github-release.yml)
+[![Publish package to PyPI](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/publish-pypi-package.yml/badge.svg)](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/publish-pypi-package.yml)
+[![Test](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/test.yml/badge.svg)](https://github.com/Nautilus-Cyberneering/librarian/actions/workflows/test.yml)
 
 A Python Console application to handle media libraries with [Git](https://git-scm.com/) and [Dvc](https://github.com/iterative/dvc).
 
