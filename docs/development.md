@@ -79,3 +79,7 @@ We use [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html). To publ
 git tag v1.3.0
 git push origin v1.3.0
 ```
+
+## Commits
+
+We are using [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/).

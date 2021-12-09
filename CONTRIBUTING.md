@@ -54,6 +54,7 @@ Before writing any code for the repository please do the following:
 - Any new code is added to the repository using Pull Requests that must be reviewed and approved by the community before being merged or rebased to the repository.
 - When creating the commit and the pull request, please refer also to the section Issues, Commits and Pull Requests.
 - Whenever it is possible, new features should have Unit Tests to maintain (or increase) the code test coverage before adding it.
+- We are using [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/).
 
 ### Additional documentation
 
