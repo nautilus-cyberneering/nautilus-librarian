@@ -1,8 +1,9 @@
 name: Publish Docker image
 
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - "*.*.*"
 
 jobs:
   build:
@@ -21,7 +22,7 @@ jobs:
           python-version: "3.9"
 
       - name: Setup Poetry
-        run: pip3 install poetry
+        run: pip3 install poetry poetry-dynamic-versioning
 
       - name: Check Poetry
         run: poetry --version

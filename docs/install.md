@@ -33,3 +33,8 @@ Or the docker image from GitHub registry:
 docker run --rm -it ghcr.io/nautilus-cyberneering/librarian [OPTIONS] COMMAND [ARGS]...
 docker run --rm -it ghcr.io/nautilus-cyberneering/librarian --help
 ```
+
+## Links
+
+- [DockerHub docker image nautiluscyberneering/librarian](https://hub.docker.com/repository/docker/nautiluscyberneering/librarian)
+- [GitHub docker image ghcr.io/nautiluscyberneering/librarian](https://github.com/Nautilus-Cyberneering/librarian/pkgs/container/librarian)
