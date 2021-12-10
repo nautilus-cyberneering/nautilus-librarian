@@ -4,7 +4,7 @@ from typing import Optional
 import typer
 from typer.main import Typer
 
-from _version import __version__
+from nautilus_librarian._version import __version__
 from nautilus_librarian.typer.app import app_init
 
 app: Typer = typer.Typer()
