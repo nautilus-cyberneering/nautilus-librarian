@@ -39,6 +39,8 @@ mkdocs = "^1.2.3"
 testpaths = [
     "tests"
 ]
+python_files = "test_*.py *_test.py"
+python_functions = "test_* it_should_*"
 
 [tool.poetry-dynamic-versioning]
 enable = true
