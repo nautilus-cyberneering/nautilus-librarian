@@ -27,6 +27,7 @@ pyvips = ">=2.1.16"
 dvc = {extras = ["azure"], version = "^2.8.3"}
 typer = {extras = ["all"], version = "^0.4.0"}
 mypy = "^0.910"
+atoml = "^1.1.1"
 
 [tool.poetry.dev-dependencies]
 black = "^21.11b1"
@@ -42,6 +43,10 @@ testpaths = [
 [tool.poetry-dynamic-versioning]
 enable = true
 vcs = "git"
+
+[tool.poetry-dynamic-versioning.substitution]
+files = ["src/nautilus_librarian/_version.py"]
+patterns = ["(^__version__\\s*(?::\\s*str)?\\s*=\\s*['\"])[^'\"]*(['\"])"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]

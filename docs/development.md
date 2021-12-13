@@ -27,12 +27,39 @@ Run mounting current repo:
 With Poetry:
 
 ```shell
+pip install poetry poetry-dynamic-versioning
 poetry install
 poetry run nautilus-librarian [OPTIONS] COMMAND [ARGS]...
 poetry run nautilus-librarian --help
 ```
 
 > NOTE: With Poetry, you have to install the [Librarian system dependencies](https://github.com/Nautilus-Cyberneering/librarian-system-dockerfile).
+
+## Build
+
+```shell
+pip install poetry poetry-dynamic-versioning
+poetry install
+poetry build
+```
+
+You should have the package in the `dist` folder.
+
+You can install the package locally with:
+
+```shell
+pip install --user --force-reinstall dist/nautilus_librarian-0.2.1.post2.dev0+871cb83-py3-none-any.whl
+```
+
+Where `0.2.1.post2.dev0+871cb83` is the package version. You can get the package version with: `poetry version`.
+Remember to exit from your poetry Python environment. If you open the wheel file (zip) you will find the version in
+the `nautilus_librarian/_version.py` file:
+
+```text
+...
+__version__: str = "0.2.1.post2.dev0+871cb83"
+...
+```
 
 ## Testing
 
@@ -73,7 +100,8 @@ mega-linter-runner --fix
 
 ## Releases
 
-We use [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html). To publish a new release, you only new to create the tag (for example, `v1.3.0`) and push it to [GitHub](https://github.com/Nautilus-Cyberneering/librarian/tags).
+We use [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html). To publish a new release, you only new to
+create the tag (for example, `v1.3.0`) and push it to [GitHub](https://github.com/Nautilus-Cyberneering/librarian/tags).
 
 ```shell
 git tag v1.3.0
