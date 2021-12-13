@@ -1,12 +1,17 @@
 import typer
 
+from nautilus_librarian.mods.dvc.domain.utils import (
+    extract_modified_media_file_list_from_dvd_diff_output,
+)
+from nautilus_librarian.mods.namecodes.domain.validate_filenames import (
+    validate_filename,
+)
+
 app = typer.Typer()
 
 
 @app.command("gold-drawings-processing")
-def gold_drawings_processing(
-    filenames: str = typer.Argument("{}", envvar="INPUT_FILENAMES")
-):
+def gold_drawings_processing(dvc_diff: str = typer.Argument("{}", envvar="INPUT_DIFF")):
     """
     Gold Drawings Processing Workflow.
 
@@ -25,9 +30,19 @@ def gold_drawings_processing(
     6. Auto-commit new Base images (TODO).
     """
 
-    if filenames == "{}":
+    if dvc_diff == "{}":
         typer.echo("No Gold image changes found")
-        typer.Exit()
+        raise typer.Exit()
+
+    filenames = extract_modified_media_file_list_from_dvd_diff_output(dvc_diff)
+
+    for filename in filenames:
+        try:
+            validate_filename(filename)
+            typer.echo(f"{filename} ✓")
+        except ValueError as error:
+            typer.echo(f"{filename} ✗ {error}", err=True)
+            raise typer.Abort()
 
 
 if __name__ == "__main__":
