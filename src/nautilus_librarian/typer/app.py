@@ -3,14 +3,17 @@ import nautilus_librarian.mods.git.typer.commands
 import nautilus_librarian.mods.gpg.typer.commands
 import nautilus_librarian.mods.libvips.typer.commands
 import nautilus_librarian.mods.namecodes.typer.commands
-import nautilus_librarian.typer.commands
+import nautilus_librarian.typer.commands.gold_drawings_processing_workflow
 
 
 def add_commands(app):
-    app.command()(nautilus_librarian.typer.commands.test)
+    app.command()(
+        nautilus_librarian.typer.commands.gold_drawings_processing_workflow.gold_drawings_processing
+    )
 
 
 def add_subcommands(app):
+    # mods
     app.add_typer(nautilus_librarian.mods.dvc.typer.commands.app, name="dvc")
     app.add_typer(nautilus_librarian.mods.git.typer.commands.app, name="git")
     app.add_typer(nautilus_librarian.mods.gpg.typer.commands.app, name="gpg")

@@ -6,6 +6,6 @@ runner = CliRunner()
 
 
 def test_app():
-    result = runner.invoke(app, ["test", "hello"])
+    result = runner.invoke(app, ["--version"])
     assert result.exit_code == 0
-    assert "Testing main module: hello" in result.stdout
+    assert "Librarian Version: 0.0.0" in result.stdout
