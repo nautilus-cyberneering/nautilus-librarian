@@ -20,9 +20,9 @@ def version_callback(value: bool) -> None:
 
 @app.callback()
 def main(
-        version: Optional[bool] = typer.Option(  # pylint: disable=unused-argument
-            None, "--version", callback=version_callback
-        ),
+    version: Optional[bool] = typer.Option(  # pylint: disable=unused-argument
+        None, "--version", callback=version_callback
+    ),
 ):
     """Main Function of CLI application, defining main options."""
     return
