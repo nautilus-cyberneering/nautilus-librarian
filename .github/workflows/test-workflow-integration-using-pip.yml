@@ -1,0 +1,28 @@
+name: Test workflow integration using Pip
+
+on:
+  push:
+    branches: [main, issue-*]
+  pull_request:
+    branches: [main, issue-*]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2.3.1
+        with:
+          python-version: "3.9"
+
+      - name: Setup wheel
+        run: pip3 install wheel
+
+      - name: Setup Nautilus Librarian
+        run: pip3 install wheel nautilus-librarian
+
+      - name: Invoke Librarian
+        run: nautilus-librarian --help
