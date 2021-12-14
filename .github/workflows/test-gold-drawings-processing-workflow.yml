@@ -1,0 +1,40 @@
+name: Test Gold Drawing Processing Workflow
+
+on:
+  push:
+    branches: [main, issue-*]
+  pull_request:
+    branches: [main, issue-*]
+
+jobs:
+  build:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2.3.1
+        with:
+          python-version: "3.9"
+
+      - name: Setup Poetry
+        run: pip3 install poetry poetry-dynamic-versioning
+
+      - name: Config Poetry for Cache
+        if: ${{ !env.ACT }}
+        run: poetry config virtualenvs.in-project true
+
+      - name: Cache the virtualenv
+        if: ${{ !env.ACT }}
+        uses: actions/cache@v2.1.6
+        with:
+          path: ./.venv
+          key: ${{ runner.os }}-venv-v0-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Poetry install
+        run: poetry install
+
+      - name: Invoke "gold-drawings-processing" command
+        run: poetry run nautilus-librarian gold-drawings-processing '{"added":[{"path":"data/000001/32/000001-32.600.2.tif"}],"deleted":[],"modified":[],"renamed":[]}'

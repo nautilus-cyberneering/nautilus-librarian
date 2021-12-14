@@ -98,6 +98,16 @@ Run with the auto fix:
 mega-linter-runner --fix
 ```
 
+## Run workflows locally
+
+You can use [act](https://github.com/nektos/act) to run workflows locally. For example:
+
+```shell
+act -W ./.github/workflows/test-gold-drawings-processing-workflow.yml -j build
+```
+
+With that command, you can run the `build` job in the `test-gold-drawings-processing-workflow.yml` workflow.
+
 ## Releases
 
 We use [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html). To publish a new release, you only new to
