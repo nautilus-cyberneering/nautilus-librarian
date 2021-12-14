@@ -1,6 +1,6 @@
 import os
 
-from nautilus_librarian.mods.namecodes.domain.file_locator import file_locator
+from nautilus_librarian.domain.file_locator import file_locator
 from nautilus_librarian.mods.namecodes.domain.filename import Filename
 
 
