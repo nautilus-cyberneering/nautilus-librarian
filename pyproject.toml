@@ -5,7 +5,7 @@ description = "A Python Console application to handle media libraries like Git a
 authors = ["Jose Celano <jose@nautilus-cyberneering.de>"]
 maintainers = ["Jose Celano <jose@nautilus-cyberneering.de>"]
 readme = "README.md"
-repository = "https://github.com/Nautilus-Cyberneering/librarian"
+repository = "https://github.com/Nautilus-Cyberneering/nautilus-librarian"
 classifiers = [
     "Development Status :: 1 - Planning",
     "Natural Language :: English",

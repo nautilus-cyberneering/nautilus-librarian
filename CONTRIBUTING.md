@@ -76,7 +76,7 @@ Document format should be Markdown unless an alternative format is really necess
 
 #### Linting
 
-We are using [MegaLinter](https://github.com/megalinter/megalinter/) to enforce normalization. Please read the [documentation](https://nautilus-cyberneering.github.io/librarian/) to know how you can run the linter locally.
+We are using [MegaLinter](https://github.com/megalinter/megalinter/) to enforce normalization. Please read the [documentation](https://nautilus-cyberneering.github.io/nautilus-librarian/) to know how you can run the linter locally.
 
 #### Naming
 
