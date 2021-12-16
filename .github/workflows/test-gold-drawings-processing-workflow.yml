@@ -31,7 +31,7 @@ jobs:
         uses: actions/cache@v2.1.6
         with:
           path: ./.venv
-          key: ${{ runner.os }}-venv-v0-${{ hashFiles('**/poetry.lock') }}
+          key: ${{ runner.os }}-venv-v0-${{ github.event.repository.name }}-${{ hashFiles('**/poetry.lock') }}
 
       - name: Poetry install
         run: poetry install
