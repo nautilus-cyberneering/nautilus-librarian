@@ -104,7 +104,7 @@ def given_a_dvc_diff_object_with_a_new_gold_image_it_should_commit_the_add_the_b
     git_status_output = execute_console_command("git status")
 
     change_current_working_directory(tests_working_dir)
-    
+
     assert result.exit_code == 0
     assert "No commits yet" in git_status_output
     assert "000001-32.600.2.tif ✓\n" in result.stdout
