@@ -3,7 +3,6 @@ import json
 from test_nautilus_librarian.test_typer.test_commands.test_gold_drawings_processing_workflow import (
     create_initial_state,
 )
-from test_nautilus_librarian.utils import execute_console_command
 from typer.testing import CliRunner
 
 from nautilus_librarian.main import app
@@ -38,8 +37,6 @@ def given_a_dvc_diff_object_with_a_new_gold_image_it_should_commit_the_added_bas
         ["gold-drawings-processing", json.dumps(dvc_diff, separators=(",", ":"))],
         env={"INPUT_GIT_REPO_DIR": str(temp_git_dir)},
     )
-
-    git_status_output = execute_console_command("git status")
 
     assert result.exit_code == 0
     assert "000001-32.600.2.tif ✓\n" in result.stdout

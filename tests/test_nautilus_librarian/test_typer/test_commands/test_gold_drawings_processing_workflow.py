@@ -33,19 +33,14 @@ def create_initial_state(
 
     sample_base_image_dir = file_locator(Filename(sample_base_image_absolute_path))
 
-    # Prerare new empty repo with a local "remote" storage
-    # https://dvc.org/doc/command-reference/remote#example-add-a-default-local-remote
     execute_console_command(
         f"""
-        pwd
         git init
         dvc init
         dvc remote add -d localremote {temp_dvc_local_remote_storage_dir}
+        mkdir -p {sample_base_image_dir}
     """
     )
-
-    # Create folder for sample Base image
-    execute_console_command(f"mkdir -p {sample_base_image_dir}")
 
     # Copy the Base sample Base image to its folder
     copy(sample_base_image_absolute_path, f"{sample_base_image_dir}")
