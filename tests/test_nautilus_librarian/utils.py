@@ -1,4 +1,3 @@
-import pathlib
 import subprocess  # nosec
 
 
@@ -35,11 +34,3 @@ def execute_console_command(multiline_command, print_output=False, print_command
         full_output += output
 
     return full_output
-
-
-def get_fixtures_dir():
-    """
-    It's a helper function to use only in tests.
-    It gives you the test folder where we store tests fixtures like: example images, gpg keys, etcetera.
-    """
-    return pathlib.Path().resolve() / "tests/fixtures"
