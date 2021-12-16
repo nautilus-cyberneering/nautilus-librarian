@@ -1,9 +1,13 @@
+import json
+from typing import List
+
 import typer
 
 from nautilus_librarian.mods.console.utils import get_current_working_directory
 from nautilus_librarian.mods.dvc.domain.utils import (
     extract_modified_media_file_list_from_dvd_diff_output,
 )
+from nautilus_librarian.mods.namecodes.domain.filename import Filename
 from nautilus_librarian.mods.namecodes.domain.validate_filenames import (
     validate_filename,
 )
@@ -27,18 +31,47 @@ def validate_filenames_step(typer, dvc_diff):
             raise typer.Abort()
 
 
-def auto_commit_base_images_step(typer, dvc_diff, git_repo_dir):
-    # TODO: Extract modified Gold image list from dvc diff
+def extract_new_gold_images_from_dvc_diff(dvc_diff) -> List[Filename]:
+    """
+    TODO: we should use the dvc mod once after merging the API wrapper feature.
 
+    Input:
+    dvc_diff
+    {
+        "added": [
+            {"path": "data/000001/32/000001-32.600.2.tif"},
+        ],
+        "deleted": [],
+        "modified": [],
+        "renamed": [],
+    }
+
+    Output:
+    ["000001-32.600.2.tif"]
+    """
+    data = json.loads(dvc_diff)
+    return [Filename(path_object["path"]) for path_object in data["added"]]
+
+
+def auto_commit_base_images_step(typer, dvc_diff):
     # TODO:
     # For each modified Gold image:
-    #   1. Calculate the corresponding Base image filename and filepath
-    #   2. Add the image to dvc
-    #   3. Push the image to remote dvc storage
-    #   4. Commit the image to the current branch with a signed commit
-    # Points 2 to 4 are different depending on whether we are adding,
+    #   [✓] 1. Calculate the corresponding Base image filename and filepath.
+    #   [ ] 2. Check if the Base image exists.
+    #   [ ] 3. Add the image to dvc.
+    #   [ ] 4. Push the image to remote dvc storage.
+    #   [ ] 5. Commit the image to the current branch with a signed commit.
+    #
+    # Points 2 to 5 are different depending on whether we are adding,
     # modifying or renaming the Gold image.
-    pass
+
+    gold_images = extract_new_gold_images_from_dvc_diff(dvc_diff)
+
+    for gold_image in gold_images:
+        corresponding_base_image = gold_image.generate_base_image_filename()
+        typer.echo(
+            f"New Gold image found: {gold_image} -> Base image: {corresponding_base_image} ✓ "
+        )
 
 
 @app.command("gold-drawings-processing")
@@ -64,10 +97,13 @@ def gold_drawings_processing(
     5. Generate Base image from Gold (change size and icc profile) (TODO).
 
     6. Auto-commit new Base images (TODO).
+
+    Example:
+        poetry run nautilus-librarian gold-drawings-processing '{"added":[{"path":"data/000001/32/000001-32.600.2.tif"}],"deleted":[],"modified":[],"renamed":[]}' # noqa
     """
 
     validate_filenames_step(typer, dvc_diff)
-    auto_commit_base_images_step(typer, git_repo_dir, dvc_diff)
+    auto_commit_base_images_step(typer, dvc_diff)
 
 
 if __name__ == "__main__":
