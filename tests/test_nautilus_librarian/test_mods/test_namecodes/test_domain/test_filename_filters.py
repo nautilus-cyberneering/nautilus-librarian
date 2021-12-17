@@ -16,6 +16,48 @@ def test_filter_media_files_from_file_list():
     assert filtered_file_list == expected_file_list
 
 
+def test_filter_media_files_from_file_list_with_other_non_library_files():
+
+    original_file_list = [
+        "data/000001/32/000001-32.600.2.tif",
+        "other.txt",
+    ]
+
+    filtered_file_list = filter_media_library_files(original_file_list)
+
+    expected_file_list = ["data/000001/32/000001-32.600.2.tif"]
+
+    assert filtered_file_list == expected_file_list
+
+
+def test_filter_media_files_from_file_list_with_other_valid_library_files():
+
+    original_file_list = [
+        "data/000001/32/000001-32.600.2.tif",
+        "data/000001/32/000001-32.600.1.json",
+    ]
+
+    filtered_file_list = filter_media_library_files(original_file_list)
+
+    expected_file_list = ["data/000001/32/000001-32.600.2.tif"]
+
+    assert filtered_file_list == expected_file_list
+
+
+def test_filter_media_files_from_file_list_with_other_invalid_library_files():
+
+    original_file_list = [
+        "data/000001/32/000001-32.600.2.tif",
+        "data/000001/32/000001-32.600.2.json",  # json file should have type 1 instead fo 2.
+    ]
+
+    filtered_file_list = filter_media_library_files(original_file_list)
+
+    expected_file_list = ["data/000001/32/000001-32.600.2.tif"]
+
+    assert filtered_file_list == expected_file_list
+
+
 def test_filter_gold_images_from_file_list():
 
     original_file_list = [

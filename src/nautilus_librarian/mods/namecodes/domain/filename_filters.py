@@ -1,11 +1,9 @@
 from nautilus_librarian.mods.namecodes.domain.filename import Filename
-from nautilus_librarian.mods.namecodes.domain.validate_filenames import (
-    validate_filename,
-)
+from nautilus_librarian.mods.namecodes.domain.validate_filenames import is_a_library_file
 
 
 def filter_media_library_files(filepaths):
-    images = list(filter(lambda filepath: validate_filename(filepath), filepaths))
+    images = list(filter(lambda filepath: is_a_library_file(filepath), filepaths))
     return images
 
 

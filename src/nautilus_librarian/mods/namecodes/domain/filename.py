@@ -14,6 +14,15 @@ class PurposeCode(Enum):
         return "%s" % self.value
 
 
+class TypeCode(Enum):
+    INDEX = 0
+    METADATA = 1
+    IMAGE = 2
+
+    def __str__(self):
+        return "%s" % self.value
+
+
 class Filename:
     """
     A library media file name.
@@ -46,10 +55,14 @@ class Filename:
         )
 
     def is_gold_image(self):
-        return self.purpose_code == str(PurposeCode.GOLD_IMAGE)
+        return self.purpose_code == str(
+            PurposeCode.GOLD_IMAGE
+        ) and self.type_code == str(TypeCode.IMAGE)
 
     def is_base_image(self):
-        return self.purpose_code == str(PurposeCode.BASE_IMAGE)
+        return self.purpose_code == str(
+            PurposeCode.BASE_IMAGE
+        ) and self.type_code == str(TypeCode.IMAGE)
 
     def generate_base_image_filename(self):
         return Filename(
