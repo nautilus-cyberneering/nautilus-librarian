@@ -29,7 +29,7 @@ def extract_modified_media_file_list_from_dvd_diff_output(dvc_diff):
     return filenames
 
 
-def extract_new_gold_images_from_dvc_diff(dvc_diff):
+def extract_added_files_from_dvc_diff(dvc_diff):
     """
     Parses the list of added Gold images from dvc diff output in json format.
 
@@ -38,6 +38,7 @@ def extract_new_gold_images_from_dvc_diff(dvc_diff):
     {
         "added": [
             {"path": "data/000001/32/000001-32.600.2.tif"},
+            {"path": "data/000001/42/000001-42.600.2.tif"},
         ],
         "deleted": [],
         "modified": [],
@@ -46,6 +47,7 @@ def extract_new_gold_images_from_dvc_diff(dvc_diff):
 
     Output:
     ["000001-32.600.2.tif"]
+    Notice Base image should not be included in the result.
 
     TODO: we should use the dvc API wrapper.
     """

@@ -15,7 +15,14 @@ class PurposeCode(Enum):
 
 
 class Filename:
-    """A library media file name"""
+    """
+    A library media file name.
+
+    It allows you to create an invalid filename because the parser do not fail.
+    We could use the "validate_filename" function in the constructor but the final
+    filename specification is not defined yet. We will probably use a json schema
+    to validate and parse the filename.
+    """
 
     def __init__(self, filename):
         basename = os.path.basename(filename)

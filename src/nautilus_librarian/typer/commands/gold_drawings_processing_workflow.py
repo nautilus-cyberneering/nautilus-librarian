@@ -9,11 +9,12 @@ from nautilus_librarian.mods.console.domain.utils import (
     get_current_working_directory,
 )
 from nautilus_librarian.mods.dvc.domain.utils import (
+    extract_added_files_from_dvc_diff,
     extract_modified_media_file_list_from_dvd_diff_output,
-    extract_new_gold_images_from_dvc_diff,
 )
 from nautilus_librarian.mods.git.domain.repo import GitRepo
 from nautilus_librarian.mods.namecodes.domain.filename import Filename
+from nautilus_librarian.mods.namecodes.domain.filename_filters import filter_gold_images
 from nautilus_librarian.mods.namecodes.domain.validate_filenames import (
     validate_filename,
 )
@@ -54,7 +55,8 @@ def get_new_gold_images_filenames_from_dvc_diff(dvc_diff) -> List[Filename]:
     Parses the list of added Gold images from dvc diff output in json format
     and returns a list of Filenames.
     """
-    gold_images = extract_new_gold_images_from_dvc_diff(dvc_diff)
+    added_files = extract_added_files_from_dvc_diff(dvc_diff)
+    gold_images = filter_gold_images(added_files)
     return [Filename(gold_image) for gold_image in gold_images]
 
 

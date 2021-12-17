@@ -27,3 +27,7 @@ def test_base_image_instantiation_from_gold_image():
     base_image = gold_image_filename.generate_base_image_filename()
 
     assert str(base_image) == str(Filename("000001-42.600.2.tif"))
+
+
+def test_invalid_filename():
+    Filename("invalid filename")

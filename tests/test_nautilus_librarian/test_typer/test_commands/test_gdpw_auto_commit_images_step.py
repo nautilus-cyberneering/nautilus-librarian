@@ -80,6 +80,7 @@ def test_get_new_gold_images_from_dvc_diff():
     dvc_diff = {
         "added": [
             {"path": "data/000001/32/000001-32.600.2.tif"},
+            {"path": "data/000001/42/000001-42.600.2.tif"},
         ],
         "deleted": [],
         "modified": [],

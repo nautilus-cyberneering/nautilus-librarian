@@ -58,6 +58,9 @@ def validate_extension(extension):
 
 
 def validate_filename(filename):
+    """
+    It returns true if the filename is valid, otherwise it throws an exception.
+    """
     fn = Filename(filename)
 
     (
@@ -73,6 +76,8 @@ def validate_filename(filename):
     validate_transformation_code(transformation_code)
     validate_type_code(type_code)
     validate_extension(extension)
+
+    return True
 
 
 def validate_filenames(filenames):
