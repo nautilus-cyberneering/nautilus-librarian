@@ -72,7 +72,26 @@ def commit_base_image(git_repo_dir, base_image_relative_path):
 
     repo.commit(
         base_image_relative_path,
-        commit_message=f"feat: new base image: {os.path.basename(base_image_relative_path)}"
+        commit_message=f"feat: new base image: {os.path.basename(base_image_relative_path)}",
+    )
+
+
+def calculate_the_corresponding_base_image_from_gold_image(git_repo_dir, gold_image):
+    """
+    Returns the Base image path which correspond to the given Gold image.
+
+    Code Review: LibraryFilePath class? and rename Filename to LibraryFilename?
+    """
+    corresponding_base_image = gold_image.generate_base_image_filename()
+    corresponding_base_image_relative_path = (
+        file_locator(corresponding_base_image) + "/" + str(corresponding_base_image)
+    )
+    corresponding_base_image_absolute_path = (
+        git_repo_dir + "/" + corresponding_base_image_relative_path
+    )
+    return (
+        corresponding_base_image_relative_path,
+        corresponding_base_image_absolute_path,
     )
 
 
@@ -112,22 +131,23 @@ def auto_commit_base_images_step(typer, dvc_diff, git_repo_dir):
     gold_images = get_new_gold_images_filenames_from_dvc_diff(dvc_diff)
 
     for gold_image in gold_images:
-        corresponding_base_image = gold_image.generate_base_image_filename()
-        corresponding_base_image_relative_path = (
-            file_locator(corresponding_base_image) + "/" + str(corresponding_base_image)
-        )
-        corresponding_base_image_absolute_path = (
-            git_repo_dir + "/" + corresponding_base_image_relative_path
+        (
+            base_img_relative_path,
+            base_img_absolute_path,
+        ) = calculate_the_corresponding_base_image_from_gold_image(
+            git_repo_dir, gold_image
         )
 
+        # TODO: inject console_printer to remove dependency with typer so that we can create
+        # unit tests for workflow steps.
         typer.echo(
-            f"New Gold image found: {gold_image} -> Base image: {corresponding_base_image_relative_path} ✓ "
+            f"New Gold image found: {gold_image} -> Base image: {base_img_relative_path} ✓ "
         )
 
-        guard_that_base_image_exists(corresponding_base_image_absolute_path)
-        dvc_add(corresponding_base_image_relative_path, git_repo_dir)
-        dvc_push(f"{corresponding_base_image_relative_path}.dvc", git_repo_dir)
-        commit_base_image(git_repo_dir, corresponding_base_image_relative_path)
+        guard_that_base_image_exists(base_img_absolute_path)
+        dvc_add(base_img_relative_path, git_repo_dir)
+        dvc_push(f"{base_img_relative_path}.dvc", git_repo_dir)
+        commit_base_image(git_repo_dir, base_img_relative_path)
 
 
 @app.command("gold-drawings-processing")

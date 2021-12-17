@@ -26,9 +26,11 @@ class GitRepo:
 
         # Signed commit
         return self.repo.git.commit(
-            "-S", f"--gpg-sign={self.git_global_user.signingkey}", "-m", f"{commit_message}"
+            "-S",
+            f"--gpg-sign={self.git_global_user.signingkey}",
+            "-m",
+            f"{commit_message}",
         )
-
 
     def set_git_global_user_config(self, git_user):
         """
