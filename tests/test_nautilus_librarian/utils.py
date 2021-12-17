@@ -1,13 +1,16 @@
+import json
 import subprocess  # nosec
 
 
-def debug_execute_console_command(multiline_command):
+def debug_execute_console_command(multiline_command: str) -> str:
     return execute_console_command(
         multiline_command, print_output=True, print_command=True
     )
 
 
-def execute_console_command(multiline_command, print_output=False, print_command=False):
+def execute_console_command(
+    multiline_command, print_output=False, print_command=False
+) -> str:
 
     commands = multiline_command.splitlines()
 
@@ -34,3 +37,7 @@ def execute_console_command(multiline_command, print_output=False, print_command
         full_output += output
 
     return full_output
+
+
+def compact_json(json_string: str) -> str:
+    return json.dumps(json_string, separators=(",", ":"))

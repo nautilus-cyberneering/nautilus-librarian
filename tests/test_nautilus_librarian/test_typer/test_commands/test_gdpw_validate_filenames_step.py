@@ -3,6 +3,7 @@ import json
 from test_nautilus_librarian.test_typer.test_commands.test_gold_drawings_processing_workflow import (
     create_initial_state,
 )
+from test_nautilus_librarian.utils import compact_json
 from typer.testing import CliRunner
 
 from nautilus_librarian.main import app
@@ -29,10 +30,7 @@ def given_a_dvc_diff_object_it_should_validate_the_filename_of_the_new_media_fil
     # Execute the workflow
     result = runner.invoke(
         app,
-        [
-            "gold-drawings-processing",
-            json.dumps(dvc_diff_with_added_gold_image, separators=(",", ":")),
-        ],
+        ["gold-drawings-processing", compact_json(dvc_diff_with_added_gold_image)],
         env={"INPUT_GIT_REPO_DIR": str(temp_git_dir)},
     )
 
@@ -81,10 +79,7 @@ def given_a_dvc_diff_object_it_should_validate_the_filename_of_the_renamed_media
     # Execute the workflow
     result = runner.invoke(
         app,
-        [
-            "gold-drawings-processing",
-            json.dumps(dvc_diff_with_renamed_image, separators=(",", ":")),
-        ],
+        ["gold-drawings-processing", compact_json(dvc_diff_with_renamed_image)],
         env={"INPUT_GIT_REPO_DIR": str(temp_git_dir)},
     )
 
@@ -107,10 +102,7 @@ def given_a_wrong_media_filename_it_should_show_an_error_and_abort_the_command(
     # Execute the workflow
     result = runner.invoke(
         app,
-        [
-            "gold-drawings-processing",
-            json.dumps(dvc_diff_with_wrong_filename, separators=(",", ":")),
-        ],
+        ["gold-drawings-processing", compact_json(dvc_diff_with_wrong_filename)],
         env={"INPUT_GIT_REPO_DIR": str(temp_git_dir)},
     )
 

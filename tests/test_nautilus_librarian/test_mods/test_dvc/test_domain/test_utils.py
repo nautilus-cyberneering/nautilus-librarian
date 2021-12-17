@@ -1,4 +1,4 @@
-import json
+from test_nautilus_librarian.utils import compact_json
 
 from nautilus_librarian.mods.dvc.domain.utils import (
     extract_modified_media_file_list_from_dvd_diff_output,
@@ -16,7 +16,7 @@ def test_extract_modified_media_file_list_from_dvd_diff_output():
     }
 
     filenames = extract_modified_media_file_list_from_dvd_diff_output(
-        json.dumps(dvc_diff, separators=(",", ":"))
+        compact_json(dvc_diff)
     )
 
     assert filenames == ["000001-32.600.2.tif"]

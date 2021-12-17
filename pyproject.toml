@@ -14,6 +14,7 @@ classifiers = [
 ]
 packages = [
     { include = "nautilus_librarian", from = "src" },
+    { include = "test_nautilus_librarian", from = "tests" },
 ]
 
 [tool.poetry.scripts]
