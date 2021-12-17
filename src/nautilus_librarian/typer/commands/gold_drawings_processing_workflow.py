@@ -1,15 +1,15 @@
-import json
 import os
 from typing import List
 
 import typer
 from git import Repo
-from test_nautilus_librarian.utils import execute_console_command, debug_execute_console_command
+from test_nautilus_librarian.utils import execute_console_command
 
 from nautilus_librarian.domain.file_locator import file_locator
 from nautilus_librarian.mods.console.utils import get_current_working_directory
 from nautilus_librarian.mods.dvc.domain.utils import (
     extract_modified_media_file_list_from_dvd_diff_output,
+    extract_new_gold_images_from_dvc_diff,
 )
 from nautilus_librarian.mods.namecodes.domain.filename import Filename
 from nautilus_librarian.mods.namecodes.domain.validate_filenames import (
@@ -47,28 +47,13 @@ def validate_filenames_step(typer, dvc_diff):
             raise typer.Abort()
 
 
-def extract_new_gold_images_from_dvc_diff(dvc_diff) -> List[Filename]:
+def get_new_gold_images_filenames_from_dvc_diff(dvc_diff) -> List[Filename]:
     """
-    Parses the list of added Gold images from dvc diff output in json format.
-
-    Input:
-    dvc_diff
-    {
-        "added": [
-            {"path": "data/000001/32/000001-32.600.2.tif"},
-        ],
-        "deleted": [],
-        "modified": [],
-        "renamed": [],
-    }
-
-    Output:
-    ["000001-32.600.2.tif"]
-
-    TODO: we should use the dvc mod once after merging the API wrapper feature.
+    Parses the list of added Gold images from dvc diff output in json format
+    and returns a list of Filenames.
     """
-    data = json.loads(dvc_diff)
-    return [Filename(path_object["path"]) for path_object in data["added"]]
+    gold_images = extract_new_gold_images_from_dvc_diff(dvc_diff)
+    return [Filename(gold_image) for gold_image in gold_images]
 
 
 def create_signed_commit(repo, filename, commit_message):
@@ -98,7 +83,7 @@ def auto_commit_base_images_step(typer, dvc_diff, git_repo_dir):
     Points 2 to 5 are different depending on whether we are adding,
     modifying or renaming the Gold image.
     """
-    gold_images = extract_new_gold_images_from_dvc_diff(dvc_diff)
+    gold_images = get_new_gold_images_filenames_from_dvc_diff(dvc_diff)
 
     for gold_image in gold_images:
         corresponding_base_image = gold_image.generate_base_image_filename()
