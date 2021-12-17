@@ -4,16 +4,14 @@ from typing import List
 import typer
 
 from nautilus_librarian.domain.file_locator import file_locator
-from nautilus_librarian.mods.console.domain.utils import (
-    execute_console_command,
-    get_current_working_directory,
-)
+from nautilus_librarian.mods.console.domain.utils import get_current_working_directory
 from nautilus_librarian.mods.dvc.domain.utils import (
     dvc_add,
     dvc_push,
     extract_added_files_from_dvc_diff,
     extract_modified_media_file_list_from_dvd_diff_output,
 )
+from nautilus_librarian.mods.git.domain.config import git_config_global_user
 from nautilus_librarian.mods.git.domain.repo import GitRepo
 from nautilus_librarian.mods.namecodes.domain.filename import Filename
 from nautilus_librarian.mods.namecodes.domain.filename_filters import filter_gold_images
@@ -68,15 +66,32 @@ def auto_commit_base_images_step(typer, dvc_diff, git_repo_dir):
     in previous steps.
 
     TODO:
-    For each modified Gold image:
+    Case 1. Added Gold images.
+    For each added Gold image:
       [✓] 1. Calculate the corresponding Base image filename and filepath.
       [✓] 2. Check if the Base image exists.
       [✓] 3. Add the image to dvc.
       [✓] 4. Push the image to remote dvc storage.
-      [ ] 5. Commit the image to the current branch with a signed commit. WIP
+      [✓] 5. Commit the image to the current branch with a signed commit.
 
     Points 2 to 5 are different depending on whether we are adding,
     modifying or renaming the Gold image.
+
+    Case 2. Modified Gold images.
+    For each modified Gold image:
+      [ ] 1. ??
+      [ ] 2. ...
+      [ ] 3. ??
+    Pending to define:
+    https://github.com/Nautilus-Cyberneering/chinese-ideographs/pull/122#issuecomment-972844365
+
+    Case 3. Renamed Gold images.
+    For each renamed Gold image:
+      [ ] 1. ??
+      [ ] 2. ...
+      [ ] 3. ??
+    Pending to define:
+    https://github.com/Nautilus-Cyberneering/chinese-ideographs/pull/122#issuecomment-972844365
     """
     gold_images = get_new_gold_images_filenames_from_dvc_diff(dvc_diff)
 
@@ -103,29 +118,14 @@ def auto_commit_base_images_step(typer, dvc_diff, git_repo_dir):
 
         repo = GitRepo(git_repo_dir)
 
-        # TODO: move to git mod
-        git_global_user_name = execute_console_command(
-            "git config --global --get user.name", cwd=git_repo_dir
-        ).strip()
-
-        # TODO: move to git mod
-        git_global_user_email = execute_console_command(
-            "git config --global --get user.email", cwd=git_repo_dir
-        ).strip()
-
-        # TODO: move to git mod
-        git_global_user_signingkey = execute_console_command(
-            "git config --global --get user.signingkey", cwd=git_repo_dir
-        ).strip()
-
-        # We are using the git global user configuration
-        repo.set_git_global_user_config(git_global_user_name, git_global_user_email)
+        git_global_user = git_config_global_user()
+        repo.set_git_global_user_config(git_global_user)
 
         commit_message = f"feat: new base image: {corresponding_base_image}"
         repo.create_signed_commit(
             corresponding_base_image_relative_path,
             commit_message,
-            git_global_user_signingkey,
+            git_global_user.signingkey,
         )
 
 

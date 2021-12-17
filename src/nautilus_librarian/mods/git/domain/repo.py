@@ -30,7 +30,7 @@ class GitRepo:
             "-S", f"--gpg-sign={signingkey}", "-m", f"{commit_message}"
         )
 
-    def set_git_global_user_config(self, user_name, user_email):
+    def set_git_global_user_config(self, git_user):
         """
         This configuration prevents from having this git error:
         stderr: 'Committer identity unknown
@@ -42,5 +42,5 @@ class GitRepo:
         Omit --global to set the identity only in this repository.
         fatal: unable to auto-detect email address (got 'root@b37fb619ac5a.(none)')'
         """
-        self.repo.config_writer().set_value("user", "name", user_name).release()
-        self.repo.config_writer().set_value("user", "email", user_email).release()
+        self.repo.config_writer().set_value("user", "name", git_user.name).release()
+        self.repo.config_writer().set_value("user", "email", git_user.email).release()
