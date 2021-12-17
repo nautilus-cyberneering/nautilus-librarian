@@ -106,12 +106,6 @@ def auto_commit_base_images_step(typer, dvc_diff, git_repo_dir):
             f"dvc push {corresponding_base_image_relative_path}.dvc", cwd=git_repo_dir
         )
 
-        # repo = Repo(git_repo_dir)
-        # commit_message = f"feat: new base image: {corresponding_base_image}"
-        # create_signed_commit(
-        #    repo, corresponding_base_image_relative_path, commit_message
-        # )
-
         repo = GitRepo(git_repo_dir)
         commit_message = f"feat: new base image: {corresponding_base_image}"
         repo.create_signed_commit(
