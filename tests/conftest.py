@@ -56,6 +56,12 @@ def get_fixtures_dir():
 
 
 @pytest.fixture()
+def temp_dir(tmp_path_factory):
+    fn = tmp_path_factory.mktemp("test_dir")
+    return fn
+
+
+@pytest.fixture()
 def temp_git_dir(tmp_path_factory):
     fn = tmp_path_factory.mktemp("repo")
     return fn

@@ -4,7 +4,7 @@ from typer.testing import CliRunner
 
 from nautilus_librarian.domain.file_locator import file_locator
 from nautilus_librarian.main import app
-from nautilus_librarian.mods.console.utils import (
+from nautilus_librarian.mods.console.domain.utils import (
     change_current_working_directory,
     execute_console_command,
     get_current_working_directory,

@@ -8,7 +8,7 @@ from test_nautilus_librarian.utils import compact_json
 from typer.testing import CliRunner
 
 from nautilus_librarian.main import app
-from nautilus_librarian.mods.console.utils import execute_console_command
+from nautilus_librarian.mods.console.domain.utils import execute_console_command
 from nautilus_librarian.mods.namecodes.domain.filename import Filename
 from nautilus_librarian.typer.commands.gold_drawings_processing_workflow import (
     get_new_gold_images_filenames_from_dvc_diff,
