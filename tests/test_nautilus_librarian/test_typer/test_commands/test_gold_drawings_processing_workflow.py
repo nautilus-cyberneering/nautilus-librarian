@@ -1,12 +1,12 @@
 from shutil import copy
 
-from test_nautilus_librarian.utils import execute_console_command
 from typer.testing import CliRunner
 
 from nautilus_librarian.domain.file_locator import file_locator
 from nautilus_librarian.main import app
 from nautilus_librarian.mods.console.utils import (
     change_current_working_directory,
+    execute_console_command,
     get_current_working_directory,
 )
 from nautilus_librarian.mods.namecodes.domain.filename import Filename

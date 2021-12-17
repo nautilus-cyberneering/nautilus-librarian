@@ -2,10 +2,12 @@ import os
 from typing import List
 
 import typer
-from test_nautilus_librarian.utils import execute_console_command
 
 from nautilus_librarian.domain.file_locator import file_locator
-from nautilus_librarian.mods.console.utils import get_current_working_directory
+from nautilus_librarian.mods.console.utils import (
+    execute_console_command,
+    get_current_working_directory,
+)
 from nautilus_librarian.mods.dvc.domain.utils import (
     extract_modified_media_file_list_from_dvd_diff_output,
     extract_new_gold_images_from_dvc_diff,
