@@ -65,6 +65,17 @@ def guard_that_base_image_exists(base_image_path):
         raise FileNotFoundException(f"Missing Base image: {base_image_path}")
 
 
+def commit_base_image(git_repo_dir, base_image_relative_path):
+    git_global_user = git_config_global_user()
+
+    repo = GitRepo(git_repo_dir, git_global_user)
+
+    repo.commit(
+        base_image_relative_path,
+        commit_message=f"feat: new base image: {os.path.basename(base_image_relative_path)}"
+    )
+
+
 def auto_commit_base_images_step(typer, dvc_diff, git_repo_dir):
     """
     Workflow step: auto-commit new Base images generated during the workflow execution
@@ -114,21 +125,9 @@ def auto_commit_base_images_step(typer, dvc_diff, git_repo_dir):
         )
 
         guard_that_base_image_exists(corresponding_base_image_absolute_path)
-
         dvc_add(corresponding_base_image_relative_path, git_repo_dir)
         dvc_push(f"{corresponding_base_image_relative_path}.dvc", git_repo_dir)
-
-        repo = GitRepo(git_repo_dir)
-
-        git_global_user = git_config_global_user()
-        repo.set_git_global_user_config(git_global_user)
-
-        commit_message = f"feat: new base image: {corresponding_base_image}"
-        repo.create_signed_commit(
-            corresponding_base_image_relative_path,
-            commit_message,
-            git_global_user.signingkey,
-        )
+        commit_base_image(git_repo_dir, corresponding_base_image_relative_path)
 
 
 @app.command("gold-drawings-processing")

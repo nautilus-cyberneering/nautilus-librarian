@@ -4,17 +4,14 @@ from git import Repo
 class GitRepo:
     """A wrapper for GitPython Repo"""
 
-    def __init__(self, git_repo_dir):
+    def __init__(self, git_repo_dir, git_global_user):
         self.repo = Repo(git_repo_dir)
+        self.git_global_user = git_global_user
+        self.set_git_global_user_config(git_global_user)
 
-    def create_signed_commit(self, filename, commit_message, signingkey):
+    def commit(self, filename, commit_message):
         """
-        It creates a signed commit.
-
-        WIP: signed commit is not created yet.
-
-        Example how to sign:
-        https://github.com/josecelano/pygithub/blob/main/src/03_sign_commit_using_the_gitpython_package.py#L190
+        It creates a commit
         """
         index = self.repo.index
         index.add([filename])
@@ -23,12 +20,15 @@ class GitRepo:
         # https://github.com/gitpython-developers/GitPython/issues/580#issuecomment-282474086
         index.write()
 
-        if signingkey is None:
+        if self.git_global_user.signingkey is None:
+            # Unsigned commit
             return self.repo.git.commit("-m", f"{commit_message}")
 
+        # Signed commit
         return self.repo.git.commit(
-            "-S", f"--gpg-sign={signingkey}", "-m", f"{commit_message}"
+            "-S", f"--gpg-sign={self.git_global_user.signingkey}", "-m", f"{commit_message}"
         )
+
 
     def set_git_global_user_config(self, git_user):
         """
