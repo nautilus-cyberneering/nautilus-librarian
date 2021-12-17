@@ -6,7 +6,6 @@ from test_nautilus_librarian.test_typer.test_commands.test_gold_drawings_process
 )
 from test_nautilus_librarian.utils import (
     compact_json,
-    debug_execute_console_command,
     execute_console_command,
 )
 from typer.testing import CliRunner
@@ -44,9 +43,7 @@ def given_a_dvc_diff_object_with_a_new_gold_image_it_should_commit_the_added_bas
         env={"INPUT_GIT_REPO_DIR": str(temp_git_dir)},
     )
 
-    debug_execute_console_command("tree -a data", cwd=temp_git_dir)
-
-    output = execute_console_command("git lol --oneline", cwd=temp_git_dir)
+    # debug_execute_console_command("tree -a data", cwd=temp_git_dir)
 
     # Assert command runned successfully
     assert result.exit_code == 0
@@ -58,9 +55,19 @@ def given_a_dvc_diff_object_with_a_new_gold_image_it_should_commit_the_added_bas
     assert os.path.isfile(f"{temp_git_dir}/data/000001/42/000001-42.600.2.tif.dvc")
     assert os.path.isfile(f"{temp_git_dir}/data/000001/42/.gitignore")
 
+    # Assert Base image was pushed to local "remote" storage
+    dvc_status_output = execute_console_command(
+        "dvc status --show-json --cloud --remote=localremote", cwd=temp_git_dir
+    )
+    dvc_status_output_json = json.loads(dvc_status_output)
+    expected_status_new = {"data/000001/42/000001-42.600.2.tif": "new"}
+    expected_status_empty = {}
+    assert (expected_status_new == dvc_status_output_json or expected_status_empty == dvc_status_output_json)
+
     # Assert Base commit was created
+    git_log_output = execute_console_command("git log --oneline", cwd=temp_git_dir)
     commit_message = "feat: new base image: 000001-42.600.2.tif"
-    assert commit_message in output
+    assert commit_message in git_log_output
 
     # TODO:
     #  * Assert file contest is OK?

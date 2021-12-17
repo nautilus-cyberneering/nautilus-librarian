@@ -4,7 +4,7 @@ from typing import List
 
 import typer
 from git import Repo
-from test_nautilus_librarian.utils import execute_console_command
+from test_nautilus_librarian.utils import execute_console_command, debug_execute_console_command
 
 from nautilus_librarian.domain.file_locator import file_locator
 from nautilus_librarian.mods.console.utils import get_current_working_directory
@@ -91,8 +91,8 @@ def auto_commit_base_images_step(typer, dvc_diff, git_repo_dir):
     For each modified Gold image:
       [✓] 1. Calculate the corresponding Base image filename and filepath.
       [✓] 2. Check if the Base image exists.
-      [ ] 3. Add the image to dvc.
-      [ ] 4. Push the image to remote dvc storage.
+      [✓] 3. Add the image to dvc.
+      [✓] 4. Push the image to remote dvc storage.
       [ ] 5. Commit the image to the current branch with a signed commit. WIP
 
     Points 2 to 5 are different depending on whether we are adding,
@@ -119,8 +119,15 @@ def auto_commit_base_images_step(typer, dvc_diff, git_repo_dir):
             )
 
         # TODO: replace by dvc mod functions (it's not merged yet)
+        # Add the Base image to dvc
         execute_console_command(
             f"dvc add {corresponding_base_image_relative_path}", cwd=git_repo_dir
+        )
+
+        # TODO: replace by dvc mod functions (it's not merged yet)
+        # Push the dvc image to the local "remote" storage
+        execute_console_command(
+            f"dvc push {corresponding_base_image_relative_path}.dvc", cwd=git_repo_dir
         )
 
         repo = Repo(git_repo_dir)
