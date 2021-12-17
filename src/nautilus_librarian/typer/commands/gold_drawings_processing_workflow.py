@@ -2,7 +2,6 @@ import os
 from typing import List
 
 import typer
-from git import Repo
 from test_nautilus_librarian.utils import execute_console_command
 
 from nautilus_librarian.domain.file_locator import file_locator
@@ -11,6 +10,7 @@ from nautilus_librarian.mods.dvc.domain.utils import (
     extract_modified_media_file_list_from_dvd_diff_output,
     extract_new_gold_images_from_dvc_diff,
 )
+from nautilus_librarian.mods.git.domain.repo import GitRepo
 from nautilus_librarian.mods.namecodes.domain.filename import Filename
 from nautilus_librarian.mods.namecodes.domain.validate_filenames import (
     validate_filename,
@@ -54,17 +54,6 @@ def get_new_gold_images_filenames_from_dvc_diff(dvc_diff) -> List[Filename]:
     """
     gold_images = extract_new_gold_images_from_dvc_diff(dvc_diff)
     return [Filename(gold_image) for gold_image in gold_images]
-
-
-def create_signed_commit(repo, filename, commit_message):
-    index = repo.index
-    index.add([filename])
-
-    # Write index. Needed for commit with signature:
-    # https://github.com/gitpython-developers/GitPython/issues/580#issuecomment-282474086
-    index.write()
-
-    repo.git.commit("-m", f"{commit_message}")
 
 
 def auto_commit_base_images_step(typer, dvc_diff, git_repo_dir):
@@ -115,10 +104,16 @@ def auto_commit_base_images_step(typer, dvc_diff, git_repo_dir):
             f"dvc push {corresponding_base_image_relative_path}.dvc", cwd=git_repo_dir
         )
 
-        repo = Repo(git_repo_dir)
+        # repo = Repo(git_repo_dir)
+        # commit_message = f"feat: new base image: {corresponding_base_image}"
+        # create_signed_commit(
+        #    repo, corresponding_base_image_relative_path, commit_message
+        # )
+
+        repo = GitRepo(git_repo_dir)
         commit_message = f"feat: new base image: {corresponding_base_image}"
-        create_signed_commit(
-            repo, corresponding_base_image_relative_path, commit_message
+        repo.create_signed_commit(
+            corresponding_base_image_relative_path, commit_message
         )
 
 
