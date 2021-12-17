@@ -9,6 +9,8 @@ from nautilus_librarian.mods.console.domain.utils import (
     get_current_working_directory,
 )
 from nautilus_librarian.mods.dvc.domain.utils import (
+    dvc_add,
+    dvc_push,
     extract_added_files_from_dvc_diff,
     extract_modified_media_file_list_from_dvd_diff_output,
 )
@@ -96,17 +98,8 @@ def auto_commit_base_images_step(typer, dvc_diff, git_repo_dir):
                 f"Missing Base image: {corresponding_base_image_absolute_path}"
             )
 
-        # TODO: replace by dvc mod functions (it's not merged yet)
-        # Add the Base image to dvc
-        execute_console_command(
-            f"dvc add {corresponding_base_image_relative_path}", cwd=git_repo_dir
-        )
-
-        # TODO: replace by dvc mod functions (it's not merged yet)
-        # Push the dvc image to the local "remote" storage
-        execute_console_command(
-            f"dvc push {corresponding_base_image_relative_path}.dvc", cwd=git_repo_dir
-        )
+        dvc_add(corresponding_base_image_relative_path, git_repo_dir)
+        dvc_push(f"{corresponding_base_image_relative_path}.dvc", git_repo_dir)
 
         repo = GitRepo(git_repo_dir)
 

@@ -82,6 +82,14 @@ or:
 poetry run pytest --cov
 ```
 
+Some useful test commands:
+
+Run only one test (`-k`) with no capture (`-s`):
+
+```shell
+pytest -s -k "test_app"
+```
+
 ## Linting
 
 With [MegaLinter](https://megalinter.github.io/latest/mega-linter-runner/#local-installation):

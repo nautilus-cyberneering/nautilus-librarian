@@ -1,6 +1,8 @@
 import json
 import os
 
+from nautilus_librarian.mods.console.domain.utils import execute_console_command
+
 
 def extract_basenames_from_filepaths(filepaths):
     return [os.path.basename(filename) for filename in filepaths]
@@ -53,3 +55,23 @@ def extract_added_files_from_dvc_diff(dvc_diff):
     """
     data = json.loads(dvc_diff)
     return [(path_object["path"]) for path_object in data["added"]]
+
+
+def dvc_add(filepath, git_repo_dir):
+    """
+    Wrapper for dvc add command.
+
+    TODO: replace by API wrapper once API wrapper is merged.
+    https://github.com/Nautilus-Cyberneering/nautilus-librarian/pull/25
+    """
+    return execute_console_command(f"dvc add {filepath}", cwd=git_repo_dir)
+
+
+def dvc_push(filepath, git_repo_dir):
+    """
+    Wrapper for dvc push command.
+
+    TODO: replace by API wrapper once API wrapper is merged.
+    https://github.com/Nautilus-Cyberneering/nautilus-librarian/pull/25
+    """
+    return execute_console_command(f"dvc push {filepath}", cwd=git_repo_dir)
