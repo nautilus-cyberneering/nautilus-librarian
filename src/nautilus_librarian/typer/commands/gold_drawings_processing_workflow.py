@@ -60,6 +60,11 @@ def get_new_gold_images_filenames_from_dvc_diff(dvc_diff) -> List[Filename]:
     return [Filename(gold_image) for gold_image in gold_images]
 
 
+def guard_that_base_image_exists(base_image_path):
+    if not os.path.isfile(base_image_path):
+        raise FileNotFoundException(f"Missing Base image: {base_image_path}")
+
+
 def auto_commit_base_images_step(typer, dvc_diff, git_repo_dir):
     """
     Workflow step: auto-commit new Base images generated during the workflow execution
@@ -108,10 +113,7 @@ def auto_commit_base_images_step(typer, dvc_diff, git_repo_dir):
             f"New Gold image found: {gold_image} -> Base image: {corresponding_base_image_relative_path} ✓ "
         )
 
-        if not os.path.isfile(corresponding_base_image_absolute_path):
-            raise FileNotFoundException(
-                f"Missing Base image: {corresponding_base_image_absolute_path}"
-            )
+        guard_that_base_image_exists(corresponding_base_image_absolute_path)
 
         dvc_add(corresponding_base_image_relative_path, git_repo_dir)
         dvc_push(f"{corresponding_base_image_relative_path}.dvc", git_repo_dir)
