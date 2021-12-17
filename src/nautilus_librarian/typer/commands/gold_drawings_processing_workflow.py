@@ -4,7 +4,7 @@ from typing import List
 import typer
 
 from nautilus_librarian.domain.file_locator import file_locator
-from nautilus_librarian.mods.console.utils import (
+from nautilus_librarian.mods.console.domain.utils import (
     execute_console_command,
     get_current_working_directory,
 )
