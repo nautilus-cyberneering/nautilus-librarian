@@ -3,6 +3,8 @@ import os
 from typing import List
 
 import typer
+from git import Repo
+from test_nautilus_librarian.utils import execute_console_command
 
 from nautilus_librarian.domain.file_locator import file_locator
 from nautilus_librarian.mods.console.utils import get_current_working_directory
@@ -69,6 +71,17 @@ def extract_new_gold_images_from_dvc_diff(dvc_diff) -> List[Filename]:
     return [Filename(path_object["path"]) for path_object in data["added"]]
 
 
+def create_signed_commit(repo, filename, commit_message):
+    index = repo.index
+    index.add([filename])
+
+    # Write index. Needed for commit with signature:
+    # https://github.com/gitpython-developers/GitPython/issues/580#issuecomment-282474086
+    index.write()
+
+    repo.git.commit("-m", f"{commit_message}")
+
+
 def auto_commit_base_images_step(typer, dvc_diff, git_repo_dir):
     """
     Workflow step: auto-commit new Base images generated during the workflow execution
@@ -80,7 +93,7 @@ def auto_commit_base_images_step(typer, dvc_diff, git_repo_dir):
       [✓] 2. Check if the Base image exists.
       [ ] 3. Add the image to dvc.
       [ ] 4. Push the image to remote dvc storage.
-      [ ] 5. Commit the image to the current branch with a signed commit.
+      [ ] 5. Commit the image to the current branch with a signed commit. WIP
 
     Points 2 to 5 are different depending on whether we are adding,
     modifying or renaming the Gold image.
@@ -89,21 +102,32 @@ def auto_commit_base_images_step(typer, dvc_diff, git_repo_dir):
 
     for gold_image in gold_images:
         corresponding_base_image = gold_image.generate_base_image_filename()
-        corresponding_base_image_path = (
-            git_repo_dir
-            + "/"
-            + file_locator(corresponding_base_image)
-            + "/"
-            + str(corresponding_base_image)
+        corresponding_base_image_relative_path = (
+            file_locator(corresponding_base_image) + "/" + str(corresponding_base_image)
         )
-        typer.echo(
-            f"New Gold image found: {gold_image} -> Base image: {corresponding_base_image_path} ✓ "
+        corresponding_base_image_absolute_path = (
+            git_repo_dir + "/" + corresponding_base_image_relative_path
         )
 
-        if not os.path.isfile(corresponding_base_image_path):
+        typer.echo(
+            f"New Gold image found: {gold_image} -> Base image: {corresponding_base_image_relative_path} ✓ "
+        )
+
+        if not os.path.isfile(corresponding_base_image_absolute_path):
             raise FileNotFoundException(
-                f"Missing Base image: {corresponding_base_image_path}"
+                f"Missing Base image: {corresponding_base_image_absolute_path}"
             )
+
+        # TODO: replace by dvc mod functions (it's not merged yet)
+        execute_console_command(
+            f"dvc add {corresponding_base_image_relative_path}", cwd=git_repo_dir
+        )
+
+        repo = Repo(git_repo_dir)
+        commit_message = f"feat: new base image: {corresponding_base_image}"
+        create_signed_commit(
+            repo, corresponding_base_image_relative_path, commit_message
+        )
 
 
 @app.command("gold-drawings-processing")

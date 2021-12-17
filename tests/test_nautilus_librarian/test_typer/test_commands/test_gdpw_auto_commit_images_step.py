@@ -1,9 +1,14 @@
 import json
+import os
 
 from test_nautilus_librarian.test_typer.test_commands.test_gold_drawings_processing_workflow import (
     create_initial_state,
 )
-from test_nautilus_librarian.utils import compact_json
+from test_nautilus_librarian.utils import (
+    compact_json,
+    debug_execute_console_command,
+    execute_console_command,
+)
 from typer.testing import CliRunner
 
 from nautilus_librarian.main import app
@@ -39,8 +44,27 @@ def given_a_dvc_diff_object_with_a_new_gold_image_it_should_commit_the_added_bas
         env={"INPUT_GIT_REPO_DIR": str(temp_git_dir)},
     )
 
+    debug_execute_console_command("tree -a data", cwd=temp_git_dir)
+
+    output = execute_console_command("git lol --oneline", cwd=temp_git_dir)
+
+    # Assert command runned successfully
     assert result.exit_code == 0
-    assert "000001-32.600.2.tif ✓\n" in result.stdout
+
+    # Assert Base image was created
+    assert os.path.isfile(f"{temp_git_dir}/data/000001/42/000001-42.600.2.tif")
+
+    # Assert dvc files were created
+    assert os.path.isfile(f"{temp_git_dir}/data/000001/42/000001-42.600.2.tif.dvc")
+    assert os.path.isfile(f"{temp_git_dir}/data/000001/42/.gitignore")
+
+    # Assert Base commit was created
+    commit_message = "feat: new base image: 000001-42.600.2.tif"
+    assert commit_message in output
+
+    # TODO:
+    #  * Assert file contest is OK?
+    #  * Assert commit content is OK?
 
 
 def test_get_new_gold_images_from_dvc_diff():
