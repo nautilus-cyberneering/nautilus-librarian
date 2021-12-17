@@ -109,9 +109,30 @@ def auto_commit_base_images_step(typer, dvc_diff, git_repo_dir):
         )
 
         repo = GitRepo(git_repo_dir)
+
+        # TODO: move to git mod
+        git_global_user_name = execute_console_command(
+            "git config --global --get user.name", cwd=git_repo_dir
+        ).strip()
+
+        # TODO: move to git mod
+        git_global_user_email = execute_console_command(
+            "git config --global --get user.email", cwd=git_repo_dir
+        ).strip()
+
+        # TODO: move to git mod
+        git_global_user_signingkey = execute_console_command(
+            "git config --global --get user.signingkey", cwd=git_repo_dir
+        ).strip()
+
+        # We are using the git global user configuration
+        repo.set_git_global_user_config(git_global_user_name, git_global_user_email)
+
         commit_message = f"feat: new base image: {corresponding_base_image}"
         repo.create_signed_commit(
-            corresponding_base_image_relative_path, commit_message
+            corresponding_base_image_relative_path,
+            commit_message,
+            git_global_user_signingkey,
         )
 
 

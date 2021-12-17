@@ -71,7 +71,8 @@ def given_a_dvc_diff_object_with_a_new_gold_image_it_should_commit_the_added_bas
     assert commit_message in git_log_output
 
     # TODO:
-    #  * Assert file contest is OK?
+    #  * Assert commit is signed
+    #  * Assert file content is OK?
     #  * Assert commit content is OK?
 
 
