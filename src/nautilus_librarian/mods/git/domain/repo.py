@@ -9,16 +9,15 @@ class GitRepo:
         self.git_global_user = git_global_user
         self.set_git_global_user_config(git_global_user)
 
-    def commit(self, filename, commit_message):
+    def commit(self, filepaths, commit_message):
         """
         It creates a commit
         """
-        index = self.repo.index
-        index.add([filename])
+        self.repo.index.add(filepaths)
 
         # Write index. Needed for commit with signature:
         # https://github.com/gitpython-developers/GitPython/issues/580#issuecomment-282474086
-        index.write()
+        self.repo.index.write()
 
         if self.git_global_user.signingkey is None:
             # Unsigned commit

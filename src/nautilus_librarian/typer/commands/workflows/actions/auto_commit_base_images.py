@@ -34,14 +34,37 @@ def guard_that_base_image_exists(base_image_path):
         raise FileNotFoundException(f"Missing Base image: {base_image_path}")
 
 
-def commit_base_image(git_repo_dir, base_image_relative_path):
+def files_to_commit(base_img_relative_path) -> List[str]:
+    """
+    Given the relative path of a Base image it returns the relative paths
+    of the files we have to include in the git repo.
+
+    For example:
+
+    For the Base image "data/000001/42/000001-42.600.2.tif", these are
+    the files tracked on the git repo:
+
+    - data/000001/42/.gitignore
+    - data/000001/42/000001-42.600.2.tif.dvc
+    """
+    base_img_dir = os.path.dirname(base_img_relative_path)
+
+    filepaths = [
+        f"{base_img_dir}/.gitignore",
+        f"{base_img_relative_path}.dvc",
+    ]
+
+    return filepaths
+
+
+def commit_base_image(git_repo_dir, base_img_relative_path):
     git_global_user = git_config_global_user()
 
     repo = GitRepo(git_repo_dir, git_global_user)
 
-    repo.commit(
-        base_image_relative_path,
-        commit_message=f"feat: new base image: {os.path.basename(base_image_relative_path)}",
+    return repo.commit(
+        files_to_commit(base_img_relative_path),
+        commit_message=f"feat: new base image: {os.path.basename(base_img_relative_path)}",
     )
 
 
@@ -116,4 +139,5 @@ def auto_commit_base_images(typer, dvc_diff, git_repo_dir):
         guard_that_base_image_exists(base_img_absolute_path)
         dvc_add(base_img_relative_path, git_repo_dir)
         dvc_push(f"{base_img_relative_path}.dvc", git_repo_dir)
+
         commit_base_image(git_repo_dir, base_img_relative_path)

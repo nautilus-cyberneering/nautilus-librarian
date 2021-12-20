@@ -8,7 +8,7 @@ from nautilus_librarian.mods.namecodes.domain.validate_filenames import (
 
 def validate_filenames(typer, dvc_diff):
     """
-    Workflow step: it validates of the media file names.
+    Workflow step: it validates all the media file names.
 
     TODO: inject "console_printer" instead of "typer"
     so that we can test this step independently in the future.

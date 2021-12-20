@@ -37,7 +37,11 @@ def create_initial_state(
         f"""
         git init
         dvc init
+        git add -A
+        git commit -m "dvc init"
         dvc remote add -d localremote {temp_dvc_local_remote_storage_dir}
+        git add -A
+        git commit -m "dvc add remote"
         mkdir -p {sample_base_image_dir}
     """
     )

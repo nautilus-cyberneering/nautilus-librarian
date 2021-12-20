@@ -1,6 +1,7 @@
 import json
 import os
 
+from git import Repo
 from test_nautilus_librarian.test_typer.test_commands.test_workflows.test_gold_drawings_processing import (
     create_initial_state,
 )
@@ -11,6 +12,7 @@ from nautilus_librarian.main import app
 from nautilus_librarian.mods.console.domain.utils import execute_console_command
 from nautilus_librarian.mods.namecodes.domain.filename import Filename
 from nautilus_librarian.typer.commands.workflows.actions.auto_commit_base_images import (
+    files_to_commit,
     get_new_gold_images_filenames_from_dvc_diff,
 )
 
@@ -70,10 +72,27 @@ def given_a_dvc_diff_object_with_a_new_gold_image_it_should_commit_the_added_bas
     commit_message = "feat: new base image: 000001-42.600.2.tif"
     assert commit_message in git_log_output
 
+    # Assert commit contains the right files
+    repo = Repo(temp_git_dir)
+    commit = repo.commit(repo.heads[0].commit)
+
+    expected_commit_stats_files = {
+        "data/000001/42/.gitignore": {"insertions": 1, "deletions": 0, "lines": 1},
+        "data/000001/42/000001-42.600.2.tif.dvc": {
+            "insertions": 4,
+            "deletions": 0,
+            "lines": 4,
+        },
+    }
+
+    assert commit.stats.files == expected_commit_stats_files
+
     # TODO:
-    #  * Assert commit is signed
-    #  * Assert file content is OK?
-    #  * Assert commit content is OK?
+    #  * Assert commit is signed, once we import the test GPG key.
+
+    # Code Review:
+    #  * Should we assert files content? I do not think so because
+    #    that would be testing dvc implementation.
 
 
 def test_get_new_gold_images_from_dvc_diff():
@@ -91,3 +110,12 @@ def test_get_new_gold_images_from_dvc_diff():
     result = get_new_gold_images_filenames_from_dvc_diff(compact_json(dvc_diff))
 
     assert result == [Filename("data/000001/32/000001-32.600.2.tif")]
+
+
+def test_files_to_commit():
+    filepaths = files_to_commit("data/000001/42/000001-42.600.2.tif")
+
+    assert filepaths == [
+        "data/000001/42/.gitignore",
+        "data/000001/42/000001-42.600.2.tif.dvc",
+    ]
