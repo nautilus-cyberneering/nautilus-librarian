@@ -1,6 +1,6 @@
 import json
 
-from test_nautilus_librarian.test_typer.test_commands.test_gold_drawings_processing_workflow import (
+from test_nautilus_librarian.test_typer.test_commands.test_workflows.test_gold_drawings_processing import (
     create_initial_state,
 )
 from test_nautilus_librarian.utils import compact_json

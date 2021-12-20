@@ -3,12 +3,12 @@ import nautilus_librarian.mods.git.typer.commands
 import nautilus_librarian.mods.gpg.typer.commands
 import nautilus_librarian.mods.libvips.typer.commands
 import nautilus_librarian.mods.namecodes.typer.commands
-import nautilus_librarian.typer.commands.gold_drawings_processing_workflow
+import nautilus_librarian.typer.commands.workflows.gold_drawings_processing
 
 
 def add_commands(app):
     app.command()(
-        nautilus_librarian.typer.commands.gold_drawings_processing_workflow.gold_drawings_processing
+        nautilus_librarian.typer.commands.workflows.gold_drawings_processing.gold_drawings_processing
     )
 
 

@@ -1,53 +1,22 @@
 import os
 from typing import List
 
-import typer
-
 from nautilus_librarian.domain.file_locator import file_locator
-from nautilus_librarian.mods.console.domain.utils import get_current_working_directory
 from nautilus_librarian.mods.dvc.domain.utils import (
     dvc_add,
     dvc_push,
     extract_added_files_from_dvc_diff,
-    extract_modified_media_file_list_from_dvd_diff_output,
 )
 from nautilus_librarian.mods.git.domain.config import git_config_global_user
 from nautilus_librarian.mods.git.domain.repo import GitRepo
 from nautilus_librarian.mods.namecodes.domain.filename import Filename
 from nautilus_librarian.mods.namecodes.domain.filename_filters import filter_gold_images
-from nautilus_librarian.mods.namecodes.domain.validate_filenames import (
-    validate_filename,
-)
-
-app = typer.Typer()
 
 
 class FileNotFoundException(Exception):
     """Raised when an expected file is not found"""
 
     pass
-
-
-def validate_filenames_step(typer, dvc_diff):
-    """
-    Workflow step: it validates of the media file names.
-
-    TODO: inject "console_printer" instead of "typer"
-    so that we can test this step independently in the future.
-    """
-    if dvc_diff == "{}":
-        typer.echo("No Gold image changes found")
-        raise typer.Exit()
-
-    filenames = extract_modified_media_file_list_from_dvd_diff_output(dvc_diff)
-
-    for filename in filenames:
-        try:
-            validate_filename(filename)
-            typer.echo(f"{filename} ✓")
-        except ValueError as error:
-            typer.echo(f"{filename} ✗ {error}", err=True)
-            raise typer.Abort()
 
 
 def get_new_gold_images_filenames_from_dvc_diff(dvc_diff) -> List[Filename]:
@@ -95,7 +64,7 @@ def calculate_the_corresponding_base_image_from_gold_image(git_repo_dir, gold_im
     )
 
 
-def auto_commit_base_images_step(typer, dvc_diff, git_repo_dir):
+def auto_commit_base_images(typer, dvc_diff, git_repo_dir):
     """
     Workflow step: auto-commit new Base images generated during the workflow execution
     in previous steps.
@@ -148,39 +117,3 @@ def auto_commit_base_images_step(typer, dvc_diff, git_repo_dir):
         dvc_add(base_img_relative_path, git_repo_dir)
         dvc_push(f"{base_img_relative_path}.dvc", git_repo_dir)
         commit_base_image(git_repo_dir, base_img_relative_path)
-
-
-@app.command("gold-drawings-processing")
-def gold_drawings_processing(
-    dvc_diff: str = typer.Argument("{}", envvar="INPUT_DVC_DIFF"),
-    git_repo_dir: str = typer.Argument(
-        get_current_working_directory, envvar="INPUT_GIT_REPO_DIR"
-    ),
-):
-    """
-    Gold Drawings Processing Workflow.
-
-    This workflow process new or updated Gold images in a pull request:
-
-    1. Get new or modified Gold images using dvc diff (TODO).
-
-    2. Pull images from dvc remote storage (TODO).
-
-    3. Validate filenames and filepaths.
-
-    4. Validate image size (TODO).
-
-    5. Generate Base image from Gold (change size and icc profile) (TODO).
-
-    6. Auto-commit new Base images (TODO).
-
-    Example:
-        poetry run nautilus-librarian gold-drawings-processing '{"added":[{"path":"data/000001/32/000001-32.600.2.tif"}],"deleted":[],"modified":[],"renamed":[]}' # noqa
-    """
-
-    validate_filenames_step(typer, dvc_diff)
-    auto_commit_base_images_step(typer, dvc_diff, git_repo_dir)
-
-
-if __name__ == "__main__":
-    app()

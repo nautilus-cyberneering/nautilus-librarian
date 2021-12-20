@@ -1,7 +1,7 @@
 import json
 import os
 
-from test_nautilus_librarian.test_typer.test_commands.test_gold_drawings_processing_workflow import (
+from test_nautilus_librarian.test_typer.test_commands.test_workflows.test_gold_drawings_processing import (
     create_initial_state,
 )
 from test_nautilus_librarian.utils import compact_json
@@ -10,7 +10,7 @@ from typer.testing import CliRunner
 from nautilus_librarian.main import app
 from nautilus_librarian.mods.console.domain.utils import execute_console_command
 from nautilus_librarian.mods.namecodes.domain.filename import Filename
-from nautilus_librarian.typer.commands.gold_drawings_processing_workflow import (
+from nautilus_librarian.typer.commands.workflows.actions.auto_commit_base_images import (
     get_new_gold_images_filenames_from_dvc_diff,
 )
 
