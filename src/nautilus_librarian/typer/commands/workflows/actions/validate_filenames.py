@@ -4,25 +4,29 @@ from nautilus_librarian.mods.dvc.domain.utils import (
 from nautilus_librarian.mods.namecodes.domain.validate_filenames import (
     validate_filename,
 )
+from nautilus_librarian.typer.commands.workflows.actions.action_result import (
+    ActionResult,
+    Message,
+    ResultCode,
+)
 
 
-def validate_filenames(typer, dvc_diff):
+def validate_filenames(dvc_diff):
     """
-    Workflow step: it validates all the media file names.
-
-    TODO: inject "console_printer" instead of "typer"
-    so that we can test this step independently in the future.
+    It validates all the media file names in the dvc diff.
     """
     if dvc_diff == "{}":
-        typer.echo("No Gold image changes found")
-        raise typer.Exit()
+        return ActionResult(ResultCode.EXIT, [Message("No Gold image changes found")])
 
     filenames = extract_modified_media_file_list_from_dvd_diff_output(dvc_diff)
+
+    messages = []
 
     for filename in filenames:
         try:
             validate_filename(filename)
-            typer.echo(f"{filename} ✓")
+            messages.append(Message(f"{filename} ✓"))
         except ValueError as error:
-            typer.echo(f"{filename} ✗ {error}", err=True)
-            raise typer.Abort()
+            return ActionResult(ResultCode.ABORT, [Message(f"{filename} ✗ {error}")])
+
+    return ActionResult(ResultCode.CONTINUE, messages)

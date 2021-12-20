@@ -1,6 +1,7 @@
 import typer
 
 from nautilus_librarian.mods.console.domain.utils import get_current_working_directory
+from nautilus_librarian.typer.commands.workflows.actions.action_result import ResultCode
 from nautilus_librarian.typer.commands.workflows.actions.auto_commit_base_images import (
     auto_commit_base_images,
 )
@@ -9,6 +10,17 @@ from nautilus_librarian.typer.commands.workflows.actions.validate_filenames impo
 )
 
 app = typer.Typer()
+
+
+def process_action_result(action_result):
+    for message in action_result.messages:
+        typer.echo(message.text, err=message.is_error)
+
+    if action_result.code is ResultCode.EXIT:
+        raise typer.Exit()
+
+    if action_result.code is ResultCode.ABORT:
+        raise typer.Abort()
 
 
 @app.command("gold-drawings-processing")
@@ -41,7 +53,9 @@ def gold_drawings_processing(
         poetry run nautilus-librarian gold-drawings-processing '{"added":[{"path":"data/000001/32/000001-32.600.2.tif"}],"deleted":[],"modified":[],"renamed":[]}' # noqa
     """
 
-    validate_filenames(typer, dvc_diff)
+    action_result = validate_filenames(dvc_diff)
+    process_action_result(action_result)
+
     auto_commit_base_images(typer, dvc_diff, git_repo_dir)
 
 
