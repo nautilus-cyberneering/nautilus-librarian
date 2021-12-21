@@ -1,3 +1,6 @@
+# pylint: disable=no-member
+# Dinamically added members of GIT API Repo object are not detected by pyLint
+
 import nautilus_librarian.nautilus_dvc_api.nautilus_dvc_api as dvcapi
 import tempfile
 import os.path
