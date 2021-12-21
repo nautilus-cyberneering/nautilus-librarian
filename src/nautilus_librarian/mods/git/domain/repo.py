@@ -4,9 +4,10 @@ from git import Repo
 class GitRepo:
     """A wrapper for GitPython Repo"""
 
-    def __init__(self, git_repo_dir, git_global_user):
+    def __init__(self, git_repo_dir, git_global_user, gnupghome="~/.gnupg"):
         self.repo = Repo(git_repo_dir)
         self.git_global_user = git_global_user
+        self.gnupghome = gnupghome
         self.set_git_global_user_config(git_global_user)
 
     def commit(self, filepaths, commit_message):
@@ -24,12 +25,13 @@ class GitRepo:
             return self.repo.git.commit("-m", f"{commit_message}")
 
         # Signed commit
-        return self.repo.git.commit(
-            "-S",
-            f"--gpg-sign={self.git_global_user.signingkey}",
-            "-m",
-            f"{commit_message}",
-        )
+        with self.repo.git.custom_environment(GNUPGHOME=self.gnupghome):
+            return self.repo.git.commit(
+                "-S",
+                f"--gpg-sign={self.git_global_user.signingkey}",
+                "-m",
+                f"{commit_message}",
+            )
 
     def set_git_global_user_config(self, git_user):
         """

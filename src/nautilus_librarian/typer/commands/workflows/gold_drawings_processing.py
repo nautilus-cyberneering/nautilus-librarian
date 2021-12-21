@@ -29,6 +29,7 @@ def gold_drawings_processing(
     git_repo_dir: str = typer.Argument(
         get_current_working_directory, envvar="INPUT_GIT_REPO_DIR"
     ),
+    gnupghome: str = typer.Argument("~/.gnupg", envvar="GNUPGHOME"),
 ):
     """
     Gold Drawings Processing Workflow.
@@ -56,7 +57,7 @@ def gold_drawings_processing(
     action_result = validate_filenames(dvc_diff)
     process_action_result(action_result)
 
-    auto_commit_base_images(typer, dvc_diff, git_repo_dir)
+    auto_commit_base_images(typer, dvc_diff, git_repo_dir, gnupghome)
 
 
 if __name__ == "__main__":

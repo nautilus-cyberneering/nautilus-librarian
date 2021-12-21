@@ -57,10 +57,10 @@ def files_to_commit(base_img_relative_path) -> List[str]:
     return filepaths
 
 
-def commit_base_image(git_repo_dir, base_img_relative_path):
+def commit_base_image(git_repo_dir, base_img_relative_path, gnupghome):
     git_global_user = git_config_global_user()
 
-    repo = GitRepo(git_repo_dir, git_global_user)
+    repo = GitRepo(git_repo_dir, git_global_user, gnupghome)
 
     return repo.commit(
         files_to_commit(base_img_relative_path),
@@ -87,7 +87,7 @@ def calculate_the_corresponding_base_image_from_gold_image(git_repo_dir, gold_im
     )
 
 
-def auto_commit_base_images(typer, dvc_diff, git_repo_dir):
+def auto_commit_base_images(typer, dvc_diff, git_repo_dir, gnupghome):
     """
     Workflow step: auto-commit new Base images generated during the workflow execution
     in previous steps.
@@ -140,4 +140,4 @@ def auto_commit_base_images(typer, dvc_diff, git_repo_dir):
         dvc_add(base_img_relative_path, git_repo_dir)
         dvc_push(f"{base_img_relative_path}.dvc", git_repo_dir)
 
-        commit_base_image(git_repo_dir, base_img_relative_path)
+        commit_base_image(git_repo_dir, base_img_relative_path, gnupghome)

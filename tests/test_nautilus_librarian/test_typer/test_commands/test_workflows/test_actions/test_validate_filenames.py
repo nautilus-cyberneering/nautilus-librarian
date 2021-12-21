@@ -31,7 +31,7 @@ def given_a_dvc_diff_object_it_should_validate_the_filename_of_the_new_media_fil
     result = runner.invoke(
         app,
         ["gold-drawings-processing", compact_json(dvc_diff_with_added_gold_image)],
-        env={"INPUT_GIT_REPO_DIR": str(temp_git_dir)},
+        env={"INPUT_GIT_REPO_DIR": str(temp_git_dir), "GNUPGHOME": "~/.gnupg"},
     )
 
     assert result.exit_code == 0
@@ -57,7 +57,7 @@ def given_a_dvc_diff_object_it_should_validate_the_filename_of_the_modified_medi
             "gold-drawings-processing",
             json.dumps(dvc_diff_with_modified_image, separators=(",", ":")),
         ],
-        env={"INPUT_GIT_REPO_DIR": str(temp_git_dir)},
+        env={"INPUT_GIT_REPO_DIR": str(temp_git_dir), "GNUPGHOME": "~/.gnupg"},
     )
 
     assert result.exit_code == 0
@@ -80,7 +80,7 @@ def given_a_dvc_diff_object_it_should_validate_the_filename_of_the_renamed_media
     result = runner.invoke(
         app,
         ["gold-drawings-processing", compact_json(dvc_diff_with_renamed_image)],
-        env={"INPUT_GIT_REPO_DIR": str(temp_git_dir)},
+        env={"INPUT_GIT_REPO_DIR": str(temp_git_dir), "GNUPGHOME": "~/.gnupg"},
     )
 
     assert result.exit_code == 0
@@ -103,7 +103,7 @@ def given_a_wrong_media_filename_it_should_show_an_error_and_abort_the_command(
     result = runner.invoke(
         app,
         ["gold-drawings-processing", compact_json(dvc_diff_with_wrong_filename)],
-        env={"INPUT_GIT_REPO_DIR": str(temp_git_dir)},
+        env={"INPUT_GIT_REPO_DIR": str(temp_git_dir), "GNUPGHOME": "~/.gnupg"},
     )
 
     assert result.exit_code == 1
