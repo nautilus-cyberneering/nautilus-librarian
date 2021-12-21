@@ -113,8 +113,8 @@ def test_list():
     dvcapi.add(get_test_dir(), "test.data")
     add_remote_to_scenario()
     dvcapi.push(get_test_dir())
-    expected_list_output = [{'isout': False, 'isdir': False, 'isexec': False, 'path': '.dvcignore'}, 
-                            {'isout': False, 'isdir': False, 'isexec': False, 'path': '.gitignore'}, 
-                            {'isout': True, 'isdir': False, 'isexec': False, 'path': 'test.data'}, 
+    expected_list_output = [{'isout': False, 'isdir': False, 'isexec': False, 'path': '.dvcignore'},
+                            {'isout': False, 'isdir': False, 'isexec': False, 'path': '.gitignore'},
+                            {'isout': True, 'isdir': False, 'isexec': False, 'path': 'test.data'},
                             {'isout': False, 'isdir': False, 'isexec': False, 'path': 'test.data.dvc'}]
     assert dvcapi.list(get_test_dir()) == expected_list_output
