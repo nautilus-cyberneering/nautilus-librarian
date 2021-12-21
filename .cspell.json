@@ -35,6 +35,7 @@
     "delslice",
     "docstrings",
     "dvcapi",
+    "dvcignore",
     "ENOENT",
     "envvar",
     "execfile",
