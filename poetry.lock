@@ -413,7 +413,7 @@ watch = ["pyinotify"]
 
 [[package]]
 name = "dvc"
-version = "2.9.1"
+version = "2.9.2"
 description = "Git for data scientists - manage your code and data together"
 category = "main"
 optional = false
@@ -450,7 +450,7 @@ python-benedict = ">=0.24.2"
 requests = ">=2.22.0"
 rich = ">=10.13.0"
 "ruamel.yaml" = ">=0.17.11"
-scmrepo = "0.0.3"
+scmrepo = "0.0.4"
 shortuuid = ">=0.5.0"
 shtab = ">=1.3.4,<2"
 tabulate = ">=0.8.7"
@@ -461,18 +461,18 @@ voluptuous = ">=0.11.7"
 "zc.lockfile" = ">=1.2.1"
 
 [package.extras]
-all = ["adlfs (>=2021.10.0)", "azure-identity (>=1.4.0)", "knack", "pydrive2[fsspec] (>=1.9.4)", "gcsfs (==2021.11.0)", "fsspec", "ossfs (==2021.8.0)", "s3fs (==2021.11.0)", "aiobotocore[boto3] (>1.0.1)", "sshfs[bcrypt] (>=2021.11.2)", "webdav4 (>=0.9.3)"]
+all = ["adlfs (>=2021.10.0)", "azure-identity (>=1.4.0)", "knack", "pydrive2[fsspec] (>=1.9.4)", "gcsfs (>=2021.11.1)", "fsspec", "ossfs (>=2021.8.0)", "s3fs (>=2021.11.1)", "aiobotocore[boto3] (>1.0.1)", "sshfs[bcrypt] (>=2021.11.2)", "webdav4 (>=0.9.3)"]
 azure = ["adlfs (>=2021.10.0)", "azure-identity (>=1.4.0)", "knack"]
-dev = ["adlfs (>=2021.10.0)", "azure-identity (>=1.4.0)", "knack", "pydrive2[fsspec] (>=1.9.4)", "gcsfs (==2021.11.0)", "fsspec", "ossfs (==2021.8.0)", "s3fs (==2021.11.0)", "aiobotocore[boto3] (>1.0.1)", "sshfs[bcrypt] (>=2021.11.2)", "webdav4 (>=0.9.3)", "tpi[ssh] (>=2.1.0)", "wheel (==0.37.0)", "dvc-ssh (==0.0.1a0)", "pytest (==6.2.5)", "pytest-cov (==3.0.0)", "pytest-xdist (==2.4.0)", "pytest-mock (==3.6.1)", "pytest-lazy-fixture (==0.6.3)", "flaky (==3.7.0)", "mock (==4.0.3)", "pytest-timeout (==2.0.1)", "rangehttpserver (==1.2.0)", "mock-ssh-server (==0.9.1)", "wget (==3.2)", "filelock (==3.4.0)", "wsgidav (==3.1.1)", "crc32c (==2.2.post0)", "xmltodict (==0.12.0)", "google-compute-engine (==2.8.13)", "google-cloud-storage (==1.43.0)", "dvclive[image] (==0.4.5)", "hdfs (==2.6.0)", "Pygments (==2.10.0)", "collective.checkdocs (==0.2)", "pydocstyle (==6.1.1)", "pylint (==2.12.2)", "pylint-pytest (==1.1.2)", "pylint-plugin-utils (==0.6)", "mypy (==0.910)", "types-requests (==2.26.1)", "types-tabulate (==0.8.3)", "types-toml (==0.10.1)", "pytest-docker (==0.10.3)", "pywin32 (>=225)"]
+dev = ["adlfs (>=2021.10.0)", "azure-identity (>=1.4.0)", "knack", "pydrive2[fsspec] (>=1.9.4)", "gcsfs (>=2021.11.1)", "fsspec", "ossfs (>=2021.8.0)", "s3fs (>=2021.11.1)", "aiobotocore[boto3] (>1.0.1)", "sshfs[bcrypt] (>=2021.11.2)", "webdav4 (>=0.9.3)", "tpi[ssh] (>=2.1.0)", "wheel (==0.37.0)", "dvc-ssh (==0.0.1a0)", "pytest (==6.2.5)", "pytest-cov (==3.0.0)", "pytest-xdist (==2.4.0)", "pytest-mock (==3.6.1)", "pytest-lazy-fixture (==0.6.3)", "flaky (==3.7.0)", "mock (==4.0.3)", "pytest-timeout (==2.0.1)", "rangehttpserver (==1.2.0)", "mock-ssh-server (==0.9.1)", "wget (==3.2)", "filelock (==3.4.0)", "wsgidav (==3.1.1)", "crc32c (==2.2.post0)", "xmltodict (==0.12.0)", "google-compute-engine (==2.8.13)", "google-cloud-storage (==1.43.0)", "dvclive[image] (==0.4.6)", "hdfs (==2.6.0)", "Pygments (==2.10.0)", "collective.checkdocs (==0.2)", "pydocstyle (==6.1.1)", "pylint (==2.12.2)", "pylint-pytest (==1.1.2)", "pylint-plugin-utils (==0.6)", "mypy (==0.910)", "types-requests (==2.26.1)", "types-tabulate (==0.8.3)", "types-toml (==0.10.1)", "pytest-docker (==0.10.3)", "pywin32 (>=225)"]
 gdrive = ["pydrive2[fsspec] (>=1.9.4)"]
-gs = ["gcsfs (==2021.11.0)"]
+gs = ["gcsfs (>=2021.11.1)"]
 hdfs = ["fsspec"]
-oss = ["ossfs (==2021.8.0)"]
-s3 = ["s3fs (==2021.11.0)", "aiobotocore[boto3] (>1.0.1)"]
+oss = ["ossfs (>=2021.8.0)"]
+s3 = ["s3fs (>=2021.11.1)", "aiobotocore[boto3] (>1.0.1)"]
 ssh = ["sshfs[bcrypt] (>=2021.11.2)"]
 ssh_gssapi = ["sshfs[gssapi] (>=2021.11.2)"]
 terraform = ["tpi[ssh] (>=2.1.0)"]
-tests = ["tpi[ssh] (>=2.1.0)", "wheel (==0.37.0)", "dvc-ssh (==0.0.1a0)", "pytest (==6.2.5)", "pytest-cov (==3.0.0)", "pytest-xdist (==2.4.0)", "pytest-mock (==3.6.1)", "pytest-lazy-fixture (==0.6.3)", "flaky (==3.7.0)", "mock (==4.0.3)", "pytest-timeout (==2.0.1)", "rangehttpserver (==1.2.0)", "mock-ssh-server (==0.9.1)", "wget (==3.2)", "filelock (==3.4.0)", "wsgidav (==3.1.1)", "crc32c (==2.2.post0)", "xmltodict (==0.12.0)", "google-compute-engine (==2.8.13)", "google-cloud-storage (==1.43.0)", "dvclive[image] (==0.4.5)", "hdfs (==2.6.0)", "Pygments (==2.10.0)", "collective.checkdocs (==0.2)", "pydocstyle (==6.1.1)", "pylint (==2.12.2)", "pylint-pytest (==1.1.2)", "pylint-plugin-utils (==0.6)", "mypy (==0.910)", "types-requests (==2.26.1)", "types-tabulate (==0.8.3)", "types-toml (==0.10.1)", "pytest-docker (==0.10.3)", "pywin32 (>=225)"]
+tests = ["tpi[ssh] (>=2.1.0)", "wheel (==0.37.0)", "dvc-ssh (==0.0.1a0)", "pytest (==6.2.5)", "pytest-cov (==3.0.0)", "pytest-xdist (==2.4.0)", "pytest-mock (==3.6.1)", "pytest-lazy-fixture (==0.6.3)", "flaky (==3.7.0)", "mock (==4.0.3)", "pytest-timeout (==2.0.1)", "rangehttpserver (==1.2.0)", "mock-ssh-server (==0.9.1)", "wget (==3.2)", "filelock (==3.4.0)", "wsgidav (==3.1.1)", "crc32c (==2.2.post0)", "xmltodict (==0.12.0)", "google-compute-engine (==2.8.13)", "google-cloud-storage (==1.43.0)", "dvclive[image] (==0.4.6)", "hdfs (==2.6.0)", "Pygments (==2.10.0)", "collective.checkdocs (==0.2)", "pydocstyle (==6.1.1)", "pylint (==2.12.2)", "pylint-pytest (==1.1.2)", "pylint-plugin-utils (==0.6)", "mypy (==0.910)", "types-requests (==2.26.1)", "types-tabulate (==0.8.3)", "types-toml (==0.10.1)", "pytest-docker (==0.10.3)", "pywin32 (>=225)"]
 webdav = ["webdav4 (>=0.9.3)"]
 webhdfs = ["requests-kerberos (==0.14.0)"]
 
@@ -1174,6 +1174,14 @@ python-versions = "*"
 requests = "*"
 
 [[package]]
+name = "python-gnupg"
+version = "0.4.8"
+description = "A wrapper for the Gnu Privacy Guard (GPG or GnuPG)"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "python-slugify"
 version = "5.0.2"
 description = "A Python Slugify application that handles Unicode"
@@ -1304,7 +1312,7 @@ python-versions = ">=3.5"
 
 [[package]]
 name = "scmrepo"
-version = "0.0.3"
+version = "0.0.4"
 description = "SCM wrapper and fsspec filesystem for Git for use in DVC"
 category = "main"
 optional = false
@@ -1535,7 +1543,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "f607a1f853031accd5430d671e6b53c02c8c3db77b4918086af08ae5300c0e2b"
+content-hash = "6568b7ac3ce39315f62bc12ac18ee4874e23e9e87198dd91bb77ef514c996aba"
 
 [metadata.files]
 adal = [
@@ -1869,8 +1877,8 @@ dulwich = [
     {file = "dulwich-0.20.26.tar.gz", hash = "sha256:38aa50f859c8ea53071a049c3f1d5cc54f7dc60a4136a1ab631756a79f6582b5"},
 ]
 dvc = [
-    {file = "dvc-2.9.1-py3-none-any.whl", hash = "sha256:fc5fccb5d6ba2749a560589d90ab4afc8ab64bb1a3f5a28f3272e50aa7aa222e"},
-    {file = "dvc-2.9.1.tar.gz", hash = "sha256:777020ed96d411cd0257ea4fdb842307a02a187b6ff8eacb7d97397507b5a007"},
+    {file = "dvc-2.9.2-py3-none-any.whl", hash = "sha256:555b4f1f86ddf03679320b81a6e3f67786cee8f5b61768acd490eda826758cef"},
+    {file = "dvc-2.9.2.tar.gz", hash = "sha256:543257907a843952c44bdb1ea84f2ae33d8693584c1175eb49eb95da0c2a2e49"},
 ]
 flatten-dict = [
     {file = "flatten-dict-0.4.2.tar.gz", hash = "sha256:506a96b6e6f805b81ae46a0f9f31290beb5fa79ded9d80dbe1b7fa236ab43076"},
@@ -2406,6 +2414,10 @@ python-fsutil = [
     {file = "python-fsutil-0.5.0.tar.gz", hash = "sha256:02a347540d10c1616390a536ced73fd67df8d01c499f497d0ab3de3fbb236f0e"},
     {file = "python_fsutil-0.5.0-py3-none-any.whl", hash = "sha256:dc8de800c9915e6a3333ff2e917207a1a7cc20d0e7ea0e165473fa29e16be566"},
 ]
+python-gnupg = [
+    {file = "python-gnupg-0.4.8.tar.gz", hash = "sha256:b64de1ae5cedf872b437201a566fa2c62ce0c95ea2e30177eb53aee1258507d7"},
+    {file = "python_gnupg-0.4.8-py2.py3-none-any.whl", hash = "sha256:93a521501d6c2785d96b190aec7125ba89c1c2fe708b0c98af3fb32b59026ab8"},
+]
 python-slugify = [
     {file = "python-slugify-5.0.2.tar.gz", hash = "sha256:f13383a0b9fcbe649a1892b9c8eb4f8eab1d6d84b84bb7a624317afa98159cab"},
     {file = "python_slugify-5.0.2-py2.py3-none-any.whl", hash = "sha256:6d8c5df75cd4a7c3a2d21e257633de53f52ab0265cd2d1dc62a730e8194a7380"},
@@ -2505,8 +2517,8 @@ rich = [
     {file = "ruamel.yaml.clib-0.2.6.tar.gz", hash = "sha256:4ff604ce439abb20794f05613c374759ce10e3595d1867764dd1ae675b85acbd"},
 ]
 scmrepo = [
-    {file = "scmrepo-0.0.3-py3-none-any.whl", hash = "sha256:25fb4640fe650d1dfd6b4981d785d050c05b5c1cc31ac25649d5aa0cd3a7845b"},
-    {file = "scmrepo-0.0.3.tar.gz", hash = "sha256:d29d9fb3e218c3632bf7f7b71500927d8a36f3f2d62ab888206913965b9afb1c"},
+    {file = "scmrepo-0.0.4-py3-none-any.whl", hash = "sha256:cbb03fd15814fd5a7bb522dde9eab112742029eb6294bca6c28da73bffa77cf1"},
+    {file = "scmrepo-0.0.4.tar.gz", hash = "sha256:e00a46f1c5f560c35bafd792fd14b07144e1a2d1c384e20ab44a25f5f1d7c335"},
 ]
 shellingham = [
     {file = "shellingham-1.4.0-py2.py3-none-any.whl", hash = "sha256:536b67a0697f2e4af32ab176c00a50ac2899c5a05e0d8e2dadac8e58888283f9"},

@@ -20,11 +20,21 @@ runner = CliRunner()
 
 
 def given_a_dvc_diff_object_with_a_new_gold_image_it_should_commit_the_added_base_image_to_dvc(
-    temp_git_dir, temp_dvc_local_remote_storage_dir, sample_base_image_absolute_path
+    temp_git_dir,
+    temp_dvc_local_remote_storage_dir,
+    sample_base_image_absolute_path,
+    temp_gpg_home_dir,
 ):
+    git_user_name = "A committer"
+    git_user_email = "committer@example.com"
+    git_user_signingkey = "3F39AA1432CA6AD7"
 
     create_initial_state(
-        temp_git_dir, temp_dvc_local_remote_storage_dir, sample_base_image_absolute_path
+        temp_git_dir,
+        temp_dvc_local_remote_storage_dir,
+        sample_base_image_absolute_path,
+        temp_gpg_home_dir,
+        git_user_signingkey,
     )
 
     dvc_diff = {
@@ -40,10 +50,17 @@ def given_a_dvc_diff_object_with_a_new_gold_image_it_should_commit_the_added_bas
     result = runner.invoke(
         app,
         ["gold-drawings-processing", compact_json(dvc_diff)],
-        env={"INPUT_GIT_REPO_DIR": str(temp_git_dir), "GNUPGHOME": "~/.gnupg"},
+        env={
+            "INPUT_GIT_REPO_DIR": str(temp_git_dir),
+            "INPUT_GIT_USER_NAME": git_user_name,
+            "INPUT_GIT_USER_EMAIL": git_user_email,
+            "INPUT_GIT_USER_SIGNINGKEY": git_user_signingkey,
+            "GNUPGHOME": str(temp_gpg_home_dir),
+        },
     )
 
-    # debug_execute_console_command("tree -a data", cwd=temp_git_dir)
+    # debug:
+    # execute_console_command("tree -a data", cwd=temp_git_dir, print_output=True, print_command=True)
 
     # Assert command runned successfully
     assert result.exit_code == 0
@@ -86,6 +103,9 @@ def given_a_dvc_diff_object_with_a_new_gold_image_it_should_commit_the_added_bas
     }
 
     assert commit.stats.files == expected_commit_stats_files
+
+    # debug: show commit with signature
+    # execute_console_command(f"git show --show-signature", cwd=temp_git_dir, print_output=True, print_command=True)
 
     # TODO:
     #  * Assert commit is signed, once we import the test GPG key.

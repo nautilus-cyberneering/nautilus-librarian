@@ -15,7 +15,11 @@ runner = CliRunner()
 
 
 def create_initial_state(
-    temp_git_dir, temp_dvc_local_remote_storage_dir, sample_base_image_absolute_path
+    temp_git_dir,
+    temp_dvc_local_remote_storage_dir,
+    sample_base_image_absolute_path,
+    temp_gpg_home_dir,
+    git_user_signingkey,
 ):
     """
     Helper function to create the initial state needed to test the workflow.
@@ -38,10 +42,10 @@ def create_initial_state(
         git init
         dvc init
         git add -A
-        git commit -m "dvc init"
+        GNUPGHOME={temp_gpg_home_dir} git commit -S --gpg-sign={git_user_signingkey} -m "dvc init"
         dvc remote add -d localremote {temp_dvc_local_remote_storage_dir}
         git add -A
-        git commit -m "dvc add remote"
+        GNUPGHOME={temp_gpg_home_dir} git commit -S --gpg-sign={git_user_signingkey} -m "dvc add remote"
         mkdir -p {sample_base_image_dir}
     """
     )
