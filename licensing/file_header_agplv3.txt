@@ -1,7 +1,7 @@
-    Chinese Ideographs
+    Nautilus Librarian
     
     Project owner: Nautilus Cyberneering GmbH.
-    Github repository: https://github.com/Nautilus-Cyberneering/chinese-ideographs  
+    Github repository: https://github.com/Nautilus-Cyberneering/nautilus-librarian  
         Project description:   
     It is a repository group for a POC project to create a continuous
     integration workflow for artwork by Ethical Software Ltd. (ESL).
