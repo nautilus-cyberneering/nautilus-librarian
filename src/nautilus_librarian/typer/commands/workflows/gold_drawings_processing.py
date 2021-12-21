@@ -44,13 +44,13 @@ def gold_drawings_processing(
         get_current_working_directory, envvar="INPUT_GIT_REPO_DIR"
     ),
     git_user_name: str = typer.Argument(
-        default_git_user_name(), envvar="INPUT_GIT_USER_NAME"
+        default_git_user_name, envvar="INPUT_GIT_USER_NAME"
     ),
     git_user_email: str = typer.Argument(
-        default_git_user_email(), envvar="INPUT_GIT_USER_EMAIL"
+        default_git_user_email, envvar="INPUT_GIT_USER_EMAIL"
     ),
     git_user_signingkey: str = typer.Argument(
-        default_git_user_signingkey(), envvar="INPUT_GIT_USER_SIGNINGKEY"
+        default_git_user_signingkey, envvar="INPUT_GIT_USER_SIGNINGKEY"
     ),
     # Third-party env vars
     gnupghome: str = typer.Argument("~/.gnupg", envvar="GNUPGHOME"),
