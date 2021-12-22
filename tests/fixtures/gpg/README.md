@@ -1,16 +1,6 @@
 # GPG fixtures
 
-Export GPG key:
-
-```shell
-gpg --output private.gpg --armor --export-secret-key committer@example.com
-```
-
-Import GPG key in a temporary directory:
-
-```shell
-gpg --homedir ./tests/fixtures/.gnupg --import private.gpg
-```
+For testing purposes we are using this [GPG key](committer_private_key.pgp).
 
 The GPG key we are using for testing:
 
@@ -26,4 +16,35 @@ sub   rsa4096 2021-11-19 [E]
 sub   rsa4096 2021-11-26 [S]
       BD98 B3F4 2545 FF93 EFF5  5F7F 3F39 AA14 32CA 6AD7
       Keygrip = 00CB9308AE0B6DE018C5ADBAB29BA7899D6062BE
+```
+
+For the tests we are using a temporary GPG home dir. YOu can do that basically in two different ways:
+
+- By using the argument `--homedir`.
+- By using the environment variable `GNUPGHOME`.
+
+Some git commands use gpg under the hood. For example, we you sign a commit:
+
+```shell
+git commit -S --gpg-sign=27304EDD6079B81C -m "first commit"
+```
+
+If you are not using the default GPG homedir you have to set the env var before calling `git commit`.
+
+```shell
+GNUPGHOME=./tests/fixtures/.gnupg git commit -S --gpg-sign=27304EDD6079B81C -m "first commit"
+```
+
+## Commands
+
+Export GPG key:
+
+```shell
+gpg --output private.gpg --armor --export-secret-key committer@example.com
+```
+
+Import GPG key in a temporary directory:
+
+```shell
+gpg --homedir ./tests/fixtures/.gnupg --import private.gpg
 ```
