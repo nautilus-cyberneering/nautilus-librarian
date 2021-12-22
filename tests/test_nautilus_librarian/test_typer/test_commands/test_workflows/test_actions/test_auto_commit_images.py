@@ -25,17 +25,14 @@ def given_a_dvc_diff_object_with_a_new_gold_image_it_should_commit_the_added_bas
     temp_dvc_local_remote_storage_dir,
     sample_base_image_absolute_path,
     temp_gpg_home_dir,
+    test_git_user,
 ):
-    git_user_name = "A committer"
-    git_user_email = "committer@example.com"
-    git_user_signingkey = "3F39AA1432CA6AD7"
-
     create_initial_state(
         temp_git_dir,
         temp_dvc_local_remote_storage_dir,
         sample_base_image_absolute_path,
         temp_gpg_home_dir,
-        git_user_signingkey,
+        test_git_user,
     )
 
     dvc_diff = {
@@ -53,9 +50,9 @@ def given_a_dvc_diff_object_with_a_new_gold_image_it_should_commit_the_added_bas
         ["gold-drawings-processing", compact_json(dvc_diff)],
         env={
             "INPUT_GIT_REPO_DIR": str(temp_git_dir),
-            "INPUT_GIT_USER_NAME": git_user_name,
-            "INPUT_GIT_USER_EMAIL": git_user_email,
-            "INPUT_GIT_USER_SIGNINGKEY": git_user_signingkey,
+            "INPUT_GIT_USER_NAME": test_git_user.name,
+            "INPUT_GIT_USER_EMAIL": test_git_user.email,
+            "INPUT_GIT_USER_SIGNINGKEY": test_git_user.signingkey,
             "GNUPGHOME": str(temp_gpg_home_dir),
         },
     )
@@ -114,12 +111,13 @@ def given_a_dvc_diff_object_with_a_new_gold_image_it_should_commit_the_added_bas
     # )
 
     # Assert the commit was created by the right user
-    assert commit.committer.name == git_user_name
-    assert commit.committer.email == git_user_email
+    assert commit.committer.name == test_git_user.name
+    assert commit.committer.email == test_git_user.email
 
     # Assert the commit was signed with the right signing key
     assert (
-        get_commit_signing_key(commit.hexsha, cwd=temp_git_dir) == git_user_signingkey
+        get_commit_signing_key(commit.hexsha, cwd=temp_git_dir)
+        == test_git_user.signingkey
     )
 
 

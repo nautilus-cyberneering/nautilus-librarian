@@ -16,17 +16,14 @@ def given_a_dvc_diff_object_it_should_validate_the_filename_of_the_new_media_fil
     temp_dvc_local_remote_storage_dir,
     sample_base_image_absolute_path,
     temp_gpg_home_dir,
+    test_git_user,
 ):
-    git_user_name = "A committer"
-    git_user_email = "committer@example.com"
-    git_user_signingkey = "3F39AA1432CA6AD7"
-
     create_initial_state(
         temp_git_dir,
         temp_dvc_local_remote_storage_dir,
         sample_base_image_absolute_path,
         temp_gpg_home_dir,
-        git_user_signingkey,
+        test_git_user,
     )
 
     dvc_diff_with_added_gold_image = {
@@ -44,9 +41,9 @@ def given_a_dvc_diff_object_it_should_validate_the_filename_of_the_new_media_fil
         ["gold-drawings-processing", compact_json(dvc_diff_with_added_gold_image)],
         env={
             "INPUT_GIT_REPO_DIR": str(temp_git_dir),
-            "INPUT_GIT_USER_NAME": git_user_name,
-            "INPUT_GIT_USER_EMAIL": git_user_email,
-            "INPUT_GIT_USER_SIGNINGKEY": git_user_signingkey,
+            "INPUT_GIT_USER_NAME": test_git_user.name,
+            "INPUT_GIT_USER_EMAIL": test_git_user.email,
+            "INPUT_GIT_USER_SIGNINGKEY": test_git_user.signingkey,
             "GNUPGHOME": str(temp_gpg_home_dir),
         },
     )
@@ -56,7 +53,7 @@ def given_a_dvc_diff_object_it_should_validate_the_filename_of_the_new_media_fil
 
 
 def given_a_dvc_diff_object_it_should_validate_the_filename_of_the_modified_media_files(
-    temp_git_dir, temp_gpg_home_dir
+    temp_git_dir, temp_gpg_home_dir, test_git_user
 ):
     dvc_diff_with_modified_image = {
         "added": [],
@@ -76,9 +73,9 @@ def given_a_dvc_diff_object_it_should_validate_the_filename_of_the_modified_medi
         ],
         env={
             "INPUT_GIT_REPO_DIR": str(temp_git_dir),
-            "INPUT_GIT_USER_NAME": "A committer",
-            "INPUT_GIT_USER_EMAIL": "committer@example.com",
-            "INPUT_GIT_USER_SIGNINGKEY": "3F39AA1432CA6AD7",
+            "INPUT_GIT_USER_NAME": test_git_user.name,
+            "INPUT_GIT_USER_EMAIL": test_git_user.email,
+            "INPUT_GIT_USER_SIGNINGKEY": test_git_user.signingkey,
             "GNUPGHOME": str(temp_gpg_home_dir),
         },
     )
@@ -88,7 +85,7 @@ def given_a_dvc_diff_object_it_should_validate_the_filename_of_the_modified_medi
 
 
 def given_a_dvc_diff_object_it_should_validate_the_filename_of_the_renamed_media_files(
-    temp_git_dir, temp_gpg_home_dir
+    temp_git_dir, temp_gpg_home_dir, test_git_user
 ):
     dvc_diff_with_renamed_image = {
         "added": [],
@@ -105,9 +102,9 @@ def given_a_dvc_diff_object_it_should_validate_the_filename_of_the_renamed_media
         ["gold-drawings-processing", compact_json(dvc_diff_with_renamed_image)],
         env={
             "INPUT_GIT_REPO_DIR": str(temp_git_dir),
-            "INPUT_GIT_USER_NAME": "A committer",
-            "INPUT_GIT_USER_EMAIL": "committer@example.com",
-            "INPUT_GIT_USER_SIGNINGKEY": "3F39AA1432CA6AD7",
+            "INPUT_GIT_USER_NAME": test_git_user.name,
+            "INPUT_GIT_USER_EMAIL": test_git_user.email,
+            "INPUT_GIT_USER_SIGNINGKEY": test_git_user.signingkey,
             "GNUPGHOME": str(temp_gpg_home_dir),
         },
     )
@@ -117,7 +114,7 @@ def given_a_dvc_diff_object_it_should_validate_the_filename_of_the_renamed_media
 
 
 def given_a_wrong_media_filename_it_should_show_an_error_and_abort_the_command(
-    temp_git_dir, temp_gpg_home_dir
+    temp_git_dir, temp_gpg_home_dir, test_git_user
 ):
     dvc_diff_with_wrong_filename = {
         "added": [
@@ -134,9 +131,9 @@ def given_a_wrong_media_filename_it_should_show_an_error_and_abort_the_command(
         ["gold-drawings-processing", compact_json(dvc_diff_with_wrong_filename)],
         env={
             "INPUT_GIT_REPO_DIR": str(temp_git_dir),
-            "INPUT_GIT_USER_NAME": "A committer",
-            "INPUT_GIT_USER_EMAIL": "committer@example.com",
-            "INPUT_GIT_USER_SIGNINGKEY": "3F39AA1432CA6AD7",
+            "INPUT_GIT_USER_NAME": test_git_user.name,
+            "INPUT_GIT_USER_EMAIL": test_git_user.email,
+            "INPUT_GIT_USER_SIGNINGKEY": test_git_user.signingkey,
             "GNUPGHOME": str(temp_gpg_home_dir),
         },
     )
