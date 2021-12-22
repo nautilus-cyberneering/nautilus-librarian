@@ -7,6 +7,7 @@ from nautilus_librarian.mods.dvc.domain.utils import (
     dvc_push,
     extract_added_files_from_dvc_diff,
 )
+from nautilus_librarian.mods.git.domain.git_user import GitUser
 from nautilus_librarian.mods.git.domain.repo import GitRepo
 from nautilus_librarian.mods.namecodes.domain.filename import Filename
 from nautilus_librarian.mods.namecodes.domain.filename_filters import filter_gold_images
@@ -89,12 +90,11 @@ def calculate_the_corresponding_base_image_from_gold_image(git_repo_dir, gold_im
     )
 
 
-def auto_commit_base_images(dvc_diff, git_repo_dir, gnupghome, git_user):
+def auto_commit_base_images(dvc_diff, git_repo_dir, gnupghome, git_user: GitUser):
     """
     Workflow step: auto-commit new Base images generated during the workflow execution
     in previous steps.
 
-    TODO:
     Case 1. Added Gold images.
     For each added Gold image:
       [✓] 1. Calculate the corresponding Base image filename and filepath.
@@ -106,6 +106,7 @@ def auto_commit_base_images(dvc_diff, git_repo_dir, gnupghome, git_user):
     Points 2 to 5 are different depending on whether we are adding,
     modifying or renaming the Gold image.
 
+    TODO:
     Case 2. Modified Gold images.
     For each modified Gold image:
       [ ] 1. ??
