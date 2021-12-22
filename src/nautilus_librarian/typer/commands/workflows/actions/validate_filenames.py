@@ -6,6 +6,7 @@ from nautilus_librarian.mods.namecodes.domain.validate_filenames import (
 )
 from nautilus_librarian.typer.commands.workflows.actions.action_result import (
     ActionResult,
+    ErrorMessage,
     Message,
     ResultCode,
 )
@@ -27,6 +28,8 @@ def validate_filenames(dvc_diff):
             validate_filename(filename)
             messages.append(Message(f"{filename} ✓"))
         except ValueError as error:
-            return ActionResult(ResultCode.ABORT, [Message(f"{filename} ✗ {error}")])
+            return ActionResult(
+                ResultCode.ABORT, [ErrorMessage(f"{filename} ✗ {error}")]
+            )
 
     return ActionResult(ResultCode.CONTINUE, messages)
