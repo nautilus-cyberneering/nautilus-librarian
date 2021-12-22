@@ -82,7 +82,7 @@ def temp_dvc_local_remote_storage_dir(tmp_path_factory):
 @pytest.fixture(scope="session")
 def sample_base_image_absolute_path():
     fixtures_dir = get_fixtures_dir()
-    base_image_path = f"{fixtures_dir}/000001-42.600.2.tif"
+    base_image_path = f"{fixtures_dir}/images/000001-42.600.2.tif"
     return base_image_path
 
 
