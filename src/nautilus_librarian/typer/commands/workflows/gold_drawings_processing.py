@@ -72,17 +72,19 @@ def gold_drawings_processing(
 
     6. Generate Base image from Gold (change size and icc profile) (TODO).
 
-    7. Auto-commit new Base images (TODO).
+    7. Auto-commit new Base images.
 
     Example:
         poetry run nautilus-librarian gold-drawings-processing '{"added":[{"path":"data/000001/32/000001-32.600.2.tif"}],"deleted":[],"modified":[],"renamed":[]}' # noqa
     """
 
-    action_result = validate_filenames(dvc_diff)
-    process_action_result(action_result)
-
     git_user = GitUser(git_user_name, git_user_email, git_user_signingkey)
-    auto_commit_base_images(typer, dvc_diff, git_repo_dir, gnupghome, git_user)
+
+    process_action_result(validate_filenames(dvc_diff))
+
+    process_action_result(
+        auto_commit_base_images(dvc_diff, git_repo_dir, gnupghome, git_user)
+    )
 
 
 if __name__ == "__main__":

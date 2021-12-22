@@ -10,6 +10,11 @@ from nautilus_librarian.mods.dvc.domain.utils import (
 from nautilus_librarian.mods.git.domain.repo import GitRepo
 from nautilus_librarian.mods.namecodes.domain.filename import Filename
 from nautilus_librarian.mods.namecodes.domain.filename_filters import filter_gold_images
+from nautilus_librarian.typer.commands.workflows.actions.action_result import (
+    ActionResult,
+    Message,
+    ResultCode,
+)
 
 
 class FileNotFoundException(Exception):
@@ -84,7 +89,7 @@ def calculate_the_corresponding_base_image_from_gold_image(git_repo_dir, gold_im
     )
 
 
-def auto_commit_base_images(typer, dvc_diff, git_repo_dir, gnupghome, git_user):
+def auto_commit_base_images(dvc_diff, git_repo_dir, gnupghome, git_user):
     """
     Workflow step: auto-commit new Base images generated during the workflow execution
     in previous steps.
@@ -119,6 +124,8 @@ def auto_commit_base_images(typer, dvc_diff, git_repo_dir, gnupghome, git_user):
     """
     gold_images = get_new_gold_images_filenames_from_dvc_diff(dvc_diff)
 
+    messages = []
+
     for gold_image in gold_images:
         (
             base_img_relative_path,
@@ -127,14 +134,16 @@ def auto_commit_base_images(typer, dvc_diff, git_repo_dir, gnupghome, git_user):
             git_repo_dir, gold_image
         )
 
-        # TODO: inject console_printer to remove dependency with typer so that we can create
-        # unit tests for workflow steps.
-        typer.echo(
-            f"New Gold image found: {gold_image} -> Base image: {base_img_relative_path} ✓ "
-        )
-
         guard_that_base_image_exists(base_img_absolute_path)
         dvc_add(base_img_relative_path, git_repo_dir)
         dvc_push(f"{base_img_relative_path}.dvc", git_repo_dir)
 
         commit_base_image(git_repo_dir, base_img_relative_path, gnupghome, git_user)
+
+        messages.append(
+            Message(
+                f"New Gold image found: {gold_image} -> Base image: {base_img_relative_path} ✓ "
+            )
+        )
+
+    return ActionResult(ResultCode.CONTINUE, messages)
