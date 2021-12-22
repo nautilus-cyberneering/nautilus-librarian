@@ -10,6 +10,7 @@ from typer.testing import CliRunner
 
 from nautilus_librarian.main import app
 from nautilus_librarian.mods.console.domain.utils import execute_console_command
+from nautilus_librarian.mods.git.domain.commit import get_commit_signing_key
 from nautilus_librarian.mods.namecodes.domain.filename import Filename
 from nautilus_librarian.typer.commands.workflows.actions.auto_commit_base_images import (
     files_to_commit,
@@ -105,14 +106,21 @@ def given_a_dvc_diff_object_with_a_new_gold_image_it_should_commit_the_added_bas
     assert commit.stats.files == expected_commit_stats_files
 
     # debug: show commit with signature
-    # execute_console_command(f"git show --show-signature", cwd=temp_git_dir, print_output=True, print_command=True)
+    # execute_console_command(
+    #    "git show --show-signature",
+    #    cwd=temp_git_dir,
+    #    print_output=True,
+    #    print_command=True,
+    # )
 
-    # TODO:
-    #  * Assert commit is signed, once we import the test GPG key.
+    # Assert the commit was created by the right user
+    assert commit.committer.name == git_user_name
+    assert commit.committer.email == git_user_email
 
-    # Code Review:
-    #  * Should we assert files content? I do not think so because
-    #    that would be testing dvc implementation.
+    # Assert the commit was signed with the right signing key
+    assert (
+        get_commit_signing_key(commit.hexsha, cwd=temp_git_dir) == git_user_signingkey
+    )
 
 
 def test_get_new_gold_images_from_dvc_diff():
