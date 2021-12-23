@@ -25,14 +25,7 @@ def make_checkpoint():
 
 
 def open_repo(path):
-    try:
-        repo = Repo(path)
-    except dvc.exceptions.NotDvcRepoError:
-        print("Error: Specified path does not point to a DVC repository")
-    except dvc.exceptions.DvcException:
-        print("Unexpected error occurred when opening repo at:", path)
-    else:
-        return repo
+    return Repo(path)
 
 
 def diff(path, a_rev="HEAD", b_rev=None, targets=None):
