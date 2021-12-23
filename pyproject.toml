@@ -14,6 +14,7 @@ classifiers = [
 ]
 packages = [
     { include = "nautilus_librarian", from = "src" },
+    { include = "test_nautilus_librarian", from = "tests" },
 ]
 
 [tool.poetry.scripts]
@@ -28,6 +29,7 @@ dvc = {extras = ["azure"], version = "^2.8.3"}
 typer = {extras = ["all"], version = "^0.4.0"}
 mypy = "^0.910"
 atoml = "^1.1.1"
+python-gnupg = "^0.4.8"
 
 [tool.poetry.dev-dependencies]
 black = "^21.11b1"

@@ -1,5 +1,7 @@
 # The Nautilus Cyberneering Contributor Agreement
 
+<!-- markdownlint-disable MD013 -->
+
 [Version 2021-11-10]
 
 ## Goal
@@ -97,3 +99,5 @@ This document is based upon:
 
 [The Fedora Project Contributor Agreement](https://fedoraproject.org/w/index.php?title=Legal:Fedora_Project_Contributor_Agreement&oldid=629385).  
 [Version 2021-05-04]
+
+<!-- markdownlint-enable MD013 -->

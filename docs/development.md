@@ -82,6 +82,14 @@ or:
 poetry run pytest --cov
 ```
 
+Some useful test commands:
+
+Run only one test (`-k`) with no capture (`-s`):
+
+```shell
+pytest -s -k "test_app"
+```
+
 ## Linting
 
 With [MegaLinter](https://megalinter.github.io/latest/mega-linter-runner/#local-installation):
@@ -103,10 +111,10 @@ mega-linter-runner --fix
 You can use [act](https://github.com/nektos/act) to run workflows locally. For example:
 
 ```shell
-act -W ./.github/workflows/test-gold-drawings-processing-workflow.yml -j build
+act -W ./.github/workflows/test-gold-images-processing-workflow.yml -j build
 ```
 
-With that command, you can run the `build` job in the `test-gold-drawings-processing-workflow.yml` workflow.
+With that command, you can run the `build` job in the `test-gold-images-processing-workflow.yml` workflow.
 
 ## Releases
 
