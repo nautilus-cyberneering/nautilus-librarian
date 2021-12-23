@@ -2,7 +2,6 @@ import dvc.api as native
 import dvc.exceptions
 from dvc.repo import Repo
 
-
 # wrappers to the native API functions
 
 
@@ -122,4 +121,5 @@ def list(repo_path, list_path=None, recursive=None, dvc_only=False):
 
 def init(path, no_scm=False):
     from dvc.repo.init import init
+
     return init(root_dir=path, no_scm=no_scm)

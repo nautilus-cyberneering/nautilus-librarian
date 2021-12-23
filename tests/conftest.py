@@ -1,4 +1,6 @@
+import os
 import pathlib
+from pathlib import Path
 from shutil import copy
 
 import _pytest.pathlib
@@ -54,18 +56,20 @@ _pytest.pathlib.resolve_package_path = resolve_package_path
 # Fixtures
 
 
-def get_fixtures_dir():
+@pytest.fixture(scope="session")
+def fixtures_dir():
     """
     It's a helper function to use only in tests.
     It gives you the test folder where we store tests fixtures like: example images, gpg keys, etcetera.
     """
-    return pathlib.Path().resolve() / "tests/fixtures"
+    current_file_dir = os.path.dirname(Path(__file__).resolve())
+    return f"{current_file_dir}/fixtures"
 
 
 @pytest.fixture(scope="session")
-def test_gpg_key_info():
+def gpg_key_info(fixtures_dir):
     """
-    The GPG key used to sign commit in tests:
+    The GPG key used to sign the commits in tests:
 
     pub   rsa4096 2021-11-19 [C]
           8896 6A5B 8C01 BD04 F3DA  4404 2730 4EDD 6079 B81C
@@ -84,9 +88,7 @@ def test_gpg_key_info():
     # Read the GPG private key used for testing from a file.
     # The file does not contain the header and footer.
     # secretlint-disable
-    committer_gpg_private_key_path = (
-        f"{get_fixtures_dir()}/gpg/committer_private_key.pgp"
-    )
+    committer_gpg_private_key_path = f"{fixtures_dir}/gpg/committer_private_key.pgp"
     gpg_private_key = "-----BEGIN PGP PRIVATE KEY BLOCK-----\n\n"
     with open(committer_gpg_private_key_path, "r") as f:
         gpg_private_key += f.read()
@@ -102,13 +104,11 @@ def test_gpg_key_info():
 
 
 @pytest.fixture(scope="session")
-def test_git_user(test_gpg_key_info):
+def git_user(gpg_key_info):
     """
-    The test committer used to create commit in tests.
+    The test committer used to create the commits in tests.
     """
-    return GitUser(
-        "A committer", "committer@example.com", test_gpg_key_info["long_key"]
-    )
+    return GitUser("A committer", "committer@example.com", gpg_key_info["long_key"])
 
 
 @pytest.fixture()
@@ -130,14 +130,13 @@ def temp_dvc_local_remote_storage_dir(tmp_path_factory):
 
 
 @pytest.fixture(scope="session")
-def sample_base_image_absolute_path():
-    fixtures_dir = get_fixtures_dir()
+def sample_base_image_absolute_path(fixtures_dir):
     base_image_path = f"{fixtures_dir}/images/000001-42.600.2.tif"
     return base_image_path
 
 
 @pytest.fixture(scope="session")
-def temp_gpg_home_dir(tmp_path_factory, test_gpg_key_info):
+def temp_gpg_home_dir(tmp_path_factory, gpg_key_info, fixtures_dir):
     # Create new tmp homedir for GPG
     gnupghome = tmp_path_factory.mktemp("gnupg")
 
@@ -145,7 +144,7 @@ def temp_gpg_home_dir(tmp_path_factory, test_gpg_key_info):
     # We need the option "allow-preset-passphrase"
     # to preset the passphrase, in order to avoid the prompt asking
     # for the passphrase while running tests.
-    gpg_agent_conf_template = f"{get_fixtures_dir()}/gpg/gpg-agent.conf"
+    gpg_agent_conf_template = f"{fixtures_dir}/gpg/gpg-agent.conf"
     copy(gpg_agent_conf_template, gnupghome)
     execute_console_command(
         f"""
@@ -155,8 +154,8 @@ def temp_gpg_home_dir(tmp_path_factory, test_gpg_key_info):
 
     # Import the GPG key in the temp GPG homedir
     keygrip, signingkey, user_name, user_email = import_gpg_private_key(
-        gpg_private_key=test_gpg_key_info["private_key"],
-        passphrase=test_gpg_key_info["passphrase"],
+        gpg_private_key=gpg_key_info["private_key"],
+        passphrase=gpg_key_info["passphrase"],
         gnupghome=str(gnupghome),
     )
 
@@ -167,8 +166,8 @@ def temp_gpg_home_dir(tmp_path_factory, test_gpg_key_info):
 
     # Preset passphrase to avoid entering it manually while running tests
     preset_passphrase(
-        test_gpg_key_info["keygrip"],
-        passphrase=test_gpg_key_info["passphrase"],
+        gpg_key_info["keygrip"],
+        passphrase=gpg_key_info["passphrase"],
         gnupghome=gnupghome,
     )
 
