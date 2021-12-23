@@ -107,8 +107,7 @@ class DvcApiWrapper:
             remote=remote,
         )
 
-    def list(self, repo_path, list_path=None, recursive=None, dvc_only=False):
-        change_current_working_directory(self.repo_path)
+    def list(self, list_path=None, recursive=None, dvc_only=False):
         return self.dvc_repo.ls(
-            repo_path, path=list_path, recursive=recursive, dvc_only=dvc_only
+            self.repo_path, path=list_path, recursive=recursive, dvc_only=dvc_only
         )
