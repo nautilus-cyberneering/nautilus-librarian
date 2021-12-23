@@ -60,7 +60,7 @@ def test_gold_images_processing_workflow_command(
     temp_dvc_local_remote_storage_dir,
     sample_base_image_absolute_path,
     temp_gpg_home_dir,
-    test_git_user,
+    git_user,
 ):
     """
     This is the acceptance test for the whole command and for the happy path.
@@ -71,7 +71,7 @@ def test_gold_images_processing_workflow_command(
         temp_dvc_local_remote_storage_dir,
         sample_base_image_absolute_path,
         temp_gpg_home_dir,
-        test_git_user,
+        git_user,
     )
 
     dvc_diff = {
@@ -88,9 +88,9 @@ def test_gold_images_processing_workflow_command(
         ["gold-images-processing", compact_json(dvc_diff)],
         env={
             "INPUT_GIT_REPO_DIR": str(temp_git_dir),
-            "INPUT_GIT_USER_NAME": test_git_user.name,
-            "INPUT_GIT_USER_EMAIL": test_git_user.email,
-            "INPUT_GIT_USER_SIGNINGKEY": test_git_user.signingkey,
+            "INPUT_GIT_USER_NAME": git_user.name,
+            "INPUT_GIT_USER_EMAIL": git_user.email,
+            "INPUT_GIT_USER_SIGNINGKEY": git_user.signingkey,
             "GNUPGHOME": str(temp_gpg_home_dir),
         },
     )

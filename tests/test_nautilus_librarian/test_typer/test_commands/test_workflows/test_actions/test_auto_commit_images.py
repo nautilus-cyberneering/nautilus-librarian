@@ -64,14 +64,14 @@ def given_a_dvc_diff_object_with_a_new_gold_image_it_should_commit_the_added_bas
     temp_dvc_local_remote_storage_dir,
     sample_base_image_absolute_path,
     temp_gpg_home_dir,
-    test_git_user,
+    git_user,
 ):
     create_initial_state(
         temp_git_dir,
         temp_dvc_local_remote_storage_dir,
         sample_base_image_absolute_path,
         temp_gpg_home_dir,
-        test_git_user,
+        git_user,
     )
 
     dvc_diff = {
@@ -84,7 +84,7 @@ def given_a_dvc_diff_object_with_a_new_gold_image_it_should_commit_the_added_bas
     }
 
     result = auto_commit_base_images(
-        compact_json(dvc_diff), str(temp_git_dir), str(temp_gpg_home_dir), test_git_user
+        compact_json(dvc_diff), str(temp_git_dir), str(temp_gpg_home_dir), git_user
     )
 
     # Assert command runned successfully
@@ -132,11 +132,10 @@ def given_a_dvc_diff_object_with_a_new_gold_image_it_should_commit_the_added_bas
     assert commit.stats.files == expected_commit_stats_files
 
     # Assert the commit was created by the right user
-    assert commit.committer.name == test_git_user.name
-    assert commit.committer.email == test_git_user.email
+    assert commit.committer.name == git_user.name
+    assert commit.committer.email == git_user.email
 
     # Assert the commit was signed with the right signing key
     assert (
-        get_commit_signing_key(commit.hexsha, cwd=temp_git_dir)
-        == test_git_user.signingkey
+        get_commit_signing_key(commit.hexsha, cwd=temp_git_dir) == git_user.signingkey
     )
