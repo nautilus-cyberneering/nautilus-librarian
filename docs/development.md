@@ -111,10 +111,10 @@ mega-linter-runner --fix
 You can use [act](https://github.com/nektos/act) to run workflows locally. For example:
 
 ```shell
-act -W ./.github/workflows/test-gold-drawings-processing-workflow.yml -j build
+act -W ./.github/workflows/test-gold-images-processing-workflow.yml -j build
 ```
 
-With that command, you can run the `build` job in the `test-gold-drawings-processing-workflow.yml` workflow.
+With that command, you can run the `build` job in the `test-gold-images-processing-workflow.yml` workflow.
 
 ## Releases
 

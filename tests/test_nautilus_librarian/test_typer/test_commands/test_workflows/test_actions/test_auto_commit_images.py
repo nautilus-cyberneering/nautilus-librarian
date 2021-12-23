@@ -2,7 +2,7 @@ import json
 import os
 
 from git.repo.base import Repo
-from test_nautilus_librarian.test_typer.test_commands.test_workflows.test_gold_drawings_processing import (
+from test_nautilus_librarian.test_typer.test_commands.test_workflows.test_gold_images_processing import (
     create_initial_state,
 )
 from test_nautilus_librarian.utils import compact_json

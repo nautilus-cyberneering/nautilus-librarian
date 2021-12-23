@@ -49,13 +49,13 @@ def create_initial_state(
 
 
 def it_should_show_a_message_if_there_is_not_any_change_in_gold_images():
-    result = runner.invoke(app, ["gold-drawings-processing"])
+    result = runner.invoke(app, ["gold-images-processing"])
 
     assert result.exit_code == 0
     assert "No Gold image changes found" in result.stdout
 
 
-def test_gold_drawings_processing_workflow_command(
+def test_gold_images_processing_workflow_command(
     temp_git_dir,
     temp_dvc_local_remote_storage_dir,
     sample_base_image_absolute_path,
@@ -85,7 +85,7 @@ def test_gold_drawings_processing_workflow_command(
 
     result = runner.invoke(
         app,
-        ["gold-drawings-processing", compact_json(dvc_diff)],
+        ["gold-images-processing", compact_json(dvc_diff)],
         env={
             "INPUT_GIT_REPO_DIR": str(temp_git_dir),
             "INPUT_GIT_USER_NAME": test_git_user.name,

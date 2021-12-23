@@ -37,8 +37,8 @@ def default_git_user_signingkey():
     git_config_global_user().signingkey
 
 
-@app.command("gold-drawings-processing")
-def gold_drawings_processing(
+@app.command("gold-images-processing")
+def gold_images_processing(
     dvc_diff: str = typer.Argument("{}", envvar="INPUT_DVC_DIFF"),
     git_repo_dir: str = typer.Argument(
         get_current_working_directory, envvar="INPUT_GIT_REPO_DIR"
@@ -56,7 +56,7 @@ def gold_drawings_processing(
     gnupghome: str = typer.Argument("~/.gnupg", envvar="GNUPGHOME"),
 ):
     """
-    Gold Drawings Processing Workflow.
+    Gold Images Processing Workflow.
 
     This workflow process new or updated Gold images in a pull request:
 
@@ -75,7 +75,7 @@ def gold_drawings_processing(
     7. Auto-commit new Base images.
 
     Example:
-        poetry run nautilus-librarian gold-drawings-processing '{"added":[{"path":"data/000001/32/000001-32.600.2.tif"}],"deleted":[],"modified":[],"renamed":[]}' # noqa
+        poetry run nautilus-librarian gold-images-processing '{"added":[{"path":"data/000001/32/000001-32.600.2.tif"}],"deleted":[],"modified":[],"renamed":[]}' # noqa
     """
 
     git_user = GitUser(git_user_name, git_user_email, git_user_signingkey)
