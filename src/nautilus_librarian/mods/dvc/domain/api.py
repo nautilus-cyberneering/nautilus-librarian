@@ -2,7 +2,8 @@ import dvc.api as native
 import dvc.exceptions
 from dvc.repo import Repo
 
-# wrappers to the native API functions
+# Wrappers to the native API functions
+# https://dvc.org/doc/command-reference
 
 
 def get_url(path, repo=None, rev=None, remote=None):
@@ -34,15 +35,9 @@ def openRepo(path):
         return repo
 
 
-# Diff
-
-
 def diff(path, a_rev="HEAD", b_rev=None, targets=None):
     repo = openRepo(path)
     return repo.diff(a_rev, b_rev, targets)
-
-
-# Track data files
 
 
 def add(path, filename, recursive=False):
@@ -50,15 +45,9 @@ def add(path, filename, recursive=False):
     return repo.add(filename, recursive=recursive)
 
 
-# Show changes in project pipelines and between remote and cache
-
-
 def status(path, remote=None, all_branches=False, recursive=False):
     repo = openRepo(path)
     return repo.status(remote=remote, all_branches=all_branches, recursive=recursive)
-
-
-# Upload tracked files or directories to remote storage
 
 
 def push(path, targets=None, remote=None, recursive=False):
@@ -66,24 +55,14 @@ def push(path, targets=None, remote=None, recursive=False):
     return repo.push(targets=targets, remote=remote, recursive=recursive)
 
 
-# Download tracked files from the remote storage
-
-
 def pull(path, targets=None, remote=None, recursive=False):
     repo = openRepo(path)
     return repo.pull(targets=targets, remote=remote, recursive=recursive)
 
 
-# Remove stages from dvc.yaml and/or stop tracking files or directories
-# (untested)
-
-
 def remove(path, target: str):
     repo = openRepo(path)
     return repo.remove(target)
-
-
-# Remove unused files and directories from cache or remote storage
 
 
 def gc(
@@ -108,15 +87,9 @@ def gc(
     )
 
 
-# List project contents, including files, models, and directories tracked by DVC and by Git
-
-
 def list(repo_path, list_path=None, recursive=None, dvc_only=False):
     repo = Repo(repo_path)
     return repo.ls(repo_path, path=list_path, recursive=recursive, dvc_only=dvc_only)
-
-
-# Creates an empty repo on the given directory
 
 
 def init(path, no_scm=False):
