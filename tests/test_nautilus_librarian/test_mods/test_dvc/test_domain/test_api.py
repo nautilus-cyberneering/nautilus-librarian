@@ -7,11 +7,8 @@ from os import path
 import pytest
 from git import Repo
 
-import nautilus_librarian.mods.dvc.domain.api as DvcApi
-from nautilus_librarian.mods.console.domain.utils import (
-    change_current_working_directory,
-    execute_console_command,
-)
+from nautilus_librarian.mods.console.domain.utils import execute_console_command
+from nautilus_librarian.mods.dvc.domain.api import DvcApiWrapper
 
 
 @pytest.fixture()
@@ -43,8 +40,7 @@ def add_remote_to_dvc(dvc_dir, remote_temp_dir):
 
 @pytest.fixture()
 def temp_dvc_dir_with_test_content(temp_dir, temp_dvc_remote):
-    Repo.init(temp_dir)
-    DvcApi.init(temp_dir)
+    DvcApiWrapper.init(temp_dir)
     add_remote_to_dvc(temp_dir, temp_dvc_remote)
     create_test_contents(temp_dir)
     return temp_dir
@@ -56,75 +52,72 @@ def push_test_contents(temp_dir):
     repo.push(repo.push(refspec="master:master"))
 
 
+def test_api_wrapper_initialization(temp_dir):
+    DvcApiWrapper.init(temp_dir)
+    api = DvcApiWrapper(temp_dir)
+
+    assert isinstance(api, DvcApiWrapper)
+
+
 def test_dvc_init(temp_dir):
-    Repo.init(temp_dir)
-    DvcApi.init(temp_dir, no_scm=False)
-
-    assert path.exists(f"{temp_dir}/.dvc")
-
-
-def test_initializing_dvc_without_git(temp_dir):
-    """
-    https://dvc.org/doc/command-reference/init#initializing-dvc-without-git
-    """
-    DvcApi.init(temp_dir, no_scm=True)
+    DvcApiWrapper.init(temp_dir)
+    DvcApiWrapper(temp_dir)
 
     assert path.exists(f"{temp_dir}/.dvc")
 
 
 def test_add(temp_dvc_dir_with_test_content):
-    change_current_working_directory(temp_dvc_dir_with_test_content)
-    DvcApi.add(temp_dvc_dir_with_test_content, "test.data")
+    api = DvcApiWrapper(temp_dvc_dir_with_test_content)
 
-    assert path.exists("test.data.dvc")
-    assert path.exists(".gitignore")
+    api.add("test.data")
+
+    assert path.exists(f"{temp_dvc_dir_with_test_content}/test.data.dvc")
+    assert path.exists(f"{temp_dvc_dir_with_test_content}/.gitignore")
 
 
 def test_status(temp_dvc_dir_with_test_content):
-    change_current_working_directory(temp_dvc_dir_with_test_content)
+    api = DvcApiWrapper(temp_dvc_dir_with_test_content)
 
-    DvcApi.add(temp_dvc_dir_with_test_content, "test.data")
+    api.add("test.data")
 
-    assert DvcApi.status(temp_dvc_dir_with_test_content, remote="localremote") == {
-        "test.data": "new"
-    }
+    assert api.status(remote="localremote") == {"test.data": "new"}
 
 
 def test_push(temp_dvc_dir_with_test_content):
-    change_current_working_directory(temp_dvc_dir_with_test_content)
+    api = DvcApiWrapper(temp_dvc_dir_with_test_content)
 
-    DvcApi.add(temp_dvc_dir_with_test_content, "test.data")
-    DvcApi.push(temp_dvc_dir_with_test_content)
+    api.add("test.data")
+    api.push()
 
-    assert DvcApi.status(temp_dvc_dir_with_test_content, remote="localremote") == {}
+    assert api.status(remote="localremote") == {}
 
 
 def test_pull(temp_dvc_dir_with_test_content):
-    change_current_working_directory(temp_dvc_dir_with_test_content)
+    api = DvcApiWrapper(temp_dvc_dir_with_test_content)
 
     # Add a new file
-    DvcApi.add(temp_dvc_dir_with_test_content, "test.data")
+    api.add("test.data")
     assert path.exists("test.data")
 
     # Push the file to the remote storage
-    DvcApi.push(temp_dvc_dir_with_test_content)
+    api.push()
 
     # Remove the local file
     remove_test_contents(temp_dvc_dir_with_test_content)
-    assert not path.exists("test.data")
+    assert not path.exists(f"{temp_dvc_dir_with_test_content}/test.data")
 
     # Pull the file from remote
-    DvcApi.pull(temp_dvc_dir_with_test_content)
+    api.pull()
 
     # The file should be pulled from remote
     assert path.exists(f"{temp_dvc_dir_with_test_content}/test.data")
 
 
 def test_list(temp_dvc_dir_with_test_content):
-    change_current_working_directory(temp_dvc_dir_with_test_content)
+    api = DvcApiWrapper(temp_dvc_dir_with_test_content)
 
-    DvcApi.add(temp_dvc_dir_with_test_content, "test.data")
-    DvcApi.push(temp_dvc_dir_with_test_content)
+    api.add("test.data")
+    api.push()
 
     expected_list_output = [
         {"isout": False, "isdir": False, "isexec": False, "path": ".dvcignore"},
@@ -132,4 +125,4 @@ def test_list(temp_dvc_dir_with_test_content):
         {"isout": True, "isdir": False, "isexec": False, "path": "test.data"},
         {"isout": False, "isdir": False, "isexec": False, "path": "test.data.dvc"},
     ]
-    assert DvcApi.list(temp_dvc_dir_with_test_content) == expected_list_output
+    assert api.list(temp_dvc_dir_with_test_content) == expected_list_output

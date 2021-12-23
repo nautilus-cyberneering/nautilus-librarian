@@ -1,90 +1,114 @@
+import os.path
+
 import dvc.api as native
-from dvc.repo import Repo
+from dvc.repo import Repo as DvcRepo
+from git import Repo as GitRepo
 
-# Wrappers to the native API functions
-# https://dvc.org/doc/command-reference
-
-
-def get_url(path, repo=None, rev=None, remote=None):
-    return native.get_url(path, repo, rev, remote)
+from nautilus_librarian.mods.console.domain.utils import (
+    change_current_working_directory,
+)
 
 
-def open(  # noqa, pylint: disable=redefined-builtin
-    path, repo=None, rev=None, remote=None, mode="r", encoding=None
-):
-    return native.open(path, repo, rev, remote, mode, encoding)
+class InvalidDvcDir(AssertionError):
+    pass
 
 
-def read(path, repo=None, rev=None, remote=None, mode="r", encoding=None):
-    return native.read(path, repo, rev, remote, mode, encoding)
+class DvcApiWrapper:
+    """
+    Wrapper for the native API functions.
 
+    More info about the native DVC api: https://dvc.org/doc/command-reference
+    More info about the DVC commands: https://dvc.org/doc/api-reference
 
-def make_checkpoint():
-    return native.make_checkpoint()
+    TODO: find out how we can remove the "change_current_working_directory" call before
+    running extended API methods.
+    """
 
+    def __init__(self, repo_path):
+        if not os.path.isdir(repo_path):
+            raise InvalidDvcDir(f"No dvc initialization found in dir {repo_path}")
+        self.repo_path = repo_path
+        self.git_repo = GitRepo(self.repo_path)
+        self.dvc_repo = DvcRepo(self.repo_path)
 
-def open_repo(path):
-    return Repo(path)
+    @staticmethod
+    def git_init(path):
+        return GitRepo.init(path)
 
+    @staticmethod
+    def dvc_init(path, no_scm=False):
+        return DvcRepo.init(root_dir=path, no_scm=no_scm)
 
-def diff(path, a_rev="HEAD", b_rev=None, targets=None):
-    repo = open_repo(path)
-    return repo.diff(a_rev, b_rev, targets)
+    @staticmethod
+    def init(path, no_scm=False):
+        DvcApiWrapper.git_init(path)
+        DvcApiWrapper.dvc_init(path, no_scm)
 
+    # Native API methods
 
-def add(path, filename, recursive=False):
-    repo = open_repo(path)
-    return repo.add(filename, recursive=recursive)
+    def get_url(self, path, repo=None, rev=None, remote=None):
+        return native.get_url(path, self.repo_path, rev, remote)
 
+    def open(self, path, repo=None, rev=None, remote=None, mode="r", encoding=None):
+        return native.open(path, self.repo_path, rev, remote, mode, encoding)
 
-def status(path, remote=None, all_branches=False, recursive=False):
-    repo = open_repo(path)
-    return repo.status(remote=remote, all_branches=all_branches, recursive=recursive)
+    def read(self, path, repo=None, rev=None, remote=None, mode="r", encoding=None):
+        return native.read(path, self.repo_path, rev, remote, mode, encoding)
 
+    def make_checkpoint(self):
+        return native.make_checkpoint()
 
-def push(path, targets=None, remote=None, recursive=False):
-    repo = open_repo(path)
-    return repo.push(targets=targets, remote=remote, recursive=recursive)
+    # Extended API methods
 
+    def diff(self, a_rev="HEAD", b_rev=None, targets=None):
+        change_current_working_directory(self.repo_path)
+        return self.dvc_repo.diff(a_rev, b_rev, targets)
 
-def pull(path, targets=None, remote=None, recursive=False):
-    repo = open_repo(path)
-    return repo.pull(targets=targets, remote=remote, recursive=recursive)
+    def add(self, filename, recursive=False):
+        change_current_working_directory(self.repo_path)
+        return self.dvc_repo.add(filename, recursive=recursive)
 
+    def status(self, remote=None, all_branches=False, recursive=False):
+        change_current_working_directory(self.repo_path)
+        return self.dvc_repo.status(
+            remote=remote, all_branches=all_branches, recursive=recursive
+        )
 
-def remove(path, target: str):
-    repo = open_repo(path)
-    return repo.remove(target)
+    def push(self, targets=None, remote=None, recursive=False):
+        change_current_working_directory(self.repo_path)
+        return self.dvc_repo.push(targets=targets, remote=remote, recursive=recursive)
 
+    def pull(self, targets=None, remote=None, recursive=False):
+        change_current_working_directory(self.repo_path)
+        return self.dvc_repo.pull(targets=targets, remote=remote, recursive=recursive)
 
-def gc(
-    path,
-    workspace=False,
-    all_branches=False,
-    all_tags=False,
-    all_commits=False,
-    force=False,
-    cloud=False,
-    remote=None,
-):
-    repo = open_repo(path)
-    return repo.gc(
-        workspace=workspace,
-        all_branches=all_branches,
-        all_tags=all_tags,
-        all_commits=all_commits,
-        force=force,
-        cloud=cloud,
-        remote=remote,
-    )
+    def remove(self, target: str):
+        change_current_working_directory(self.repo_path)
+        return self.dvc_repo.remove(target)
 
+    def gc(
+        self,
+        workspace=False,
+        all_branches=False,
+        all_tags=False,
+        all_commits=False,
+        force=False,
+        cloud=False,
+        remote=None,
+    ):
+        change_current_working_directory(self.repo_path)
+        return self.dvc_repo.gc(
+            workspace=workspace,
+            all_branches=all_branches,
+            all_tags=all_tags,
+            all_commits=all_commits,
+            force=force,
+            cloud=cloud,
+            remote=remote,
+        )
 
-def list(repo_path, list_path=None, recursive=None, dvc_only=False):
-    repo = Repo(repo_path)
-    return repo.ls(repo_path, path=list_path, recursive=recursive, dvc_only=dvc_only)
-
-
-def init(path, no_scm=False):
-    from dvc.repo.init import init
-
-    return init(root_dir=path, no_scm=no_scm)
+    def list(self, repo_path, list_path=None, recursive=None, dvc_only=False):
+        change_current_working_directory(self.repo_path)
+        return self.dvc_repo.ls(
+            repo_path, path=list_path, recursive=recursive, dvc_only=dvc_only
+        )
