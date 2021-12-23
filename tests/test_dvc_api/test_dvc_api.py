@@ -65,7 +65,8 @@ def create_test_scenario(init_GIT=False, init_DVC=False, create_contents=False):
 
 def add_remote_to_scenario():
     remote_temp_dir = tempfile.TemporaryDirectory().name
-    os.system("dvc remote add -d localremote " + remote_temp_dir)
+    # TODO: Security Review
+    os.system("dvc remote add -d localremote " + remote_temp_dir)  # nosec
 
 
 def test_dvc_init():

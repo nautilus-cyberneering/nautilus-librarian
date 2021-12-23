@@ -29,6 +29,7 @@ def execute_console_command(
         if print_command:
             print(command.strip())
 
+        # TODO: Security Review
         process = subprocess.run(
             command,
             shell=True,  # nosec
