@@ -24,7 +24,7 @@ def make_checkpoint():
     return native.make_checkpoint()
 
 
-def openRepo(path):
+def open_repo(path):
     try:
         repo = Repo(path)
     except dvc.exceptions.NotDvcRepoError:
@@ -36,32 +36,32 @@ def openRepo(path):
 
 
 def diff(path, a_rev="HEAD", b_rev=None, targets=None):
-    repo = openRepo(path)
+    repo = open_repo(path)
     return repo.diff(a_rev, b_rev, targets)
 
 
 def add(path, filename, recursive=False):
-    repo = openRepo(path)
+    repo = open_repo(path)
     return repo.add(filename, recursive=recursive)
 
 
 def status(path, remote=None, all_branches=False, recursive=False):
-    repo = openRepo(path)
+    repo = open_repo(path)
     return repo.status(remote=remote, all_branches=all_branches, recursive=recursive)
 
 
 def push(path, targets=None, remote=None, recursive=False):
-    repo = openRepo(path)
+    repo = open_repo(path)
     return repo.push(targets=targets, remote=remote, recursive=recursive)
 
 
 def pull(path, targets=None, remote=None, recursive=False):
-    repo = openRepo(path)
+    repo = open_repo(path)
     return repo.pull(targets=targets, remote=remote, recursive=recursive)
 
 
 def remove(path, target: str):
-    repo = openRepo(path)
+    repo = open_repo(path)
     return repo.remove(target)
 
 
@@ -75,7 +75,7 @@ def gc(
     cloud=False,
     remote=None,
 ):
-    repo = openRepo(path)
+    repo = open_repo(path)
     return repo.gc(
         workspace=workspace,
         all_branches=all_branches,

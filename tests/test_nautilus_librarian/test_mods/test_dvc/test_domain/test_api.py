@@ -49,15 +49,15 @@ def get_test_dir():
 #        This can produce an exception in DVC execution when adding a remote storage to a repo, for unknown causes.
 #        To prevent this, tempfile.mkdtemp can be used, but additional logic for deletin the temp dir should be
 #        added. A better option could be using pytest fixtures.
-def create_test_scenario(init_GIT=False, init_DVC=False, create_contents=False):
+def create_test_scenario(init_git=False, init_dvc=False, create_contents=False):
     global temp_dir
     temp_dir = tempfile.TemporaryDirectory()
     os.chdir(get_test_dir())
     print(get_test_dir())
-    if init_GIT:
+    if init_git:
         Repo.init(get_test_dir())
-    if init_DVC:
-        dvcapi.init(get_test_dir(), no_scm=(not init_GIT))
+    if init_dvc:
+        dvcapi.init(get_test_dir(), no_scm=(not init_git))
     if create_contents:
         create_test_contents()
     return
@@ -70,31 +70,31 @@ def add_remote_to_scenario():
 
 
 def test_dvc_init():
-    create_test_scenario(init_GIT=True, init_DVC=True)
+    create_test_scenario(init_git=True, init_dvc=True)
     assert path.exists(".dvc")
 
 
 def test_dvc_standalone_init():
-    create_test_scenario(init_DVC=True)
+    create_test_scenario(init_dvc=True)
     assert path.exists(".dvc")
 
 
 def test_add():
-    create_test_scenario(init_GIT=True, init_DVC=True, create_contents=True)
+    create_test_scenario(init_git=True, init_dvc=True, create_contents=True)
     dvcapi.add(get_test_dir(), "test.data")
     assert path.exists("test.data.dvc")
     assert path.exists(".gitignore")
 
 
 def test_status():
-    create_test_scenario(init_GIT=True, init_DVC=True, create_contents=True)
+    create_test_scenario(init_git=True, init_dvc=True, create_contents=True)
     dvcapi.add(get_test_dir(), "test.data")
     add_remote_to_scenario()
     assert dvcapi.status(get_test_dir(), remote="localremote") == {"test.data": "new"}
 
 
 def test_push():
-    create_test_scenario(init_GIT=True, init_DVC=True, create_contents=True)
+    create_test_scenario(init_git=True, init_dvc=True, create_contents=True)
     dvcapi.add(get_test_dir(), "test.data")
     add_remote_to_scenario()
     dvcapi.push(get_test_dir())
@@ -102,7 +102,7 @@ def test_push():
 
 
 def test_pull():
-    create_test_scenario(init_GIT=True, init_DVC=True, create_contents=True)
+    create_test_scenario(init_git=True, init_dvc=True, create_contents=True)
     dvcapi.add(get_test_dir(), "test.data")
     add_remote_to_scenario()
     dvcapi.push(get_test_dir())
@@ -114,7 +114,7 @@ def test_pull():
 
 
 def test_list():
-    create_test_scenario(init_GIT=True, init_DVC=True, create_contents=True)
+    create_test_scenario(init_git=True, init_dvc=True, create_contents=True)
     dvcapi.add(get_test_dir(), "test.data")
     add_remote_to_scenario()
     dvcapi.push(get_test_dir())
