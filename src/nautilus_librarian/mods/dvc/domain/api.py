@@ -1,5 +1,4 @@
 import dvc.api as native
-import dvc.exceptions
 from dvc.repo import Repo
 
 # Wrappers to the native API functions
