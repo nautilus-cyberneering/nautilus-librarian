@@ -3,6 +3,7 @@ import typer
 from nautilus_librarian.mods.console.domain.utils import get_current_working_directory
 from nautilus_librarian.mods.git.domain.config import git_config_global_user
 from nautilus_librarian.mods.git.domain.git_user import GitUser
+from nautilus_librarian.mods.dvc.domain.api import DvcApiWrapper
 from nautilus_librarian.typer.commands.workflows.actions.action_result import ResultCode
 from nautilus_librarian.typer.commands.workflows.actions.auto_commit_base_images import (
     auto_commit_base_images,
@@ -37,9 +38,15 @@ def default_git_user_signingkey():
     git_config_global_user().signingkey
 
 
+def get_dvc_diff_if_not_provided(dvc_diff, repo_dir):
+    if not dvc_diff:
+        return str(DvcApiWrapper(repo_dir).diff()).replace('\'', '"')
+    else:
+        return dvc_diff
+
+
 @app.command("gold-images-processing")
 def gold_images_processing(
-    dvc_diff: str = typer.Argument("{}", envvar="INPUT_DVC_DIFF"),
     git_repo_dir: str = typer.Argument(
         get_current_working_directory, envvar="INPUT_GIT_REPO_DIR"
     ),
@@ -54,6 +61,8 @@ def gold_images_processing(
     ),
     # Third-party env vars
     gnupghome: str = typer.Argument("~/.gnupg", envvar="GNUPGHOME"),
+    # Options
+    dvc_diff: str = typer.Option(None, envvar="INPUT_DVC_DIFF"),
 ):
     """
     Gold Images Processing Workflow.
@@ -75,10 +84,12 @@ def gold_images_processing(
     7. Auto-commit new Base images.
 
     Example:
-        poetry run nautilus-librarian gold-images-processing '{"added":[{"path":"data/000001/32/000001-32.600.2.tif"}],"deleted":[],"modified":[],"renamed":[]}' # noqa
+        poetry run nautilus-librarian gold-images-processing /path/to/repo --dvc_diff '{"added":[{"path":"data/000001/32/000001-32.600.2.tif"}],"deleted":[],"modified":[],"renamed":[]}' # noqa
     """
 
     git_user = GitUser(git_user_name, git_user_email, git_user_signingkey)
+
+    dvc_diff = get_dvc_diff_if_not_provided(dvc_diff, git_repo_dir)
 
     process_action_result(validate_filenames(dvc_diff))
 
