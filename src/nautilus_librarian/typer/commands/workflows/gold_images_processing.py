@@ -47,6 +47,7 @@ def get_dvc_diff_if_not_provided(dvc_diff, repo_dir):
 
 @app.command("gold-images-processing")
 def gold_images_processing(
+    dvc_diff: str = typer.Argument(None, envvar="INPUT_DVC_DIFF"),
     git_repo_dir: str = typer.Argument(
         get_current_working_directory, envvar="INPUT_GIT_REPO_DIR"
     ),
@@ -61,8 +62,6 @@ def gold_images_processing(
     ),
     # Third-party env vars
     gnupghome: str = typer.Argument("~/.gnupg", envvar="GNUPGHOME"),
-    # Options
-    dvc_diff: str = typer.Option(None, envvar="INPUT_DVC_DIFF"),
 ):
     """
     Gold Images Processing Workflow.
@@ -84,7 +83,7 @@ def gold_images_processing(
     7. Auto-commit new Base images.
 
     Example:
-        poetry run nautilus-librarian gold-images-processing /path/to/repo --dvc_diff '{"added":[{"path":"data/000001/32/000001-32.600.2.tif"}],"deleted":[],"modified":[],"renamed":[]}' # noqa
+        poetry run nautilus-librarian gold-images-processing /path/to/repo '{"added":[{"path":"data/000001/32/000001-32.600.2.tif"}],"deleted":[],"modified":[],"renamed":[]}' # noqa
     """
 
     git_user = GitUser(git_user_name, git_user_email, git_user_signingkey)
