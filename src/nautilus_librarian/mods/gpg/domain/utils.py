@@ -1,6 +1,7 @@
 import gnupg
 
 from nautilus_librarian.mods.console.domain.utils import execute_console_command
+from nautilus_librarian.mods.gpg.domain.gpg_colon_list_parser import GpgColonListParser
 
 
 def get_key_details_with_colons_format(fingerprint, gnupghome):
@@ -34,21 +35,9 @@ def get_keygrip_by(fingerprint, gnupghome):
 
     output = get_key_details_with_colons_format(fingerprint, gnupghome)
 
-    records = output.splitlines()
+    gpgColonListParser = GpgColonListParser(output)
 
-    current_fingerprint = ""
-
-    for record in records:
-        if record.startswith("fpr"):
-            fields = record.split(":")
-            current_fingerprint = fields[9]
-        if record.startswith("grp"):
-            fields = record.split(":")
-            keygrip = fields[9]
-            if current_fingerprint == fingerprint:
-                return keygrip
-
-    return None
+    return gpgColonListParser.get_keygrip_by_fingerprint(fingerprint)
 
 
 def get_key_user_by(fingerprint, gnupghome):
@@ -75,23 +64,9 @@ def get_key_user_by(fingerprint, gnupghome):
 
     output = get_key_details_with_colons_format(fingerprint, gnupghome)
 
-    records = output.splitlines()
+    gpgColonListParser = GpgColonListParser(output)
 
-    current_fingerprint = ""
-
-    for record in records:
-        if record.startswith("fpr"):
-            fields = record.split(":")
-            current_fingerprint = fields[9]
-        if record.startswith("uid"):
-            fields = record.split(":")
-            uid = fields[9]
-            if current_fingerprint == fingerprint:
-                name, separator, rest = uid.partition(" <")
-                email, separator, rest = rest.partition(">")
-                return name, email
-
-    return None, None
+    return gpgColonListParser.get_user_id_by_fingerprint(fingerprint)
 
 
 def import_gpg_private_key(gpg_private_key, passphrase, gnupghome):
