@@ -1,7 +1,6 @@
 import pathlib
-from shutil import copy
-import _pytest.pathlib
 
+import _pytest.pathlib
 
 # Problem: Pytest do not support namescape packages.
 #
@@ -40,5 +39,5 @@ def resolve_package_path(path):
     return None
 
 
-# apply patch
-_pytest.pathlib.resolve_package_path = resolve_package_path
+def apply_patch():
+    _pytest.pathlib.resolve_package_path = resolve_package_path
