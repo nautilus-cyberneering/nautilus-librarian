@@ -3,33 +3,38 @@ import gnupg
 from nautilus_librarian.mods.console.domain.utils import execute_console_command
 
 
-def get_key_details_with_colons_format(fingerprint):
+def get_key_details_with_colons_format(fingerprint, gnupghome):
     output = execute_console_command(
-        f"gpg --batch --with-colons --with-keygrip --list-secret-keys {fingerprint}"
+        f"gpg --homedir {gnupghome} --batch --with-colons --with-keygrip --list-secret-keys {fingerprint}"
     )
     return output
 
 
-def get_keygrip_by(fingerprint):
+def get_keygrip_by(fingerprint, gnupghome):
     """
     This function gets the keygrip of a given GPG key using the gpg console command and parsing the output.
 
     Sample output for the command:
-    sec:-:4096:1:27304EDD6079B81C:1637342753:::-:::scESC:::+:::23::0:
+
+    sec:-:4096:1:27304EDD6079B81C:1637342753:::-:::cESC:::+:::23::0:
     fpr:::::::::88966A5B8C01BD04F3DA440427304EDD6079B81C:
     grp:::::::::449972AC9FF11BCABEED8A7AE834C4349CC4DBFF:
-    uid:-::::1637342753::B3B0B2247600E80BAB9D4802D5CF0AFC477DE016::A committer <committer@example.com>::::::::::0:
+    uid:-::::1638182580::B3B0B2247600E80BAB9D4802D5CF0AFC477DE016::A committer <committer@example.com>::::::::::0:
     ssb:-:4096:1:5B6BDD35BEDFBF6F:1637342753::::::e:::+:::23:
     fpr:::::::::B1D4A2483D1D2A02416BE0775B6BDD35BEDFBF6F:
     grp:::::::::97D36F5B8F5BECDA8A1923FC00D11C7C438584F9:
+    ssb:-:4096:1:3F39AA1432CA6AD7:1637931661::::::s:::+:::23:
+    fpr:::::::::BD98B3F42545FF93EFF55F7F3F39AA1432CA6AD7:
+    grp:::::::::00CB9308AE0B6DE018C5ADBAB29BA7899D6062BE:
+
     In that example the keygrip (grp) of the key 88966A5B8C01BD04F3DA440427304EDD6079B81C is
     449972AC9FF11BCABEED8A7AE834C4349CC4DBFF
     Specification for the format: https://github.com/CSNW/gnupg/blob/master/doc/DETAILS
     """
 
-    output = get_key_details_with_colons_format(fingerprint)
+    output = get_key_details_with_colons_format(fingerprint, gnupghome)
 
-    records = output.split("\n")
+    records = output.splitlines()
 
     current_fingerprint = ""
 
@@ -46,26 +51,31 @@ def get_keygrip_by(fingerprint):
     return None
 
 
-def get_key_user_by(fingerprint):
+def get_key_user_by(fingerprint, gnupghome):
     """
     This function gets the uid record of a given GPG key using the gpg console command and parsing the output.
 
     Sample output for the command:
-    sec:-:4096:1:27304EDD6079B81C:1637342753:::-:::scESC:::+:::23::0:
+
+    sec:-:4096:1:27304EDD6079B81C:1637342753:::-:::cESC:::+:::23::0:
     fpr:::::::::88966A5B8C01BD04F3DA440427304EDD6079B81C:
     grp:::::::::449972AC9FF11BCABEED8A7AE834C4349CC4DBFF:
-    uid:-::::1637342753::B3B0B2247600E80BAB9D4802D5CF0AFC477DE016::A committer <committer@example.com>::::::::::0:
+    uid:-::::1638182580::B3B0B2247600E80BAB9D4802D5CF0AFC477DE016::A committer <committer@example.com>::::::::::0:
     ssb:-:4096:1:5B6BDD35BEDFBF6F:1637342753::::::e:::+:::23:
     fpr:::::::::B1D4A2483D1D2A02416BE0775B6BDD35BEDFBF6F:
     grp:::::::::97D36F5B8F5BECDA8A1923FC00D11C7C438584F9:
+    ssb:-:4096:1:3F39AA1432CA6AD7:1637931661::::::s:::+:::23:
+    fpr:::::::::BD98B3F42545FF93EFF55F7F3F39AA1432CA6AD7:
+    grp:::::::::00CB9308AE0B6DE018C5ADBAB29BA7899D6062BE:
+
     In that example the 'uid' of the key 88966A5B8C01BD04F3DA440427304EDD6079B81C is A committer <committer@example.com>
     There could be more than one 'uid' record. We return the first one.
     Specification for the format: https://github.com/CSNW/gnupg/blob/master/doc/DETAILS
     """
 
-    output = get_key_details_with_colons_format(fingerprint)
+    output = get_key_details_with_colons_format(fingerprint, gnupghome)
 
-    records = output.split("\n")
+    records = output.splitlines()
 
     current_fingerprint = ""
 
@@ -81,41 +91,17 @@ def get_key_user_by(fingerprint):
                 email, separator, rest = rest.partition(">")
                 return name, email
 
-    return None
-
-
-def get_short_key_id_from_fingerprint(fingerprint):
-    """
-    fingerprint = 88966A5B8C01BD04F3DA440427304EDD6079B81C
-    Fingerprint: 8896 6A5B 8C01 BD04  F3DA 4404 2730 4EDD 6079 B81C
-    Long key ID:                                2730 4EDD 6079 B81C
-    Short key ID:                                         6079 B81C
-    Returns: 6079B81C
-    """
-    return fingerprint[24:]
+    return None, None
 
 
 def import_gpg_private_key(gpg_private_key, passphrase, gnupghome):
     """
-    Import PGP key into the the local keyring
+    Import PGP key into the the local keyring.
+    It returns the fingerprint of the imported key.
     """
     gpg = gnupg.GPG(gnupghome=gnupghome, verbose=False, use_agent=True)
 
-    import_result = gpg.import_keys(gpg_private_key, passphrase=passphrase)
-    fingerprint = import_result.fingerprints[0]
-
-    keygrip = get_keygrip_by(fingerprint)
-    committer_name, committer_email = get_key_user_by(fingerprint)
-
-    short_key_id = get_short_key_id_from_fingerprint(fingerprint)
-
-    # print(f'Fingerprint: {fingerprint}')
-    # print(f'Short key ID: {short_key_id}')
-    # print(f'Keygrip: {keygrip}')
-    # print(f'Commiter name: {committer_name}')
-    # print(f'Committer email: {committer_email}')
-
-    return keygrip, short_key_id, committer_name, committer_email
+    return gpg.import_keys(gpg_private_key, passphrase=passphrase)
 
 
 def preset_passphrase(keygrip, passphrase, gnupghome):

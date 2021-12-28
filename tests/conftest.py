@@ -67,9 +67,35 @@ def fixtures_dir():
 
 
 @pytest.fixture(scope="session")
-def gpg_key_info(fixtures_dir):
+def gpg_master_key_info():
     """
-    The GPG key used to sign the commits in tests:
+    The GPG master key info. This key is used in tests. Key details:
+
+    pub   rsa4096 2021-11-19 [C]
+          8896 6A5B 8C01 BD04 F3DA  4404 2730 4EDD 6079 B81C
+          Keygrip = 449972AC9FF11BCABEED8A7AE834C4349CC4DBFF
+    uid           [ultimate] A committer <committer@example.com>
+    sub   rsa4096 2021-11-19 [E]
+          B1D4 A248 3D1D 2A02 416B  E077 5B6B DD35 BEDF BF6F
+          Keygrip = 97D36F5B8F5BECDA8A1923FC00D11C7C438584F9
+    sub   rsa4096 2021-11-26 [S]
+          BD98 B3F4 2545 FF93 EFF5  5F7F 3F39 AA14 32CA 6AD7
+          Keygrip = 00CB9308AE0B6DE018C5ADBAB29BA7899D6062BE
+    """
+
+    return {
+        "fingerprint": "88966A5B8C01BD04F3DA440427304EDD6079B81C",
+        "long_key": "440427304EDD6079B81C",
+        "keygrip": "449972AC9FF11BCABEED8A7AE834C4349CC4DBFF",
+        "name": "A committer",
+        "email": "committer@example.com",
+    }
+
+
+@pytest.fixture(scope="session")
+def gpg_signing_key_info(fixtures_dir):
+    """
+    The GPG subkey key used to sign the commits in tests. Key details:
 
     pub   rsa4096 2021-11-19 [C]
           8896 6A5B 8C01 BD04 F3DA  4404 2730 4EDD 6079 B81C
@@ -96,19 +122,24 @@ def gpg_key_info(fixtures_dir):
     # secretlint-enable
 
     return {
+        "fingerprint": "BD98B3F42545FF93EFF55F7F3F39AA1432CA6AD7",
         "long_key": "3F39AA1432CA6AD7",
         "keygrip": "00CB9308AE0B6DE018C5ADBAB29BA7899D6062BE",
         "passphrase": "123456",
         "private_key": gpg_private_key,
+        "name": "A committer",
+        "email": "committer@example.com",
     }
 
 
 @pytest.fixture(scope="session")
-def git_user(gpg_key_info):
+def git_user(gpg_signing_key_info):
     """
     The test committer used to create the commits in tests.
     """
-    return GitUser("A committer", "committer@example.com", gpg_key_info["long_key"])
+    return GitUser(
+        "A committer", "committer@example.com", gpg_signing_key_info["long_key"]
+    )
 
 
 @pytest.fixture()
@@ -136,7 +167,7 @@ def sample_base_image_absolute_path(fixtures_dir):
 
 
 @pytest.fixture(scope="session")
-def temp_gpg_home_dir(tmp_path_factory, gpg_key_info, fixtures_dir):
+def temp_gpg_home_dir(tmp_path_factory, gpg_signing_key_info, fixtures_dir):
     # Create new tmp homedir for GPG
     gnupghome = tmp_path_factory.mktemp("gnupg")
 
@@ -153,9 +184,9 @@ def temp_gpg_home_dir(tmp_path_factory, gpg_key_info, fixtures_dir):
     )
 
     # Import the GPG key in the temp GPG homedir
-    keygrip, signingkey, user_name, user_email = import_gpg_private_key(
-        gpg_private_key=gpg_key_info["private_key"],
-        passphrase=gpg_key_info["passphrase"],
+    import_gpg_private_key(
+        gpg_private_key=gpg_signing_key_info["private_key"],
+        passphrase=gpg_signing_key_info["passphrase"],
         gnupghome=str(gnupghome),
     )
 
@@ -166,8 +197,8 @@ def temp_gpg_home_dir(tmp_path_factory, gpg_key_info, fixtures_dir):
 
     # Preset passphrase to avoid entering it manually while running tests
     preset_passphrase(
-        gpg_key_info["keygrip"],
-        passphrase=gpg_key_info["passphrase"],
+        gpg_signing_key_info["keygrip"],
+        passphrase=gpg_signing_key_info["passphrase"],
         gnupghome=gnupghome,
     )
 
