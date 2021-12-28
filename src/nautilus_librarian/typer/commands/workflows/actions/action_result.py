@@ -33,3 +33,13 @@ class ActionResult:
             if text in message.text:
                 return True
         return False
+
+    def last_message(self) -> ErrorMessage:
+        if len(self.messages) == 0:
+            return None
+        return self.messages[-1]
+
+    def last_message_text(self) -> str:
+        if len(self.messages) == 0:
+            return ""
+        return self.messages[-1].text
