@@ -85,7 +85,7 @@ def test_gold_images_processing_workflow_command(
 
     result = runner.invoke(
         app,
-        ["gold-images-processing", compact_json(dvc_diff)],
+        ["gold-images-processing", "--dvc-diff", compact_json(dvc_diff)],
         env={
             "INPUT_GIT_REPO_DIR": str(temp_git_dir),
             "INPUT_GIT_USER_NAME": git_user.name,

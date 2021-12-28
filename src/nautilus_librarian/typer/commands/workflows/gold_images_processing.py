@@ -47,10 +47,6 @@ def get_dvc_diff_if_not_provided(dvc_diff, repo_dir):
 
 @app.command("gold-images-processing")
 def gold_images_processing(
-    dvc_diff: str = typer.Argument(None, envvar="INPUT_DVC_DIFF"),
-    git_repo_dir: str = typer.Argument(
-        get_current_working_directory, envvar="INPUT_GIT_REPO_DIR"
-    ),
     git_user_name: str = typer.Argument(
         default_git_user_name, envvar="INPUT_GIT_USER_NAME"
     ),
@@ -60,6 +56,10 @@ def gold_images_processing(
     git_user_signingkey: str = typer.Argument(
         default_git_user_signingkey, envvar="INPUT_GIT_USER_SIGNINGKEY"
     ),
+    git_repo_dir: str = typer.Option(
+        get_current_working_directory, envvar="INPUT_GIT_REPO_DIR"
+    ),    
+    dvc_diff: str = typer.Option(None, envvar="INPUT_DVC_DIFF"),
     # Third-party env vars
     gnupghome: str = typer.Argument("~/.gnupg", envvar="GNUPGHOME"),
 ):
