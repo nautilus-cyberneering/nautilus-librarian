@@ -1,9 +1,9 @@
 import typer
 
 from nautilus_librarian.mods.console.domain.utils import get_current_working_directory
+from nautilus_librarian.mods.dvc.domain.api import DvcApiWrapper
 from nautilus_librarian.mods.git.domain.config import git_config_global_user
 from nautilus_librarian.mods.git.domain.git_user import GitUser
-from nautilus_librarian.mods.dvc.domain.api import DvcApiWrapper
 from nautilus_librarian.typer.commands.workflows.actions.action_result import ResultCode
 from nautilus_librarian.typer.commands.workflows.actions.auto_commit_base_images import (
     auto_commit_base_images,
@@ -40,7 +40,7 @@ def default_git_user_signingkey():
 
 def get_dvc_diff_if_not_provided(dvc_diff, repo_dir):
     if not dvc_diff:
-        return str(DvcApiWrapper(repo_dir).diff()).replace('\'', '"')
+        return str(DvcApiWrapper(repo_dir).diff()).replace("'", '"')
     else:
         return dvc_diff
 
@@ -58,7 +58,7 @@ def gold_images_processing(
     ),
     git_repo_dir: str = typer.Option(
         get_current_working_directory, envvar="INPUT_GIT_REPO_DIR"
-    ),    
+    ),
     dvc_diff: str = typer.Option(None, envvar="INPUT_DVC_DIFF"),
     # Third-party env vars
     gnupghome: str = typer.Argument("~/.gnupg", envvar="GNUPGHOME"),
