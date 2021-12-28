@@ -19,7 +19,9 @@ def validate_filepaths_action(dvc_diff):
             ResultCode.EXIT, [Message("No media library file changes found")]
         )
 
-    filepaths = extract_list_of_media_file_changes_from_dvd_diff_output(dvc_diff, only_basename=False)
+    filepaths = extract_list_of_media_file_changes_from_dvd_diff_output(
+        dvc_diff, only_basename=False
+    )
 
     messages = []
 

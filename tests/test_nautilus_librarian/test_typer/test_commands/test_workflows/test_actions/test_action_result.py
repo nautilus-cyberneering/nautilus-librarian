@@ -16,3 +16,8 @@ def it_should_store_error_messages():
         ResultCode.CONTINUE, [ErrorMessage("world is collapsing")]
     )
     assert action_result.contains_text("world is collapsing")
+
+
+def it_should_return_the_last_message():
+    action_result = ActionResult(ResultCode.CONTINUE, [ErrorMessage("world is nice")])
+    assert action_result.last_message() == Message("world is nice")

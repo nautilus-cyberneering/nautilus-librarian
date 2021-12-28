@@ -17,14 +17,14 @@ def extract_added_and_modified_and_renamed_files_from_dvc_diff(
 ):
     """
     It gets a plain string list with the added, modified or renamed files from the dvc diff json.
-    
+
     With only_basename=True
     Input: {"added": [{"path": "data/000001/32/000001-32.600.2.tif"}], "deleted": [], "modified": [], "renamed": []}
     Output: ['000001-32.600.2.tif']
 
     only_basename=False
     Input: {"added": [{"path": "data/000001/32/000001-32.600.2.tif"}], "deleted": [], "modified": [], "renamed": []}
-    Output: ['data/000001/32/000001-32.600.2.tif']    
+    Output: ['data/000001/32/000001-32.600.2.tif']
     """
 
     data = json.loads(dvc_diff)
