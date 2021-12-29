@@ -1,11 +1,13 @@
 from os import mkdir
 from shutil import copy
 
+from typer.testing import CliRunner
+
 from nautilus_librarian.domain.file_locator import file_locator
 from nautilus_librarian.main import app
 from nautilus_librarian.mods.console.domain.utils import execute_console_command
 from nautilus_librarian.mods.namecodes.domain.filename import Filename
-from typer.testing import CliRunner
+
 
 runner = CliRunner()
 

@@ -2,6 +2,11 @@ import json
 import os
 
 from git.repo.base import Repo
+from test_nautilus_librarian.test_typer.test_commands.test_workflows.test_gold_images_processing import (
+    create_initial_state,
+)
+from test_nautilus_librarian.utils import compact_json
+
 from nautilus_librarian.mods.console.domain.utils import execute_console_command
 from nautilus_librarian.mods.git.domain.commit import get_commit_signing_key
 from nautilus_librarian.mods.namecodes.domain.filename import Filename
@@ -12,10 +17,6 @@ from nautilus_librarian.typer.commands.workflows.actions.auto_commit_base_images
     files_to_commit,
     get_new_gold_images_filenames_from_dvc_diff,
 )
-from test_nautilus_librarian.test_typer.test_commands.test_workflows.test_gold_images_processing import (
-    create_initial_state,
-)
-from test_nautilus_librarian.utils import compact_json
 
 
 def test_get_new_gold_images_from_dvc_diff():
