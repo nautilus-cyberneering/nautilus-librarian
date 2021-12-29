@@ -7,6 +7,9 @@ from nautilus_librarian.typer.commands.workflows.actions.action_result import Re
 from nautilus_librarian.typer.commands.workflows.actions.auto_commit_base_images import (
     auto_commit_base_images,
 )
+from nautilus_librarian.typer.commands.workflows.actions.dvc_pull_action import (
+    dvc_pull_action,
+)
 from nautilus_librarian.typer.commands.workflows.actions.validate_filenames import (
     validate_filenames,
 )
@@ -86,6 +89,10 @@ def gold_images_processing(
     process_action_result(validate_filenames(dvc_diff))
 
     process_action_result(validate_filepaths_action(dvc_diff))
+
+    remote = "localremote"
+
+    process_action_result(dvc_pull_action(dvc_diff, git_repo_dir, remote))
 
     process_action_result(
         auto_commit_base_images(dvc_diff, git_repo_dir, gnupghome, git_user)
