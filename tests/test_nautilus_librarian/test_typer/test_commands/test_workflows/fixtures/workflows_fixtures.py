@@ -2,7 +2,6 @@ import os
 from pathlib import Path
 
 import pytest
-
 from nautilus_librarian.mods.git.domain.git_user import GitUser
 
 

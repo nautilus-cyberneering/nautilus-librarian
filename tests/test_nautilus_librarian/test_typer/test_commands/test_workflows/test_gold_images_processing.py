@@ -1,13 +1,11 @@
 from os import mkdir
 from shutil import copy
 
-from test_nautilus_librarian.utils import compact_json
-from typer.testing import CliRunner
-
 from nautilus_librarian.domain.file_locator import file_locator
 from nautilus_librarian.main import app
 from nautilus_librarian.mods.console.domain.utils import execute_console_command
 from nautilus_librarian.mods.namecodes.domain.filename import Filename
+from typer.testing import CliRunner
 
 runner = CliRunner()
 
@@ -49,10 +47,7 @@ def create_initial_state(
     copy(sample_base_image_absolute_path, f"{temp_git_dir}/{sample_base_image_dir}")
 
 
-def add_gold_image(
-    temp_git_dir,
-    sample_gold_image_absolute_path
-    ):
+def add_gold_image(temp_git_dir, sample_gold_image_absolute_path):
     # Copy the Base sample Base image to its folder
     filename = Filename(sample_gold_image_absolute_path)
     sample_gold_image_dir = file_locator(filename)
@@ -72,8 +67,7 @@ def it_should_show_a_message_if_there_is_not_any_change_in_gold_images(
     sample_base_image_absolute_path,
     temp_gpg_home_dir,
     git_user,
-    ):
-
+):
     create_initial_state(
         temp_git_dir,
         temp_dvc_local_remote_storage_dir,
@@ -118,11 +112,7 @@ def test_gold_images_processing_workflow_command(
         git_user,
     )
 
-    add_gold_image(
-        temp_git_dir,
-        sample_gold_image_absolute_path
-    )
-
+    add_gold_image(temp_git_dir, sample_gold_image_absolute_path)
     result = runner.invoke(
         app,
         ["gold-images-processing"],
@@ -137,6 +127,6 @@ def test_gold_images_processing_workflow_command(
 
     assert result.exit_code == 0
     assert (
-         "000001-32.600.2.tif ✓\nNew Gold image found: 000001-32.600.2.tif -> Base image: data/000001/42/000001-42.600.2.tif ✓ \n"  # noqa
-         in result.stdout
+        "000001-32.600.2.tif ✓\nNew Gold image found: 000001-32.600.2.tif -> Base image: data/000001/42/000001-42.600.2.tif ✓ \n"  # noqa
+        in result.stdout
     )
