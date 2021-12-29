@@ -38,7 +38,7 @@ def extract_added_and_modified_and_renamed_files_from_dvc_diff(
     return filepaths
 
 
-def extract_list_of_media_file_changes_from_dvd_diff_output(
+def extract_list_of_media_file_changes_from_dvc_diff_output(
     dvc_diff, only_basename=True
 ):
     return extract_added_and_modified_and_renamed_files_from_dvc_diff(
