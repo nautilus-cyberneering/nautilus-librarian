@@ -4,16 +4,13 @@ from nautilus_librarian.domain.file_locator import file_locator
 from nautilus_librarian.mods.namecodes.domain.filename import Filename
 
 
-class InvalidImageFolderException(Exception):
+class InvalidImageFolderException(ValueError):
     """Raised when the file is located in a wrong path"""
 
     pass
 
 
 def validate_filepath(filepath):
-    # Gold Image: data/000001/32/000001-32.600.2.tif
-    # Base Image: data/000001/42/000001-32.600.2.tif
-
     actual_folder = os.path.dirname(filepath)
 
     filename = Filename(os.path.basename(filepath))

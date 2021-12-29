@@ -10,6 +10,9 @@ from nautilus_librarian.typer.commands.workflows.actions.auto_commit_base_images
 from nautilus_librarian.typer.commands.workflows.actions.validate_filenames import (
     validate_filenames,
 )
+from nautilus_librarian.typer.commands.workflows.actions.validate_filepaths_action import (
+    validate_filepaths_action,
+)
 
 app = typer.Typer()
 
@@ -66,7 +69,7 @@ def gold_images_processing(
 
     3. Validate filenames.
 
-    4. Validate filepaths (TODO).
+    4. Validate filepaths.
 
     5. Validate image size (TODO).
 
@@ -81,6 +84,8 @@ def gold_images_processing(
     git_user = GitUser(git_user_name, git_user_email, git_user_signingkey)
 
     process_action_result(validate_filenames(dvc_diff))
+
+    process_action_result(validate_filepaths_action(dvc_diff))
 
     process_action_result(
         auto_commit_base_images(dvc_diff, git_repo_dir, gnupghome, git_user)
