@@ -1,3 +1,4 @@
+from os import mkdir
 from shutil import copy
 
 from test_nautilus_librarian.utils import compact_json
@@ -48,8 +49,50 @@ def create_initial_state(
     copy(sample_base_image_absolute_path, f"{temp_git_dir}/{sample_base_image_dir}")
 
 
-def it_should_show_a_message_if_there_is_not_any_change_in_gold_images():
-    result = runner.invoke(app, ["gold-images-processing"])
+def add_gold_image(
+    temp_git_dir,
+    sample_gold_image_absolute_path
+    ):
+    # Copy the Base sample Base image to its folder
+    filename = Filename(sample_gold_image_absolute_path)
+    sample_gold_image_dir = file_locator(filename)
+    mkdir(f"{temp_git_dir}/{sample_gold_image_dir}")
+    copy(sample_gold_image_absolute_path, f"{temp_git_dir}/{sample_gold_image_dir}")
+
+    # Add the newly copied file to the DVC cache
+    execute_console_command(
+        f"dvc add {sample_gold_image_dir}/{filename}",
+        cwd=temp_git_dir,
+    )
+
+
+def it_should_show_a_message_if_there_is_not_any_change_in_gold_images(
+    temp_git_dir,
+    temp_dvc_local_remote_storage_dir,
+    sample_base_image_absolute_path,
+    temp_gpg_home_dir,
+    git_user,
+    ):
+
+    create_initial_state(
+        temp_git_dir,
+        temp_dvc_local_remote_storage_dir,
+        sample_base_image_absolute_path,
+        temp_gpg_home_dir,
+        git_user,
+    )
+
+    result = runner.invoke(
+        app,
+        ["gold-images-processing"],
+        env={
+            "INPUT_GIT_REPO_DIR": str(temp_git_dir),
+            "INPUT_GIT_USER_NAME": git_user.name,
+            "INPUT_GIT_USER_EMAIL": git_user.email,
+            "INPUT_GIT_USER_SIGNINGKEY": git_user.signingkey,
+            "GNUPGHOME": str(temp_gpg_home_dir),
+        },
+    )
 
     assert result.exit_code == 0
     assert "No Gold image changes found" in result.stdout
@@ -59,6 +102,7 @@ def test_gold_images_processing_workflow_command(
     temp_git_dir,
     temp_dvc_local_remote_storage_dir,
     sample_base_image_absolute_path,
+    sample_gold_image_absolute_path,
     temp_gpg_home_dir,
     git_user,
 ):
@@ -74,18 +118,14 @@ def test_gold_images_processing_workflow_command(
         git_user,
     )
 
-    dvc_diff = {
-        "added": [
-            {"path": "data/000001/32/000001-32.600.2.tif"},
-        ],
-        "deleted": [],
-        "modified": [],
-        "renamed": [],
-    }
+    add_gold_image(
+        temp_git_dir,
+        sample_gold_image_absolute_path
+    )
 
     result = runner.invoke(
         app,
-        ["gold-images-processing", "--dvc-diff", compact_json(dvc_diff)],
+        ["gold-images-processing"],
         env={
             "INPUT_GIT_REPO_DIR": str(temp_git_dir),
             "INPUT_GIT_USER_NAME": git_user.name,
@@ -97,6 +137,6 @@ def test_gold_images_processing_workflow_command(
 
     assert result.exit_code == 0
     assert (
-        "000001-32.600.2.tif ✓\nNew Gold image found: 000001-32.600.2.tif -> Base image: data/000001/42/000001-42.600.2.tif ✓ \n"  # noqa
-        in result.stdout
+         "000001-32.600.2.tif ✓\nNew Gold image found: 000001-32.600.2.tif -> Base image: data/000001/42/000001-42.600.2.tif ✓ \n"  # noqa
+         in result.stdout
     )

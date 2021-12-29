@@ -1,4 +1,5 @@
 import typer
+import sys
 
 from nautilus_librarian.mods.console.domain.utils import get_current_working_directory
 from nautilus_librarian.mods.dvc.domain.api import DvcApiWrapper
@@ -88,7 +89,7 @@ def gold_images_processing(
 
     git_user = GitUser(git_user_name, git_user_email, git_user_signingkey)
 
-    dvc_diff = get_dvc_diff_if_not_provided(dvc_diff, git_repo_dir)
+    dvc_diff = get_dvc_diff_if_not_provided(None, git_repo_dir)
 
     process_action_result(validate_filenames(dvc_diff))
 
