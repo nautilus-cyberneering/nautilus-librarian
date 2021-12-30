@@ -152,7 +152,9 @@ def test_gold_images_processing_workflow_command(
         git_user,
     )
 
-    add_gold_image(temp_git_dir, sample_gold_image_absolute_path, temp_gpg_home_dir, git_user)
+    add_gold_image(
+        temp_git_dir, sample_gold_image_absolute_path, temp_gpg_home_dir, git_user
+    )
     copy_media_file_to_its_folder(sample_gold_image_absolute_path, temp_git_dir)
 
     # Add the new Gold image

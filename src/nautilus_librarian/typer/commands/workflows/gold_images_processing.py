@@ -4,7 +4,6 @@ from nautilus_librarian.mods.console.domain.utils import get_current_working_dir
 from nautilus_librarian.mods.dvc.domain.api import DvcApiWrapper
 from nautilus_librarian.mods.dvc.domain.utils import dvc_default_remote
 from nautilus_librarian.mods.git.domain.config import (
-    git_config_global_user,
     default_git_user_email,
     default_git_user_name,
     default_git_user_signingkey,
@@ -37,23 +36,15 @@ def process_action_result(action_result):
     if action_result.code is ResultCode.ABORT:
         raise typer.Abort()
 
-def default_git_user_name():
-    git_config_global_user().name
-
-
-def default_git_user_email():
-    git_config_global_user().email
-
-
-def default_git_user_signingkey():
-    git_config_global_user().signingkey
-
 
 def get_dvc_diff_if_not_provided(dvc_diff, repo_dir, previous_ref, current_ref):
     if not dvc_diff:
-        return str(DvcApiWrapper(repo_dir).diff(a_rev=previous_ref, b_rev=current_ref)).replace("'", '"')
+        return str(
+            DvcApiWrapper(repo_dir).diff(a_rev=previous_ref, b_rev=current_ref)
+        ).replace("'", '"')
     else:
         return dvc_diff
+
 
 @app.command("gold-images-processing")
 def gold_images_processing(
@@ -105,7 +96,9 @@ def gold_images_processing(
 
     git_user = GitUser(git_user_name, git_user_email, git_user_signingkey)
 
-    dvc_diff = get_dvc_diff_if_not_provided(None, git_repo_dir, previous_ref, current_ref)
+    dvc_diff = get_dvc_diff_if_not_provided(
+        None, git_repo_dir, previous_ref, current_ref
+    )
 
     process_action_result(validate_filenames(dvc_diff))
 
