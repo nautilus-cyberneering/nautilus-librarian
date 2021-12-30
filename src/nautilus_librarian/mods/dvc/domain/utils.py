@@ -1,36 +1,78 @@
 import json
 import os
 
+from deprecated import deprecated
+
 from nautilus_librarian.mods.console.domain.utils import execute_console_command
 
 
-def extract_basenames_from_filepaths(filepaths):
-    return [os.path.basename(filename) for filename in filepaths]
+def extract_basename_from_filepath(filepath: str) -> str:
+    return os.path.basename(filepath)
 
 
-def extract_added_and_modified_and_renamed_files_from_dvc_diff(dvc_diff):
+def extract_basenames_from_filepaths(filepaths: list[str]) -> list[str]:
+    return [extract_basename_from_filepath(filepath) for filepath in filepaths]
+
+
+def extract_added_and_modified_and_renamed_files_from_dvc_diff(
+    dvc_diff, only_basename=True
+):
     """
     It gets a plain string list with the added, modified or renamed files from the dvc diff json.
+
+    With only_basename=True
+    Input: {"added": [{"path": "data/000001/32/000001-32.600.2.tif"}], "deleted": [], "modified": [], "renamed": []}
+    Output: ['000001-32.600.2.tif']
+
+    only_basename=False
     Input: {"added": [{"path": "data/000001/32/000001-32.600.2.tif"}], "deleted": [], "modified": [], "renamed": []}
     Output: ['data/000001/32/000001-32.600.2.tif']
     """
 
     data = json.loads(dvc_diff)
 
-    filenames = data["added"] + data["modified"] + data["renamed"]
+    filepath_objects = data["added"] + data["modified"] + data["renamed"]
+    filepaths = [path_object["path"] for path_object in filepath_objects]
 
-    # Extract filepaths
-    filepaths = [path_object["path"] for path_object in filenames]
+    if only_basename:
+        filepaths = extract_basenames_from_filepaths(filepaths)
 
     return filepaths
 
 
-def extract_modified_media_file_list_from_dvd_diff_output(dvc_diff):
-    filepaths = extract_added_and_modified_and_renamed_files_from_dvc_diff(dvc_diff)
-    filenames = extract_basenames_from_filepaths(filepaths)
-    return filenames
+def extract_added_and_modified_files_from_dvc_diff(dvc_diff, only_basename=True):
+    """
+    It gets a plain string list with the added and modified files from the dvc diff json.
+
+    With only_basename=True
+    Input: {"added": [{"path": "data/000001/32/000001-32.600.2.tif"}], "deleted": [], "modified": [], "renamed": []}
+    Output: ['000001-32.600.2.tif']
+
+    only_basename=False
+    Input: {"added": [{"path": "data/000001/32/000001-32.600.2.tif"}], "deleted": [], "modified": [], "renamed": []}
+    Output: ['data/000001/32/000001-32.600.2.tif']
+    """
+
+    data = json.loads(dvc_diff)
+
+    filepath_objects = data["added"] + data["modified"]
+    filepaths = [path_object["path"] for path_object in filepath_objects]
+
+    if only_basename:
+        filepaths = extract_basenames_from_filepaths(filepaths)
+
+    return filepaths
 
 
+def extract_list_of_media_file_changes_from_dvc_diff_output(
+    dvc_diff, only_basename=True
+):
+    return extract_added_and_modified_and_renamed_files_from_dvc_diff(
+        dvc_diff, only_basename
+    )
+
+
+@deprecated(reason="use DvcApiWrapper class")
 def extract_added_files_from_dvc_diff(dvc_diff):
     """
     Parses the list of added Gold images from dvc diff output in json format.
@@ -57,6 +99,15 @@ def extract_added_files_from_dvc_diff(dvc_diff):
     return [(path_object["path"]) for path_object in data["added"]]
 
 
+def dvc_default_remote(git_repo_dir):
+    """
+    It returns the default remote for the dvc repo.
+    """
+    output = execute_console_command("dvc remote default --project", cwd=git_repo_dir)
+    return output.strip()
+
+
+@deprecated(reason="use DvcApiWrapper class")
 def dvc_add(filepath, git_repo_dir):
     """
     Wrapper for dvc add command.
@@ -67,6 +118,7 @@ def dvc_add(filepath, git_repo_dir):
     return execute_console_command(f"dvc add {filepath}", cwd=git_repo_dir)
 
 
+@deprecated(reason="use DvcApiWrapper class")
 def dvc_push(filepath, git_repo_dir):
     """
     Wrapper for dvc push command.
@@ -75,3 +127,11 @@ def dvc_push(filepath, git_repo_dir):
     https://github.com/Nautilus-Cyberneering/nautilus-librarian/pull/25
     """
     return execute_console_command(f"dvc push {filepath}", cwd=git_repo_dir)
+
+
+@deprecated(reason="use DvcApiWrapper class")
+def dvc_diff(a_rev, b_rev, git_repo_dir):
+    dvc_diff_output = execute_console_command(
+        f"dvc diff --show-json {a_rev} {b_rev}", cwd=git_repo_dir
+    )
+    return json.loads(dvc_diff_output)

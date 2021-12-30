@@ -143,7 +143,7 @@ def auto_commit_base_images(dvc_diff, git_repo_dir, gnupghome, git_user: GitUser
 
         messages.append(
             Message(
-                f"New Gold image found: {gold_image} -> Base image: {base_img_relative_path} ✓ "
+                f"New Gold image found: {gold_image} -> Base image: {base_img_relative_path} ✓"
             )
         )
 

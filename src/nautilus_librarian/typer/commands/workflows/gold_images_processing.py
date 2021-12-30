@@ -2,14 +2,26 @@ import typer
 
 from nautilus_librarian.mods.console.domain.utils import get_current_working_directory
 from nautilus_librarian.mods.dvc.domain.api import DvcApiWrapper
-from nautilus_librarian.mods.git.domain.config import git_config_global_user
+from nautilus_librarian.mods.dvc.domain.utils import dvc_default_remote
+from nautilus_librarian.mods.git.domain.config import (
+    git_config_global_user,
+    default_git_user_email,
+    default_git_user_name,
+    default_git_user_signingkey,
+)
 from nautilus_librarian.mods.git.domain.git_user import GitUser
 from nautilus_librarian.typer.commands.workflows.actions.action_result import ResultCode
 from nautilus_librarian.typer.commands.workflows.actions.auto_commit_base_images import (
     auto_commit_base_images,
 )
+from nautilus_librarian.typer.commands.workflows.actions.dvc_pull_action import (
+    dvc_pull_action,
+)
 from nautilus_librarian.typer.commands.workflows.actions.validate_filenames import (
     validate_filenames,
+)
+from nautilus_librarian.typer.commands.workflows.actions.validate_filepaths_action import (
+    validate_filepaths_action,
 )
 
 app = typer.Typer()
@@ -24,7 +36,6 @@ def process_action_result(action_result):
 
     if action_result.code is ResultCode.ABORT:
         raise typer.Abort()
-
 
 def default_git_user_name():
     git_config_global_user().name
@@ -44,7 +55,6 @@ def get_dvc_diff_if_not_provided(dvc_diff, repo_dir, previous_ref, current_ref):
     else:
         return dvc_diff
 
-
 @app.command("gold-images-processing")
 def gold_images_processing(
     git_user_name: str = typer.Argument(
@@ -62,6 +72,11 @@ def gold_images_processing(
     dvc_diff: str = typer.Option(None, envvar="NL_DVC_DIFF"),
     previous_ref: str = typer.Option("HEAD", envvar="NL_PREVIOUS_REF"),
     current_ref: str = typer.Option(None, envvar="NL_CURRENT_REF"),
+    dvc_remote: str = typer.Option(
+        default=None,
+        envvar="NL_DVC_REMOTE",
+        help="The name of the DVC remote storage. Use `dvc remote list --project` to get the list of remotes",
+    ),
     # Third-party env vars
     gnupghome: str = typer.Argument("~/.gnupg", envvar="GNUPGHOME"),
 ):
@@ -72,11 +87,11 @@ def gold_images_processing(
 
     1. Get new or modified Gold images using dvc diff (TODO).
 
-    2. Pull images from dvc remote storage (TODO).
+    2. Pull images from dvc remote storage.
 
     3. Validate filenames.
 
-    4. Validate filepaths (TODO).
+    4. Validate filepaths.
 
     5. Validate image size (TODO).
 
@@ -93,6 +108,13 @@ def gold_images_processing(
     dvc_diff = get_dvc_diff_if_not_provided(None, git_repo_dir, previous_ref, current_ref)
 
     process_action_result(validate_filenames(dvc_diff))
+
+    process_action_result(validate_filepaths_action(dvc_diff))
+
+    if dvc_remote is None:
+        dvc_remote = dvc_default_remote(git_repo_dir)
+
+    process_action_result(dvc_pull_action(dvc_diff, git_repo_dir, dvc_remote))
 
     process_action_result(
         auto_commit_base_images(dvc_diff, git_repo_dir, gnupghome, git_user)

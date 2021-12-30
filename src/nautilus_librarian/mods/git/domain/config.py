@@ -21,3 +21,15 @@ def git_config_global_user():
     ).strip()
 
     return GitUser(name, email, signingkey)
+
+
+def default_git_user_name():
+    git_config_global_user().name
+
+
+def default_git_user_email():
+    git_config_global_user().email
+
+
+def default_git_user_signingkey():
+    git_config_global_user().signingkey

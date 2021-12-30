@@ -1,5 +1,5 @@
 from nautilus_librarian.mods.dvc.domain.utils import (
-    extract_modified_media_file_list_from_dvd_diff_output,
+    extract_list_of_media_file_changes_from_dvc_diff_output,
 )
 from nautilus_librarian.mods.namecodes.domain.validate_filenames import (
     validate_filename,
@@ -19,7 +19,7 @@ def validate_filenames(dvc_diff):
     if dvc_diff == "{}":
         return ActionResult(ResultCode.EXIT, [Message("No Gold image changes found")])
 
-    filenames = extract_modified_media_file_list_from_dvd_diff_output(dvc_diff)
+    filenames = extract_list_of_media_file_changes_from_dvc_diff_output(dvc_diff)
 
     messages = []
 
