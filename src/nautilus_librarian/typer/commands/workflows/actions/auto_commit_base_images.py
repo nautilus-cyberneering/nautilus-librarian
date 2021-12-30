@@ -4,7 +4,6 @@ from typing import List
 from nautilus_librarian.domain.file_locator import file_locator
 from nautilus_librarian.mods.dvc.domain.api import DvcApiWrapper
 from nautilus_librarian.mods.dvc.domain.utils import (
-    dvc_push,
     extract_added_files_from_dvc_diff,
 )
 from nautilus_librarian.mods.git.domain.git_user import GitUser
@@ -139,8 +138,7 @@ def auto_commit_base_images(dvc_diff, git_repo_dir, gnupghome, git_user: GitUser
 
         dvcApiWrapper = DvcApiWrapper(git_repo_dir)
         dvcApiWrapper.add(base_img_relative_path)
-
-        dvc_push(f"{base_img_relative_path}.dvc", git_repo_dir)
+        dvcApiWrapper.push(f"{base_img_relative_path}.dvc")
 
         commit_base_image(git_repo_dir, base_img_relative_path, gnupghome, git_user)
 
