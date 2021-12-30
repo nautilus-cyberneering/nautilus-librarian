@@ -6,6 +6,7 @@ from git import Repo as GitRepo
 
 from nautilus_librarian.mods.console.domain.utils import (
     change_current_working_directory,
+    execute_console_command,
 )
 
 
@@ -58,7 +59,7 @@ class DvcApiWrapper:
     def make_checkpoint(self):
         return native.make_checkpoint()
 
-    # Extended API methods
+    # Extended dvc.repo methods
 
     def diff(self, a_rev="HEAD", b_rev=None, targets=None):
         change_current_working_directory(self.repo_path)
@@ -111,3 +112,14 @@ class DvcApiWrapper:
         return self.dvc_repo.ls(
             self.repo_path, path=list_path, recursive=recursive, dvc_only=dvc_only
         )
+
+    # Wrappers for console commands
+
+    def dvc_default_remote(self):
+        """
+        It returns the default remote for the dvc repo.
+        """
+        output = execute_console_command(
+            "dvc remote default --project", cwd=self.repo_path
+        )
+        return output.strip()
