@@ -50,7 +50,7 @@ jobs:
           poetry install
           poetry build
           ls "${{ github.workspace }}/dist/"
-          pip install --user "${{ github.workspace }}/dist/nautilus_librarian-$(poetry version --short)-py3-none-any.whl"          
+          pip install --user "${{ github.workspace }}/dist/nautilus_librarian-$(poetry version --short)-py3-none-any.whl"
           ls /root/.local/bin
 
       - name: Invoke Librarian (dev env)
