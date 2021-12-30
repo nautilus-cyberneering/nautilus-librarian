@@ -1,17 +1,8 @@
-import json
-import os
-
-
-def extract_basename_from_filepath(filepath: str) -> str:
-    return os.path.basename(filepath)
-
-
-def extract_basenames_from_filepaths(filepaths: list[str]) -> list[str]:
-    return [extract_basename_from_filepath(filepath) for filepath in filepaths]
+from nautilus_librarian.mods.dvc.domain.dvc_diff_parser import DvcDiffParser
 
 
 def extract_added_and_modified_and_renamed_files_from_dvc_diff(
-    dvc_diff, only_basename=True
+    dvc_diff_json, only_basename=True
 ):
     """
     It gets a plain string list with the added, modified or renamed files from the dvc diff json.
@@ -24,19 +15,11 @@ def extract_added_and_modified_and_renamed_files_from_dvc_diff(
     Input: {"added": [{"path": "data/000001/32/000001-32.600.2.tif"}], "deleted": [], "modified": [], "renamed": []}
     Output: ['data/000001/32/000001-32.600.2.tif']
     """
-
-    data = json.loads(dvc_diff)
-
-    filepath_objects = data["added"] + data["modified"] + data["renamed"]
-    filepaths = [path_object["path"] for path_object in filepath_objects]
-
-    if only_basename:
-        filepaths = extract_basenames_from_filepaths(filepaths)
-
-    return filepaths
+    dvc_diff = DvcDiffParser.from_json(dvc_diff_json)
+    return dvc_diff.filter(exclude_deleted=True, only_basename=only_basename)
 
 
-def extract_added_and_modified_files_from_dvc_diff(dvc_diff, only_basename=True):
+def extract_added_and_modified_files_from_dvc_diff(dvc_diff_json, only_basename=True):
     """
     It gets a plain string list with the added and modified files from the dvc diff json.
 
@@ -48,16 +31,10 @@ def extract_added_and_modified_files_from_dvc_diff(dvc_diff, only_basename=True)
     Input: {"added": [{"path": "data/000001/32/000001-32.600.2.tif"}], "deleted": [], "modified": [], "renamed": []}
     Output: ['data/000001/32/000001-32.600.2.tif']
     """
-
-    data = json.loads(dvc_diff)
-
-    filepath_objects = data["added"] + data["modified"]
-    filepaths = [path_object["path"] for path_object in filepath_objects]
-
-    if only_basename:
-        filepaths = extract_basenames_from_filepaths(filepaths)
-
-    return filepaths
+    dvc_diff = DvcDiffParser.from_json(dvc_diff_json)
+    return dvc_diff.filter(
+        exclude_deleted=True, exclude_renamed=True, only_basename=only_basename
+    )
 
 
 def extract_list_of_media_file_changes_from_dvc_diff_output(
@@ -68,7 +45,7 @@ def extract_list_of_media_file_changes_from_dvc_diff_output(
     )
 
 
-def extract_added_files_from_dvc_diff(dvc_diff):
+def extract_added_files_from_dvc_diff(dvc_diff_json):
     """
     Parses the list of added Gold images from dvc diff output in json format.
 
@@ -88,5 +65,7 @@ def extract_added_files_from_dvc_diff(dvc_diff):
     ["000001-32.600.2.tif"]
     Notice Base image should not be included in the result.
     """
-    data = json.loads(dvc_diff)
-    return [(path_object["path"]) for path_object in data["added"]]
+    dvc_diff = DvcDiffParser.from_json(dvc_diff_json)
+    return dvc_diff.filter(
+        exclude_deleted=True, exclude_modified=True, exclude_renamed=True
+    )
