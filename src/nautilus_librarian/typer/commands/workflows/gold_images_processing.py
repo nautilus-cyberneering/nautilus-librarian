@@ -1,7 +1,12 @@
 import typer
 
 from nautilus_librarian.mods.console.domain.utils import get_current_working_directory
-from nautilus_librarian.mods.git.domain.config import git_config_global_user
+from nautilus_librarian.mods.dvc.domain.utils import dvc_default_remote
+from nautilus_librarian.mods.git.domain.config import (
+    default_git_user_email,
+    default_git_user_name,
+    default_git_user_signingkey,
+)
 from nautilus_librarian.mods.git.domain.git_user import GitUser
 from nautilus_librarian.typer.commands.workflows.actions.action_result import ResultCode
 from nautilus_librarian.typer.commands.workflows.actions.auto_commit_base_images import (
@@ -31,18 +36,6 @@ def process_action_result(action_result):
         raise typer.Abort()
 
 
-def default_git_user_name():
-    git_config_global_user().name
-
-
-def default_git_user_email():
-    git_config_global_user().email
-
-
-def default_git_user_signingkey():
-    git_config_global_user().signingkey
-
-
 @app.command("gold-images-processing")
 def gold_images_processing(
     dvc_diff: str = typer.Argument("{}", envvar="INPUT_DVC_DIFF"),
@@ -58,6 +51,11 @@ def gold_images_processing(
     git_user_signingkey: str = typer.Argument(
         default_git_user_signingkey, envvar="INPUT_GIT_USER_SIGNINGKEY"
     ),
+    dvc_remote: str = typer.Option(
+        default=None,
+        envvar="NL_DVC_REMOTE",
+        help="The name of the DVC remote storage. Use `dvc remote list --project` to get the list of remotes",
+    ),
     # Third-party env vars
     gnupghome: str = typer.Argument("~/.gnupg", envvar="GNUPGHOME"),
 ):
@@ -68,7 +66,7 @@ def gold_images_processing(
 
     1. Get new or modified Gold images using dvc diff (TODO).
 
-    2. Pull images from dvc remote storage (TODO).
+    2. Pull images from dvc remote storage.
 
     3. Validate filenames.
 
@@ -90,9 +88,10 @@ def gold_images_processing(
 
     process_action_result(validate_filepaths_action(dvc_diff))
 
-    remote = "localremote"
+    if dvc_remote is None:
+        dvc_remote = dvc_default_remote(git_repo_dir)
 
-    process_action_result(dvc_pull_action(dvc_diff, git_repo_dir, remote))
+    process_action_result(dvc_pull_action(dvc_diff, git_repo_dir, dvc_remote))
 
     process_action_result(
         auto_commit_base_images(dvc_diff, git_repo_dir, gnupghome, git_user)
