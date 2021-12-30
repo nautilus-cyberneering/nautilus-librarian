@@ -1,5 +1,4 @@
 import typer
-import sys
 
 from nautilus_librarian.mods.console.domain.utils import get_current_working_directory
 from nautilus_librarian.mods.dvc.domain.api import DvcApiWrapper

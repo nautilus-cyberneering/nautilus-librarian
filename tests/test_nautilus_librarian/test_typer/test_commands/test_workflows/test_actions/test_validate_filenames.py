@@ -1,8 +1,9 @@
+from test_nautilus_librarian.utils import compact_json
+
 from nautilus_librarian.typer.commands.workflows.actions.action_result import ResultCode
 from nautilus_librarian.typer.commands.workflows.actions.validate_filenames import (
     validate_filenames,
 )
-from test_nautilus_librarian.utils import compact_json
 
 
 def given_a_dvc_diff_object_it_should_validate_the_filename_of_the_new_media_files():
