@@ -38,9 +38,9 @@ def default_git_user_signingkey():
     git_config_global_user().signingkey
 
 
-def get_dvc_diff_if_not_provided(dvc_diff, repo_dir):
+def get_dvc_diff_if_not_provided(dvc_diff, repo_dir, previous_ref, current_ref):
     if not dvc_diff:
-        return str(DvcApiWrapper(repo_dir).diff()).replace("'", '"')
+        return str(DvcApiWrapper(repo_dir).diff(a_rev=previous_ref, b_rev=current_ref)).replace("'", '"')
     else:
         return dvc_diff
 
@@ -60,6 +60,8 @@ def gold_images_processing(
         get_current_working_directory, envvar="NL_GIT_REPO_DIR"
     ),
     dvc_diff: str = typer.Option(None, envvar="NL_DVC_DIFF"),
+    previous_ref: str = typer.Option("HEAD", envvar="NL_PREVIOUS_REF"),
+    current_ref: str = typer.Option(None, envvar="NL_CURRENT_REF"),
     # Third-party env vars
     gnupghome: str = typer.Argument("~/.gnupg", envvar="GNUPGHOME"),
 ):
@@ -88,7 +90,7 @@ def gold_images_processing(
 
     git_user = GitUser(git_user_name, git_user_email, git_user_signingkey)
 
-    dvc_diff = get_dvc_diff_if_not_provided(None, git_repo_dir)
+    dvc_diff = get_dvc_diff_if_not_provided(None, git_repo_dir, previous_ref, current_ref)
 
     process_action_result(validate_filenames(dvc_diff))
 
