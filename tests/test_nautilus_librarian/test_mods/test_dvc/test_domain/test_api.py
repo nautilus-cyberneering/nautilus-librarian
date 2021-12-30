@@ -126,3 +126,9 @@ def test_list(temp_dvc_dir_with_test_content):
         {"isout": False, "isdir": False, "isexec": False, "path": "test.data.dvc"},
     ]
     assert api.list(temp_dvc_dir_with_test_content) == expected_list_output
+
+
+def test_dvc_default_remote(temp_dvc_dir_with_test_content):
+    api = DvcApiWrapper(temp_dvc_dir_with_test_content)
+
+    assert api.dvc_default_remote() == "localremote"

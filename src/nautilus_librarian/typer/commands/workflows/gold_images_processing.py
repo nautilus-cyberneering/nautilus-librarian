@@ -1,7 +1,7 @@
 import typer
 
 from nautilus_librarian.mods.console.domain.utils import get_current_working_directory
-from nautilus_librarian.mods.dvc.domain.utils import dvc_default_remote
+from nautilus_librarian.mods.dvc.domain.api import DvcApiWrapper
 from nautilus_librarian.mods.git.domain.config import (
     default_git_user_email,
     default_git_user_name,
@@ -89,7 +89,7 @@ def gold_images_processing(
     process_action_result(validate_filepaths_action(dvc_diff))
 
     if dvc_remote is None:
-        dvc_remote = dvc_default_remote(git_repo_dir)
+        dvc_remote = DvcApiWrapper(git_repo_dir).dvc_default_remote()
 
     process_action_result(dvc_pull_action(dvc_diff, git_repo_dir, dvc_remote))
 

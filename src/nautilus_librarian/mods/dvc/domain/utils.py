@@ -72,7 +72,6 @@ def extract_list_of_media_file_changes_from_dvc_diff_output(
     )
 
 
-@deprecated(reason="use DvcApiWrapper class")
 def extract_added_files_from_dvc_diff(dvc_diff):
     """
     Parses the list of added Gold images from dvc diff output in json format.
@@ -92,19 +91,9 @@ def extract_added_files_from_dvc_diff(dvc_diff):
     Output:
     ["000001-32.600.2.tif"]
     Notice Base image should not be included in the result.
-
-    TODO: we should use the dvc API wrapper.
     """
     data = json.loads(dvc_diff)
     return [(path_object["path"]) for path_object in data["added"]]
-
-
-def dvc_default_remote(git_repo_dir):
-    """
-    It returns the default remote for the dvc repo.
-    """
-    output = execute_console_command("dvc remote default --project", cwd=git_repo_dir)
-    return output.strip()
 
 
 @deprecated(reason="use DvcApiWrapper class")
