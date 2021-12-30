@@ -97,17 +97,6 @@ def extract_added_files_from_dvc_diff(dvc_diff):
 
 
 @deprecated(reason="use DvcApiWrapper class")
-def dvc_add(filepath, git_repo_dir):
-    """
-    Wrapper for dvc add command.
-
-    TODO: replace by API wrapper once API wrapper is merged.
-    https://github.com/Nautilus-Cyberneering/nautilus-librarian/pull/25
-    """
-    return execute_console_command(f"dvc add {filepath}", cwd=git_repo_dir)
-
-
-@deprecated(reason="use DvcApiWrapper class")
 def dvc_push(filepath, git_repo_dir):
     """
     Wrapper for dvc push command.
