@@ -1,3 +1,5 @@
+import shlex
+
 from nautilus_librarian.mods.console.domain.utils import execute_console_command
 
 
@@ -17,10 +19,11 @@ def get_commit_signing_key(commit: str, cwd):
     Fingerprint: BD98B3F42545FF93EFF55F7F3F39AA1432CA6AD7
     Long key:                            3F39AA1432CA6AD7
     """
+    shell_escaped_commit = shlex.quote(commit)
 
     # Get commit info with signature
     output = execute_console_command(
-        f"git show --show-signature --stat {commit}", cwd=cwd
+        f"git show --show-signature --stat {shell_escaped_commit}", cwd=cwd
     )
 
     # Extract long key from output

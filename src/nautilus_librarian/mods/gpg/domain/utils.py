@@ -1,3 +1,6 @@
+import os
+import shlex
+
 import gnupg
 
 from nautilus_librarian.mods.console.domain.utils import execute_console_command
@@ -5,8 +8,14 @@ from nautilus_librarian.mods.gpg.domain.gpg_colon_list_parser import GpgColonLis
 
 
 def get_key_details_with_colons_format(fingerprint, gnupghome):
+    shell_escaped_fingerprint = shlex.quote(str(fingerprint))
+    shell_escaped_gnupghome = shlex.quote(str(gnupghome))
+
+    if not os.path.isdir(shell_escaped_gnupghome):
+        raise ValueError(f"Directory {shell_escaped_gnupghome} not found")
+
     output = execute_console_command(
-        f"gpg --homedir {gnupghome} --batch --with-colons --with-keygrip --list-secret-keys {fingerprint}"
+        f"gpg --homedir {shell_escaped_gnupghome} --batch --with-colons --with-keygrip --list-secret-keys {shell_escaped_fingerprint}"  # noqa
     )
     return output
 
