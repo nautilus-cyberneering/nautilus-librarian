@@ -81,10 +81,10 @@ def it_should_show_a_message_if_there_is_not_any_change_in_gold_images(
         app,
         ["gold-images-processing"],
         env={
-            "INPUT_GIT_REPO_DIR": str(temp_git_dir),
-            "INPUT_GIT_USER_NAME": git_user.name,
-            "INPUT_GIT_USER_EMAIL": git_user.email,
-            "INPUT_GIT_USER_SIGNINGKEY": git_user.signingkey,
+            "NL_GIT_REPO_DIR": str(temp_git_dir),
+            "NL_GIT_USER_NAME": git_user.name,
+            "NL_GIT_USER_EMAIL": git_user.email,
+            "NL_GIT_USER_SIGNINGKEY": git_user.signingkey,
             "GNUPGHOME": str(temp_gpg_home_dir),
         },
     )
@@ -118,10 +118,10 @@ def test_gold_images_processing_workflow_command(
         app,
         ["gold-images-processing"],
         env={
-            "INPUT_GIT_REPO_DIR": str(temp_git_dir),
-            "INPUT_GIT_USER_NAME": git_user.name,
-            "INPUT_GIT_USER_EMAIL": git_user.email,
-            "INPUT_GIT_USER_SIGNINGKEY": git_user.signingkey,
+            "NL_GIT_REPO_DIR": str(temp_git_dir),
+            "NL_GIT_USER_NAME": git_user.name,
+            "NL_GIT_USER_EMAIL": git_user.email,
+            "NL_GIT_USER_SIGNINGKEY": git_user.signingkey,
             "GNUPGHOME": str(temp_gpg_home_dir),
         },
     )
