@@ -1,10 +1,6 @@
 import json
 import os
 
-from deprecated import deprecated
-
-from nautilus_librarian.mods.console.domain.utils import execute_console_command
-
 
 def extract_basename_from_filepath(filepath: str) -> str:
     return os.path.basename(filepath)
@@ -72,7 +68,6 @@ def extract_list_of_media_file_changes_from_dvc_diff_output(
     )
 
 
-@deprecated(reason="use DvcApiWrapper class")
 def extract_added_files_from_dvc_diff(dvc_diff):
     """
     Parses the list of added Gold images from dvc diff output in json format.
@@ -92,46 +87,6 @@ def extract_added_files_from_dvc_diff(dvc_diff):
     Output:
     ["000001-32.600.2.tif"]
     Notice Base image should not be included in the result.
-
-    TODO: we should use the dvc API wrapper.
     """
     data = json.loads(dvc_diff)
     return [(path_object["path"]) for path_object in data["added"]]
-
-
-def dvc_default_remote(git_repo_dir):
-    """
-    It returns the default remote for the dvc repo.
-    """
-    output = execute_console_command("dvc remote default --project", cwd=git_repo_dir)
-    return output.strip()
-
-
-@deprecated(reason="use DvcApiWrapper class")
-def dvc_add(filepath, git_repo_dir):
-    """
-    Wrapper for dvc add command.
-
-    TODO: replace by API wrapper once API wrapper is merged.
-    https://github.com/Nautilus-Cyberneering/nautilus-librarian/pull/25
-    """
-    return execute_console_command(f"dvc add {filepath}", cwd=git_repo_dir)
-
-
-@deprecated(reason="use DvcApiWrapper class")
-def dvc_push(filepath, git_repo_dir):
-    """
-    Wrapper for dvc push command.
-
-    TODO: replace by API wrapper once API wrapper is merged.
-    https://github.com/Nautilus-Cyberneering/nautilus-librarian/pull/25
-    """
-    return execute_console_command(f"dvc push {filepath}", cwd=git_repo_dir)
-
-
-@deprecated(reason="use DvcApiWrapper class")
-def dvc_diff(a_rev, b_rev, git_repo_dir):
-    dvc_diff_output = execute_console_command(
-        f"dvc diff --show-json {a_rev} {b_rev}", cwd=git_repo_dir
-    )
-    return json.loads(dvc_diff_output)

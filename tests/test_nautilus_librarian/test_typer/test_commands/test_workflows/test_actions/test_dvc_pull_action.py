@@ -7,7 +7,7 @@ from test_nautilus_librarian.test_typer.test_commands.test_workflows.test_gold_i
 from test_nautilus_librarian.utils import compact_json
 
 from nautilus_librarian.mods.console.domain.utils import execute_console_command
-from nautilus_librarian.mods.dvc.domain.utils import dvc_diff
+from nautilus_librarian.mods.dvc.domain.api import DvcApiWrapper
 from nautilus_librarian.typer.commands.workflows.actions.dvc_pull_action import (
     dvc_pull_action,
 )
@@ -46,7 +46,8 @@ def given_a_dvc_diff_object_with_a_new_gold_image_it_should_pull_the_image_from_
         cwd=temp_git_dir,
     )
 
-    dvc_diff_dict = dvc_diff("HEAD^", "HEAD", temp_git_dir)
+    dvcApiWrapper = DvcApiWrapper(temp_git_dir)
+    dvc_diff_dict = dvcApiWrapper.diff("HEAD^", "HEAD")
 
     # Assert Gold image does not exist
     assert not os.path.exists(f"{temp_git_dir}/data/000001/32/000001-32.600.2.tif")
