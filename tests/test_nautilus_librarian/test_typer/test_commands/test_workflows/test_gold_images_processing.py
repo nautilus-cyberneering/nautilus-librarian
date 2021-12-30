@@ -7,7 +7,7 @@ from typer.testing import CliRunner
 from nautilus_librarian.domain.file_locator import file_locator
 from nautilus_librarian.main import app
 from nautilus_librarian.mods.console.domain.utils import execute_console_command
-from nautilus_librarian.mods.dvc.domain.utils import dvc_diff
+from nautilus_librarian.mods.dvc.domain.api import DvcApiWrapper
 from nautilus_librarian.mods.namecodes.domain.filename import Filename
 
 runner = CliRunner()
@@ -124,7 +124,8 @@ def test_gold_images_processing_workflow_command(
         cwd=temp_git_dir,
     )
 
-    dvc_diff_dict = dvc_diff("HEAD^", "HEAD", temp_git_dir)
+    dvcApiWrapper = DvcApiWrapper(temp_git_dir)
+    dvc_diff_dict = dvcApiWrapper.diff("HEAD^", "HEAD")
 
     result = runner.invoke(
         app,

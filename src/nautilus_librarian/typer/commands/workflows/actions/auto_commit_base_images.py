@@ -3,9 +3,7 @@ from typing import List
 
 from nautilus_librarian.domain.file_locator import file_locator
 from nautilus_librarian.mods.dvc.domain.api import DvcApiWrapper
-from nautilus_librarian.mods.dvc.domain.utils import (
-    extract_added_files_from_dvc_diff,
-)
+from nautilus_librarian.mods.dvc.domain.utils import extract_added_files_from_dvc_diff
 from nautilus_librarian.mods.git.domain.git_user import GitUser
 from nautilus_librarian.mods.git.domain.repo import GitRepo
 from nautilus_librarian.mods.namecodes.domain.filename import Filename

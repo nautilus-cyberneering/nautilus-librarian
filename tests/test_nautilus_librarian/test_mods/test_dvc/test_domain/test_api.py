@@ -66,6 +66,14 @@ def test_dvc_init(temp_dir):
     assert path.exists(f"{temp_dir}/.dvc")
 
 
+def test_diff_when_there_is_no_change(temp_dvc_dir_with_test_content):
+    api = DvcApiWrapper(temp_dvc_dir_with_test_content)
+
+    diff = api.diff("HEAD^", "HEAD")
+
+    assert diff == {}
+
+
 def test_add(temp_dvc_dir_with_test_content):
     api = DvcApiWrapper(temp_dvc_dir_with_test_content)
 

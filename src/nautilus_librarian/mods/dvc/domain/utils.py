@@ -1,10 +1,6 @@
 import json
 import os
 
-from deprecated import deprecated
-
-from nautilus_librarian.mods.console.domain.utils import execute_console_command
-
 
 def extract_basename_from_filepath(filepath: str) -> str:
     return os.path.basename(filepath)
@@ -94,11 +90,3 @@ def extract_added_files_from_dvc_diff(dvc_diff):
     """
     data = json.loads(dvc_diff)
     return [(path_object["path"]) for path_object in data["added"]]
-
-
-@deprecated(reason="use DvcApiWrapper class")
-def dvc_diff(a_rev, b_rev, git_repo_dir):
-    dvc_diff_output = execute_console_command(
-        f"dvc diff --show-json {a_rev} {b_rev}", cwd=git_repo_dir
-    )
-    return json.loads(dvc_diff_output)
