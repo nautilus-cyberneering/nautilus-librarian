@@ -36,21 +36,32 @@ def process_action_result(action_result):
         raise typer.Abort()
 
 
+def get_dvc_diff_if_not_provided(dvc_diff, repo_dir, previous_ref, current_ref):
+    if not dvc_diff:
+        return str(
+            DvcApiWrapper(repo_dir).diff(a_rev=previous_ref, b_rev=current_ref)
+        ).replace("'", '"')
+    else:
+        return dvc_diff
+
+
 @app.command("gold-images-processing")
 def gold_images_processing(
-    dvc_diff: str = typer.Argument("{}", envvar="INPUT_DVC_DIFF"),
-    git_repo_dir: str = typer.Argument(
-        get_current_working_directory, envvar="INPUT_GIT_REPO_DIR"
-    ),
     git_user_name: str = typer.Argument(
-        default_git_user_name, envvar="INPUT_GIT_USER_NAME"
+        default_git_user_name, envvar="NL_GIT_USER_NAME"
     ),
     git_user_email: str = typer.Argument(
-        default_git_user_email, envvar="INPUT_GIT_USER_EMAIL"
+        default_git_user_email, envvar="NL_GIT_USER_EMAIL"
     ),
     git_user_signingkey: str = typer.Argument(
-        default_git_user_signingkey, envvar="INPUT_GIT_USER_SIGNINGKEY"
+        default_git_user_signingkey, envvar="NL_GIT_USER_SIGNINGKEY"
     ),
+    git_repo_dir: str = typer.Option(
+        get_current_working_directory, envvar="NL_GIT_REPO_DIR"
+    ),
+    dvc_diff: str = typer.Option(None, envvar="NL_DVC_DIFF"),
+    previous_ref: str = typer.Option("HEAD", envvar="NL_PREVIOUS_REF"),
+    current_ref: str = typer.Option(None, envvar="NL_CURRENT_REF"),
     dvc_remote: str = typer.Option(
         default=None,
         envvar="NL_DVC_REMOTE",
@@ -79,10 +90,14 @@ def gold_images_processing(
     7. Auto-commit new Base images.
 
     Example:
-        poetry run nautilus-librarian gold-images-processing '{"added":[{"path":"data/000001/32/000001-32.600.2.tif"}],"deleted":[],"modified":[],"renamed":[]}' # noqa
+        poetry run nautilus-librarian gold-images-processing /path/to/repo '{"added":[{"path":"data/000001/32/000001-32.600.2.tif"}],"deleted":[],"modified":[],"renamed":[]}' # noqa
     """
 
     git_user = GitUser(git_user_name, git_user_email, git_user_signingkey)
+
+    dvc_diff = get_dvc_diff_if_not_provided(
+        None, git_repo_dir, previous_ref, current_ref
+    )
 
     process_action_result(validate_filenames(dvc_diff))
 
