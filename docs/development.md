@@ -129,3 +129,40 @@ git push origin v1.3.0
 ## Commits
 
 We are using [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/).
+
+## Security
+
+The application uses a lot of console commands. Commands that use arguments taken from user input could be a potential security risk. Please review the rules to avoid command injection before adding a new console command.
+
+If you want to know more about command injection please read the links below.
+
+The basic rules to follow when you add a new console command are:
+
+1. Always try to use an internal Python API (if it exists) instead of running an OS command.
+2. Try to use a high-level wrapper instead of executing a command: `gpg_connect_agent(...)`, `git(...)`, `dvc(...)`, `gpg(...)`.
+3. Do not pass user-controlled input (if possible). If you need it, consider using validation before passing values. If you expect a file path, check if the file exists. If you expect an email, validate the email, etcetera.
+4. Do not use "shell" if not needed. Consider using `execute_console_command` instead of `execute_shell_command`.
+5. Do not use "f-string" with `execute_console_command` and `execute_shell_command`. Consider using placeholders in the command string and passing variables values as keyword arguments. Those functions use the function `shlex.quote(..)` to scape the values. For example:
+
+```python
+execute_console_command(
+    "dvc remote add -d {remote_name} {remote_dir}",
+    remote_name=remote_name,
+    remote_dir=remote_dir,
+    cwd=self.git_repo_dir,
+)
+```
+
+instead of:
+
+```python
+execute_console_command(
+    f"dvc remote add -d {remote_name} {remote_dir}",
+    cwd=self.git_repo_dir,
+)
+```
+
+Links:
+
+* [OS Command Injection in Python](https://semgrep.dev/docs/cheat-sheets/python-command-injection/)
+* [Command injection prevention for Python](https://knowledge-base.secureflag.com/vulnerabilities/code_injection/os_command_injection_python.html)
