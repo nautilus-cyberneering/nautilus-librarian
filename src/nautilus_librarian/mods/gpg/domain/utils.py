@@ -1,5 +1,4 @@
 import os
-import shlex
 
 import gnupg
 
@@ -8,14 +7,13 @@ from nautilus_librarian.mods.gpg.domain.gpg_colon_list_parser import GpgColonLis
 
 
 def get_key_details_with_colons_format(fingerprint, gnupghome):
-    shell_escaped_fingerprint = shlex.quote(str(fingerprint))
-    shell_escaped_gnupghome = shlex.quote(str(gnupghome))
-
-    if not os.path.isdir(shell_escaped_gnupghome):
-        raise ValueError(f"Directory {shell_escaped_gnupghome} not found")
+    if not os.path.isdir(gnupghome):
+        raise ValueError(f"Directory {gnupghome} not found")
 
     output = execute_console_command(
-        f"gpg --homedir {shell_escaped_gnupghome} --batch --with-colons --with-keygrip --list-secret-keys {shell_escaped_fingerprint}"  # noqa
+        "gpg --homedir {gnupghome} --batch --with-colons --with-keygrip --list-secret-keys {fingerprint}",
+        gnupghome=gnupghome,
+        fingerprint=fingerprint,
     )
     return output
 
@@ -93,5 +91,9 @@ def preset_passphrase(keygrip, passphrase, gnupghome):
     Preset passphrase using gpg-connect-agent in order to avoid prompting the user for it.
     """
     hex_passphrase = passphrase.encode("utf-8").hex().upper()
-    preset_passphrase_command = f"gpg-connect-agent --homedir {gnupghome} 'PRESET_PASSPHRASE {keygrip} -1 {hex_passphrase}' /bye"  # noqa
-    return execute_console_command(preset_passphrase_command)
+    return execute_console_command(
+        "gpg-connect-agent --homedir {gnupghome} 'PRESET_PASSPHRASE {keygrip} -1 {hex_passphrase}' /bye",
+        gnupghome=gnupghome,
+        keygrip=keygrip,
+        hex_passphrase=hex_passphrase,
+    )

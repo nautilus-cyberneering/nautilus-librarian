@@ -50,16 +50,23 @@ def create_initial_state(
     sample_base_image_dir = file_locator(Filename(sample_base_image_absolute_path))
 
     execute_console_command(
-        f"""
+        """
         git init
         dvc init
         git add -A
-        GNUPGHOME={temp_gpg_home_dir} git commit -S --gpg-sign={git_user.signingkey} -m "dvc init" --author="{git_user.name} <{git_user.email}>" # noqa
+        GNUPGHOME={temp_gpg_home_dir} git commit -S --gpg-sign={git_user_signingkey} -m "dvc init" --author="{git_user_name} <{git_user_email}>" # noqa
         dvc remote add -d {remote_name} {temp_dvc_local_remote_storage_dir}
         git add -A
-        GNUPGHOME={temp_gpg_home_dir} git commit -S --gpg-sign={git_user.signingkey} -m "dvc add remote" --author="{git_user.name} <{git_user.email}>" # noqa
+        GNUPGHOME={temp_gpg_home_dir} git commit -S --gpg-sign={git_user_signingkey} -m "dvc add remote" --author="{git_user_name} <{git_user_email}>" # noqa
         mkdir -p {sample_base_image_dir}
     """,
+        temp_gpg_home_dir=temp_gpg_home_dir,
+        git_user_signingkey=git_user.signingkey,
+        git_user_name=git_user.name,
+        git_user_email=git_user.email,
+        remote_name=remote_name,
+        temp_dvc_local_remote_storage_dir=temp_dvc_local_remote_storage_dir,
+        sample_base_image_dir=sample_base_image_dir,
         cwd=temp_git_dir,
     )
 
@@ -76,12 +83,16 @@ def add_gold_image(git_dir, sample_gold_image_absolute_path, gpg_home_dir, git_u
 
     # Add the newly copied file to the DVC cache
     execute_console_command(
-        f"""
+        """
         dvc add data/000001/32/000001-32.600.2.tif
         dvc push
         git add data/000001/32/000001-32.600.2.tif.dvc data/000001/32/.gitignore
-        GNUPGHOME={gpg_home_dir} git commit -S --gpg-sign={git_user.signingkey} -m "feat: new gold image: 000001-32.600.2.tif" --author="{git_user.name} <{git_user.email}>" # noqa
+        GNUPGHOME={gpg_home_dir} git commit -S --gpg-sign={git_user_signingkey} -m "feat: new gold image: 000001-32.600.2.tif" --author="{git_user_name} <{git_user_email}>" # noqa
     """,
+        gpg_home_dir=gpg_home_dir,
+        git_user_signingkey=git_user.signingkey,
+        git_user_name=git_user.name,
+        git_user_email=git_user.email,
         cwd=git_dir,
     )
 

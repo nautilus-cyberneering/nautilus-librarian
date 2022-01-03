@@ -1,4 +1,5 @@
 import os
+import shlex
 import subprocess  # nosec
 
 
@@ -10,28 +11,38 @@ def change_current_working_directory(new_dir):
     return os.chdir(new_dir)
 
 
-def debug_execute_console_command(multiline_command: str, cwd=None) -> str:
-    return execute_console_command(
-        multiline_command, print_output=True, print_command=True, cwd=cwd
-    )
+def shell_escape_arguments(**kwargs):
+    escaped_kwargs = {}
+    for key, value in kwargs.items():
+        escaped_kwargs[key] = shlex.quote(str(value))
+    return escaped_kwargs
 
 
 def execute_console_command(
-    multiline_command, print_output=False, print_command=False, cwd=None
+    multiline_command,
+    vars={},
+    print_output=False,
+    print_command=False,
+    cwd=None,
+    **kwargs
 ) -> str:
 
     commands = multiline_command.splitlines()
 
     full_output = ""
 
+    escaped_kwargs = shell_escape_arguments(**kwargs)
+
     for command in commands:
 
+        formatted_cmd = command.format(**escaped_kwargs)
+
         if print_command:
-            print(command.strip())
+            print(formatted_cmd.strip())
 
         # TODO: Security Review
         process = subprocess.run(
-            command,
+            formatted_cmd,
             shell=True,  # nosec
             check=True,
             stdout=subprocess.PIPE,

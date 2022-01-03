@@ -94,9 +94,10 @@ def temp_gpg_home_dir(tmp_path_factory, gpg_signing_key_info, gpg_fixtures_dir):
     gpg_agent_conf_template = f"{gpg_fixtures_dir}/gpg-agent.conf"
     copy(gpg_agent_conf_template, gnupghome)
     execute_console_command(
-        f"""
+        """
         gpg-connect-agent --homedir {gnupghome} RELOADAGENT /bye
-    """
+    """,
+        gnupghome=gnupghome,
     )
 
     # Import the GPG key in the temp GPG homedir
@@ -105,11 +106,6 @@ def temp_gpg_home_dir(tmp_path_factory, gpg_signing_key_info, gpg_fixtures_dir):
         passphrase=gpg_signing_key_info["passphrase"],
         gnupghome=str(gnupghome),
     )
-
-    # Debug: check if the GPG was imported correctly
-    # execute_console_command(
-    #    f"gpg --homedir {gnupghome} -k", cwd=gnupghome, print_output=True
-    # )
 
     # Preset passphrase to avoid entering it manually while running tests
     preset_passphrase(

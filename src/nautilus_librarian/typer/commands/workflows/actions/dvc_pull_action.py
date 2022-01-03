@@ -22,14 +22,13 @@ def dvc_pull_action(dvc_diff, git_repo_dir, remote_name):
         dvc_diff, only_basename=False
     )
 
-    dvcApiWrapper = DvcApiWrapper(git_repo_dir)
+    dvc_api_wrapper = DvcApiWrapper(git_repo_dir)
 
     messages = []
 
     for filename in filenames:
         try:
-            # dvc pull --remote azure data/000000/32/000000-32.600.2.tif
-            dvcApiWrapper.pull(filename, remote_name)
+            dvc_api_wrapper.pull(filename, remote_name)
 
             messages.append(Message(f"✓ {filename} pulled from dvc storage"))
         except ValueError as error:

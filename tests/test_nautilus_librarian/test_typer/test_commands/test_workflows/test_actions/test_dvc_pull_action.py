@@ -36,18 +36,22 @@ def given_a_dvc_diff_object_with_a_new_gold_image_it_should_pull_the_image_from_
 
     # Add the new Gold image and remove the local copy of the image
     execute_console_command(
-        f"""
+        """
         dvc add data/000001/32/000001-32.600.2.tif
         dvc push
         git add data/000001/32/000001-32.600.2.tif.dvc data/000001/32/.gitignore
-        GNUPGHOME={temp_gpg_home_dir} git commit -S --gpg-sign={git_user.signingkey} -m "feat: new gold image: 000001-32.600.2.tif" --author="{git_user.name} <{git_user.email}>" # noqa
+        GNUPGHOME={temp_gpg_home_dir} git commit -S --gpg-sign={git_user_signingkey} -m "feat: new gold image: 000001-32.600.2.tif" --author="{git_user_name} <{git_user_email}>" # noqa
         rm data/000001/32/000001-32.600.2.tif
     """,
+        temp_gpg_home_dir=temp_gpg_home_dir,
+        git_user_signingkey=git_user.signingkey,
+        git_user_name=git_user.name,
+        git_user_email=git_user.email,
         cwd=temp_git_dir,
     )
 
-    dvcApiWrapper = DvcApiWrapper(temp_git_dir)
-    dvc_diff_dict = dvcApiWrapper.diff("HEAD^", "HEAD")
+    dvc_api_wrapper = DvcApiWrapper(temp_git_dir)
+    dvc_diff_dict = dvc_api_wrapper.diff("HEAD^", "HEAD")
 
     # Assert Gold image does not exist
     assert not os.path.exists(f"{temp_git_dir}/data/000001/32/000001-32.600.2.tif")

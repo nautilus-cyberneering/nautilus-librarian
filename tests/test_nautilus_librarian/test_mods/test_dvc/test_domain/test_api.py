@@ -34,7 +34,9 @@ def remove_test_contents(temp_dir):
 
 def add_remote_to_dvc(dvc_dir, remote_temp_dir):
     execute_console_command(
-        f"dvc remote add -d localremote {remote_temp_dir}", cwd=dvc_dir
+        "dvc remote add -d localremote {remote_temp_dir}",
+        remote_temp_dir=remote_temp_dir,
+        cwd=dvc_dir,
     )
 
 
