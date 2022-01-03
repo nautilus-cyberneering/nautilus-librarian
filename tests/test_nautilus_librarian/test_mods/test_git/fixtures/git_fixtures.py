@@ -29,6 +29,4 @@ def git_temp_dir_with_one_commit(temp_git_dir, temp_gpg_home_dir, git_user):
         cwd=temp_git_dir,
     )
 
-    execute_shell_command("git status", cwd=temp_git_dir)
-
     return temp_git_dir
