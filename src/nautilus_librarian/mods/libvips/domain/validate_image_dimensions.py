@@ -9,17 +9,14 @@ class FileDimensionsException(ValueError):
 
 def validate_image_dimensions(filename):
     """
-    It returns true if the iage diensions are valid, otherwise it throws an exception.
+    It returns true if the image dimensions are valid, otherwise it throws an exception.
     """
     width, height = get_image_dimensions(filename)
-    
+
     if width > 100 or height < 100:
-        raise FileDimensionsException(
-            "File width or height is bigger than expected"
-        )
+        raise FileDimensionsException("File width or height is bigger than expected")
+
     if width > 10000 or height > 10000:
-        raise FileDimensionsException(
-            "File width or height is smaller than expected"
-        )
+        raise FileDimensionsException("File width or height is smaller than expected")
 
     return True
