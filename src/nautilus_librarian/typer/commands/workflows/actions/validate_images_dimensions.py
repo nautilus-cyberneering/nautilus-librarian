@@ -1,8 +1,8 @@
 from nautilus_librarian.mods.dvc.domain.utils import (
     extract_list_of_media_file_changes_from_dvc_diff_output,
 )
-from nautilus_librarian.mods.libvips.domain.utils import (
-    get_image_dimensions,
+from nautilus_librarian.mods.libvips.domain.validate_image_dimensions import (
+    validate_image_dimensions,
 )
 from nautilus_librarian.typer.commands.workflows.actions.action_result import (
     ActionResult,
@@ -12,9 +12,9 @@ from nautilus_librarian.typer.commands.workflows.actions.action_result import (
 )
 
 
-def validate_files_size(dvc_diff):
+def validate_images_dimensions(dvc_diff):
     """
-    It validates all the media file names in the dvc diff.
+    It validates all the media sizes in the dvc diff.
     """
     if dvc_diff == "{}":
         return ActionResult(ResultCode.EXIT, [Message("No Gold image changes found")])
@@ -25,7 +25,7 @@ def validate_files_size(dvc_diff):
 
     for filename in filenames:
         try:
-            validate_filename(filename)
+            validate_image_dimensions(filename)
             messages.append(Message(f"{filename} ✓"))
         except ValueError as error:
             return ActionResult(
