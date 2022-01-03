@@ -38,7 +38,7 @@ jobs:
         run: |
           apt-get update
           apt-get upgrade -y
-	        apt-get install -y libvips-dev
+          apt-get install -y libvips-dev
 
       - name: Setup Poetry
         run: pip3 install poetry
