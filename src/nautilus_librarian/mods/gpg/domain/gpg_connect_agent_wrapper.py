@@ -18,7 +18,7 @@ class GpgConnectAgentWrapper:
         guard_that_is_a_valid_keygrip(keygrip)
 
         hex_passphrase = passphrase.encode("utf-8").hex().upper()
-        
+
         return execute_console_command(
             "gpg-connect-agent --homedir {gnupghome} 'PRESET_PASSPHRASE {keygrip} -1 {hex_passphrase}' /bye",
             gnupghome=self.gnupghome,
