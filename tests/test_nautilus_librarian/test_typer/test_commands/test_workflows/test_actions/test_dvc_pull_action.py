@@ -6,7 +6,7 @@ from test_nautilus_librarian.test_typer.test_commands.test_workflows.test_gold_i
 )
 from test_nautilus_librarian.utils import compact_json
 
-from nautilus_librarian.mods.console.domain.utils import execute_console_command
+from nautilus_librarian.mods.console.domain.utils import execute_shell_command
 from nautilus_librarian.mods.dvc.domain.api import DvcApiWrapper
 from nautilus_librarian.typer.commands.workflows.actions.dvc_pull_action import (
     dvc_pull_action,
@@ -35,7 +35,7 @@ def given_a_dvc_diff_object_with_a_new_gold_image_it_should_pull_the_image_from_
     copy_media_file_to_its_folder(sample_gold_image_absolute_path, temp_git_dir)
 
     # Add the new Gold image and remove the local copy of the image
-    execute_console_command(
+    execute_shell_command(
         """
         dvc add data/000001/32/000001-32.600.2.tif
         dvc push

@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from nautilus_librarian.mods.console.domain.utils import execute_console_command
+from nautilus_librarian.mods.console.domain.utils import execute_shell_command
 
 
 @pytest.fixture(scope="session")
@@ -15,7 +15,7 @@ def git_fixtures_dir():
 def git_temp_dir_with_one_commit(temp_git_dir, temp_gpg_home_dir, git_user):
 
     # Create and initialize a git repo and add a README.md file
-    execute_console_command(
+    execute_shell_command(
         """
         git init
         touch README.md
@@ -28,5 +28,7 @@ def git_temp_dir_with_one_commit(temp_git_dir, temp_gpg_home_dir, git_user):
         git_user_email=git_user.email,
         cwd=temp_git_dir,
     )
+
+    execute_shell_command("git status", cwd=temp_git_dir)
 
     return temp_git_dir

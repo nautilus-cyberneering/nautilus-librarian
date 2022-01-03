@@ -5,7 +5,7 @@ from typer.testing import CliRunner
 
 from nautilus_librarian.domain.file_locator import file_locator
 from nautilus_librarian.main import app
-from nautilus_librarian.mods.console.domain.utils import execute_console_command
+from nautilus_librarian.mods.console.domain.utils import execute_shell_command
 from nautilus_librarian.mods.namecodes.domain.filename import Filename
 
 runner = CliRunner()
@@ -49,7 +49,7 @@ def create_initial_state(
     """
     sample_base_image_dir = file_locator(Filename(sample_base_image_absolute_path))
 
-    execute_console_command(
+    execute_shell_command(
         """
         git init
         dvc init
@@ -82,7 +82,7 @@ def add_gold_image(git_dir, sample_gold_image_absolute_path, gpg_home_dir, git_u
     copy(sample_gold_image_absolute_path, f"{git_dir}/{sample_gold_image_dir}")
 
     # Add the newly copied file to the DVC cache
-    execute_console_command(
+    execute_shell_command(
         """
         dvc add data/000001/32/000001-32.600.2.tif
         dvc push
