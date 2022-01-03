@@ -10,6 +10,9 @@ class DirNotFound(ValueError):
 
 class DvcCommandWrapper:
     def __init__(self, git_repo_dir: str) -> None:
+        if not os.path.isdir(git_repo_dir):
+            raise DirNotFound(f"Directory not found {git_repo_dir}")
+
         self.git_repo_dir = git_repo_dir
         pass
 

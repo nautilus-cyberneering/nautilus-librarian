@@ -7,7 +7,7 @@ from test_nautilus_librarian.test_typer.test_commands.test_workflows.test_gold_i
 from test_nautilus_librarian.utils import compact_json
 
 from nautilus_librarian.mods.dvc.domain.dvc_command_wrapper import dvc
-from nautilus_librarian.mods.git.domain.commit import get_commit_signing_key
+from nautilus_librarian.mods.git.domain.git_command_wrapper import git
 from nautilus_librarian.mods.namecodes.domain.filename import Filename
 from nautilus_librarian.typer.commands.workflows.actions.action_result import ResultCode
 from nautilus_librarian.typer.commands.workflows.actions.auto_commit_base_images import (
@@ -133,5 +133,5 @@ def given_a_dvc_diff_object_with_a_new_gold_image_it_should_commit_the_added_bas
 
     # Assert the commit was signed with the right signing key
     assert (
-        get_commit_signing_key(commit.hexsha, cwd=temp_git_dir) == git_user.signingkey
+        git(temp_git_dir).get_commit_signing_key(commit.hexsha) == git_user.signingkey
     )
