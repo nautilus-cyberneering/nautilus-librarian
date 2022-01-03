@@ -1,10 +1,7 @@
 import pytest
 
-from nautilus_librarian.mods.gpg.domain.utils import (
-    get_key_details_with_colons_format,
-    get_key_user_by,
-    get_keygrip_by,
-)
+from nautilus_librarian.mods.gpg.domain.gpg_command_wrapper import gpg
+from nautilus_librarian.mods.gpg.domain.services import get_key_user_by, get_keygrip_by
 
 
 def remove_white_spaces_and_line_breaks(text):
@@ -12,8 +9,8 @@ def remove_white_spaces_and_line_breaks(text):
 
 
 def test_get_key_details_with_colons_format(temp_gpg_home_dir, gpg_signing_key_info):
-    output = get_key_details_with_colons_format(
-        gpg_signing_key_info["fingerprint"], temp_gpg_home_dir
+    output = gpg(temp_gpg_home_dir).get_key_details_with_colons_format(
+        gpg_signing_key_info["fingerprint"]
     )
 
     expected_output = """
@@ -39,14 +36,14 @@ def test_get_key_details_with_colons_format_with_shell_injection(
 ):
     with pytest.raises(Exception):
         malicious_gnupghome = "~.gnupg; rm -rf /dir_to_be_deleted"
-        get_key_details_with_colons_format(
-            gpg_signing_key_info["fingerprint"], malicious_gnupghome
+        gpg(malicious_gnupghome).get_key_details_with_colons_format(
+            gpg_signing_key_info["fingerprint"]
         )
 
     with pytest.raises(Exception):
         fingerprint = "88966A5B8C01BD04F3DA440427304EDD6079B81C"
         malicious_fingerprint = f"{fingerprint}; rm -rf /dir_to_be_deleted"
-        get_key_details_with_colons_format(malicious_fingerprint, temp_gpg_home_dir)
+        gpg(temp_gpg_home_dir).get_key_details_with_colons_format(malicious_fingerprint)
 
 
 def test_get_keygrip_by(temp_gpg_home_dir, gpg_signing_key_info):

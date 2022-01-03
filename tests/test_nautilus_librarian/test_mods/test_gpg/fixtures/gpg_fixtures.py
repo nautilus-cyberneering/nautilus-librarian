@@ -5,7 +5,7 @@ from shutil import copy
 import pytest
 
 from nautilus_librarian.mods.console.domain.utils import execute_console_command
-from nautilus_librarian.mods.gpg.domain.utils import (
+from nautilus_librarian.mods.gpg.domain.services import (
     import_gpg_private_key,
     preset_passphrase,
 )
