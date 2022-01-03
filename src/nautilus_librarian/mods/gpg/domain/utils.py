@@ -6,9 +6,42 @@ from nautilus_librarian.mods.console.domain.utils import execute_console_command
 from nautilus_librarian.mods.gpg.domain.gpg_colon_list_parser import GpgColonListParser
 
 
-def get_key_details_with_colons_format(fingerprint, gnupghome):
+class InvalidFingerprint(ValueError):
+    pass
+
+
+def is_hexadecimal(text):
+    try:
+        int(text, 16)
+        return True
+    except ValueError:
+        return False
+
+
+def guard_that_is_a_valid_fingerprint(fingerprint):
+    if len(fingerprint) != 40:
+        raise InvalidFingerprint(f"Invalid fingerprint {fingerprint}")
+
+    if not is_hexadecimal(fingerprint):
+        raise InvalidFingerprint(f"Invalid fingerprint {fingerprint}")
+
+
+def guard_that_is_a_valid_keygrip(keygrip):
+    if len(keygrip) != 40:
+        raise InvalidFingerprint(f"Invalid keygrip {keygrip}")
+
+    if not is_hexadecimal(keygrip):
+        raise InvalidFingerprint(f"Invalid keygrip {keygrip}")
+
+
+def guard_that_is_a_valid_gpg_home_dir(gnupghome):
     if not os.path.isdir(gnupghome):
         raise ValueError(f"Directory {gnupghome} not found")
+
+
+def get_key_details_with_colons_format(fingerprint, gnupghome):
+    guard_that_is_a_valid_fingerprint(fingerprint)
+    guard_that_is_a_valid_gpg_home_dir(gnupghome)
 
     output = execute_console_command(
         "gpg --homedir {gnupghome} --batch --with-colons --with-keygrip --list-secret-keys {fingerprint}",
@@ -90,6 +123,9 @@ def preset_passphrase(keygrip, passphrase, gnupghome):
     """
     Preset passphrase using gpg-connect-agent in order to avoid prompting the user for it.
     """
+    guard_that_is_a_valid_gpg_home_dir(gnupghome)
+    guard_that_is_a_valid_keygrip(keygrip)
+
     hex_passphrase = passphrase.encode("utf-8").hex().upper()
     return execute_console_command(
         "gpg-connect-agent --homedir {gnupghome} 'PRESET_PASSPHRASE {keygrip} -1 {hex_passphrase}' /bye",
