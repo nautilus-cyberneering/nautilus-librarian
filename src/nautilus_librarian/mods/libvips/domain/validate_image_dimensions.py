@@ -9,14 +9,14 @@ class file_dimensions_exception(ValueError):
 
 def validate_image_dimensions(filename, min_image_size: int, max_image_size: int):
     """
-    It returns true if the image dimensions are valid, otherwise it throws an exception.
+    It returns the image dimensions if are valid, otherwise it throws an exception.
     """
     width, height = get_image_dimensions(filename)
 
     if width > max_image_size or height > max_image_size:
-        raise file_dimensions_exception("File width or height is bigger than expected")
+        raise file_dimensions_exception(f"File dimensions ({width} x {height}) bigger than maximum size of {max_image_size}")
 
     if width < min_image_size or height < min_image_size:
-        raise file_dimensions_exception("File width or height is smaller than expected")
+        raise file_dimensions_exception(f"File dimensions ({width} x {height}) smaller than minimun size of {min_image_size}")
 
-    return True
+    return width, height

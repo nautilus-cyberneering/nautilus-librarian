@@ -19,17 +19,17 @@ def validate_images_dimensions(dvc_diff, min_image_size, max_image_size):
     if dvc_diff == "{}":
         return ActionResult(ResultCode.EXIT, [Message("No Gold image changes found")])
 
-    filenames = extract_list_of_media_file_changes_from_dvc_diff_output(dvc_diff)
+    filenames = extract_list_of_media_file_changes_from_dvc_diff_output(dvc_diff, only_basename=False)
 
     messages = []
 
     for filename in filenames:
         try:
-            validate_image_dimensions(filename, min_image_size, max_image_size)
-            messages.append(Message(f"{filename} ✓"))
+            (width, height) = validate_image_dimensions(filename, min_image_size, max_image_size)
+            messages.append(Message(f"Dimensions of {filename} are {width} x {height} ✓"))
         except ValueError as error:
             return ActionResult(
-                ResultCode.ABORT, [ErrorMessage(f"{filename} ✗ {error}")]
+                ResultCode.ABORT, [ErrorMessage(f"✗ Dimensions of {filename} are not correct: {error}")]
             )
 
     return ActionResult(ResultCode.CONTINUE, messages)

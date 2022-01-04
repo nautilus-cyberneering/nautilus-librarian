@@ -20,4 +20,4 @@ def it_should_reject_image_smaller_than_expected(libvips_fixtures_dir):
 
 def it_should_accept_proper_size_image(libvips_fixtures_dir):
 
-    assert(validate_image_dimensions(libvips_fixtures_dir + "/test_image.tif", 256, 8192))
+    assert validate_image_dimensions(libvips_fixtures_dir + "/test_image.tif", 256, 8192) == (512, 256)
