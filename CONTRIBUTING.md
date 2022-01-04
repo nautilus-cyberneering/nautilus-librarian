@@ -116,9 +116,10 @@ Every issue should have its branch following this format: "issue-##-short-descri
 
 ### Commit messages
 
-- Use the present tense and imperative mood ("Add feature", "Change cursor color")
-- Limit the first line to 72 characters or less
-- Reference issues and pull requests liberally after the first line
+- We are using [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/).
+- Use the present tense and imperative mood ("Add feature", "Change cursor color").
+- Limit the first line to 72 characters or less.
+- Reference issues and pull requests liberally after the first line.
 - Consider starting the commit message with an applicable emoji (taken from the [Atom Contribution Guidelines](https://github.com/atom/atom/blob/master/CONTRIBUTING.md)):
 
   - :art: `:art:` when improving the format/structure of the code
