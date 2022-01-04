@@ -12,7 +12,7 @@ from nautilus_librarian.typer.commands.workflows.actions.action_result import (
 )
 
 
-def validate_images_dimensions(dvc_diff):
+def validate_images_dimensions(dvc_diff, min_image_size, max_image_size):
     """
     It validates all the media sizes in the dvc diff.
     """
@@ -25,7 +25,7 @@ def validate_images_dimensions(dvc_diff):
 
     for filename in filenames:
         try:
-            validate_image_dimensions(filename)
+            validate_image_dimensions(filename, min_image_size, max_image_size)
             messages.append(Message(f"{filename} ✓"))
         except ValueError as error:
             return ActionResult(

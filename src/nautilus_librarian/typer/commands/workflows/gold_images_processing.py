@@ -21,6 +21,7 @@ from nautilus_librarian.typer.commands.workflows.actions.validate_filenames impo
 from nautilus_librarian.typer.commands.workflows.actions.validate_filepaths_action import (
     validate_filepaths_action,
 )
+from nautilus_librarian.typer.commands.workflows.actions.validate_images_dimensions import validate_images_dimensions
 
 app = typer.Typer()
 
@@ -58,6 +59,12 @@ def gold_images_processing(
     ),
     git_repo_dir: str = typer.Option(
         get_current_working_directory, envvar="NL_GIT_REPO_DIR"
+    ),
+    min_image_size: int = typer.Option(
+        256, envvar="NL_MIN_IMAGE_SIZE"
+    ),
+    max_image_size: int = typer.Option(
+        16384, envvar="NL_MAX_IMAGE_SIZE"
     ),
     dvc_diff: str = typer.Option(None, envvar="NL_DVC_DIFF"),
     previous_ref: str = typer.Option("HEAD", envvar="NL_PREVIOUS_REF"),
@@ -107,6 +114,8 @@ def gold_images_processing(
         dvc_remote = DvcApiWrapper(git_repo_dir).dvc_default_remote()
 
     process_action_result(dvc_pull_action(dvc_diff, git_repo_dir, dvc_remote))
+
+    process_action_result(validate_images_dimensions(dvc_diff, min_image_size, max_image_size))
 
     process_action_result(
         auto_commit_base_images(dvc_diff, git_repo_dir, gnupghome, git_user)
