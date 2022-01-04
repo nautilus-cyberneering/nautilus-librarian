@@ -21,7 +21,7 @@ from nautilus_librarian.typer.commands.workflows.actions.validate_filenames impo
 from nautilus_librarian.typer.commands.workflows.actions.validate_filepaths_action import (
     validate_filepaths_action,
 )
-from nautilus_librarian.typer.commands.workflows.actions.validate_images_dimensions import validate_images_dimensions
+from nautilus_librarian.typer.commands.workflows.actions.validate_images_dimensions_action import validate_images_dimensions
 
 app = typer.Typer()
 
