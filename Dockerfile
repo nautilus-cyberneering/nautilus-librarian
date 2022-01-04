@@ -15,6 +15,11 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python - \
     && poetry config virtualenvs.create false
 
+# Install libvips
+RUN apt-get update \
+	&& apt-get upgrade -y \
+	&& apt-get install -y libvips-dev 
+
 # Install dependencies
 COPY pyproject.toml poetry.lock /app/
 RUN poetry install --no-interaction --no-root
