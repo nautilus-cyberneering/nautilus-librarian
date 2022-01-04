@@ -134,9 +134,9 @@ def auto_commit_base_images(dvc_diff, git_repo_dir, gnupghome, git_user: GitUser
 
         guard_that_base_image_exists(base_img_absolute_path)
 
-        dvcApiWrapper = DvcApiWrapper(git_repo_dir)
-        dvcApiWrapper.add(base_img_relative_path)
-        dvcApiWrapper.push(f"{base_img_relative_path}.dvc")
+        dvc_api_wrapper = DvcApiWrapper(git_repo_dir)
+        dvc_api_wrapper.add(base_img_relative_path)
+        dvc_api_wrapper.push(f"{base_img_relative_path}.dvc")
 
         commit_base_image(git_repo_dir, base_img_relative_path, gnupghome, git_user)
 

@@ -1,35 +1,21 @@
-from nautilus_librarian.mods.console.domain.utils import execute_console_command
+from nautilus_librarian.mods.git.domain.git_command_wrapper import git
 from nautilus_librarian.mods.git.domain.git_user import GitUser
 
 
-def git_config_global_user():
+def git_config_global_user() -> GitUser:
     """
-    It return the git global user configuration.
-
-    It parses the config values from the git console command.
-
-    TODO:
-        * Check if we can use https://gitpython.readthedocs.io/en/stable/index.html.
-        * We could write a wrapper: GitConfig(git_repo_dir). Like GitRepo class.
+    It returns the git global user configuration.
     """
-    name = execute_console_command("git config --global --get user.name").strip()
-
-    email = execute_console_command("git config --global --get user.email").strip()
-
-    signingkey = execute_console_command(
-        "git config --global --get user.signingkey"
-    ).strip()
-
-    return GitUser(name, email, signingkey)
+    return git().get_global_user()
 
 
-def default_git_user_name():
-    git_config_global_user().name
+def default_git_user_name() -> str:
+    return git_config_global_user().name
 
 
-def default_git_user_email():
-    git_config_global_user().email
+def default_git_user_email() -> str:
+    return git_config_global_user().email
 
 
-def default_git_user_signingkey():
-    git_config_global_user().signingkey
+def default_git_user_signingkey() -> str:
+    return git_config_global_user().signingkey

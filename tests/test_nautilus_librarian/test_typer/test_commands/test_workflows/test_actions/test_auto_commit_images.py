@@ -1,4 +1,3 @@
-import json
 import os
 
 from git.repo.base import Repo
@@ -7,8 +6,8 @@ from test_nautilus_librarian.test_typer.test_commands.test_workflows.test_gold_i
 )
 from test_nautilus_librarian.utils import compact_json
 
-from nautilus_librarian.mods.console.domain.utils import execute_console_command
-from nautilus_librarian.mods.git.domain.commit import get_commit_signing_key
+from nautilus_librarian.mods.dvc.domain.dvc_command_wrapper import dvc
+from nautilus_librarian.mods.git.domain.git_command_wrapper import git
 from nautilus_librarian.mods.namecodes.domain.filename import Filename
 from nautilus_librarian.typer.commands.workflows.actions.action_result import ResultCode
 from nautilus_librarian.typer.commands.workflows.actions.auto_commit_base_images import (
@@ -100,10 +99,7 @@ def given_a_dvc_diff_object_with_a_new_gold_image_it_should_commit_the_added_bas
     assert os.path.isfile(f"{temp_git_dir}/data/000001/42/.gitignore")
 
     # Assert Base image was pushed to local "remote" storage
-    dvc_status_output = execute_console_command(
-        "dvc status --show-json --cloud --remote=localremote", cwd=temp_git_dir
-    )
-    dvc_status_output_json = json.loads(dvc_status_output)
+    dvc_status_output_json = dvc(temp_git_dir).status_remote("localremote")
     expected_status_new = {"data/000001/42/000001-42.600.2.tif": "new"}
     expected_status_empty = {}
     assert (
@@ -137,5 +133,5 @@ def given_a_dvc_diff_object_with_a_new_gold_image_it_should_commit_the_added_bas
 
     # Assert the commit was signed with the right signing key
     assert (
-        get_commit_signing_key(commit.hexsha, cwd=temp_git_dir) == git_user.signingkey
+        git(temp_git_dir).get_commit_signing_key(commit.hexsha) == git_user.signingkey
     )
