@@ -6,8 +6,8 @@ from git import Repo as GitRepo
 
 from nautilus_librarian.mods.console.domain.utils import (
     change_current_working_directory,
-    execute_console_command,
 )
+from nautilus_librarian.mods.dvc.domain.dvc_command_wrapper import dvc
 
 
 class InvalidDvcDir(AssertionError):
@@ -119,7 +119,4 @@ class DvcApiWrapper:
         """
         It returns the default remote for the dvc repo.
         """
-        output = execute_console_command(
-            "dvc remote default --project", cwd=self.repo_path
-        )
-        return output.strip()
+        return dvc(self.repo_path).default_remote()

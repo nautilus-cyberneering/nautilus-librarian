@@ -7,8 +7,8 @@ from os import path
 import pytest
 from git import Repo
 
-from nautilus_librarian.mods.console.domain.utils import execute_console_command
 from nautilus_librarian.mods.dvc.domain.api import DvcApiWrapper
+from nautilus_librarian.mods.dvc.domain.dvc_command_wrapper import dvc
 
 
 @pytest.fixture()
@@ -33,9 +33,7 @@ def remove_test_contents(temp_dir):
 
 
 def add_remote_to_dvc(dvc_dir, remote_temp_dir):
-    execute_console_command(
-        f"dvc remote add -d localremote {remote_temp_dir}", cwd=dvc_dir
-    )
+    dvc(dvc_dir).add_local_remote_as_default("localremote", remote_temp_dir)
 
 
 @pytest.fixture()
