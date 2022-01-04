@@ -6,7 +6,9 @@ from nautilus_librarian.typer.commands.workflows.actions.validate_images_dimensi
 )
 
 
-def given_a_diff_structure_and_size_limits_it_should_validate_new_image_dimensions(sample_gold_image_absolute_path):
+def given_a_diff_structure_and_size_limits_it_should_validate_new_image_dimensions(
+    sample_gold_image_absolute_path,
+):
 
     dvc_diff_with_added_gold_image = {
         "added": [
@@ -17,13 +19,19 @@ def given_a_diff_structure_and_size_limits_it_should_validate_new_image_dimensio
         "renamed": [],
     }
 
-    result = validate_images_dimensions(compact_json(dvc_diff_with_added_gold_image), 512, 4096)
+    result = validate_images_dimensions(
+        compact_json(dvc_diff_with_added_gold_image), 512, 4096
+    )
 
     assert result.code == ResultCode.CONTINUE
-    assert result.contains_text("Dimensions of "+sample_gold_image_absolute_path+" are 1740 x 1160 ✓")
+    assert result.contains_text(
+        "Dimensions of " + sample_gold_image_absolute_path + " are 1740 x 1160 ✓"
+    )
 
 
-def given_a_diff_structure_and_size_limits_it_should_validate_modified_image_dimensions(sample_gold_image_absolute_path):
+def given_a_diff_structure_and_size_limits_it_should_validate_modified_image_dimensions(
+    sample_gold_image_absolute_path,
+):
 
     dvc_diff_with_modified_image = {
         "added": [],
@@ -34,13 +42,19 @@ def given_a_diff_structure_and_size_limits_it_should_validate_modified_image_dim
         "renamed": [],
     }
 
-    result = validate_images_dimensions(compact_json(dvc_diff_with_modified_image), 512, 4096)
+    result = validate_images_dimensions(
+        compact_json(dvc_diff_with_modified_image), 512, 4096
+    )
 
     assert result.code == ResultCode.CONTINUE
-    assert result.contains_text("Dimensions of "+sample_gold_image_absolute_path+" are 1740 x 1160 ✓")
+    assert result.contains_text(
+        "Dimensions of " + sample_gold_image_absolute_path + " are 1740 x 1160 ✓"
+    )
 
 
-def given_a_diff_structure_and_size_limits_it_should_validate_renamed_image_dimensions(sample_gold_image_absolute_path):
+def given_a_diff_structure_and_size_limits_it_should_validate_renamed_image_dimensions(
+    sample_gold_image_absolute_path,
+):
 
     dvc_diff_with_renamed_image = {
         "added": [],
@@ -51,13 +65,19 @@ def given_a_diff_structure_and_size_limits_it_should_validate_renamed_image_dime
         ],
     }
 
-    result = validate_images_dimensions(compact_json(dvc_diff_with_renamed_image), 512, 4096)
+    result = validate_images_dimensions(
+        compact_json(dvc_diff_with_renamed_image), 512, 4096
+    )
 
     assert result.code == ResultCode.CONTINUE
-    assert result.contains_text("Dimensions of "+sample_gold_image_absolute_path+" are 1740 x 1160 ✓")
+    assert result.contains_text(
+        "Dimensions of " + sample_gold_image_absolute_path + " are 1740 x 1160 ✓"
+    )
 
 
-def given_a_diff_structure_and_size_limits_it_should_not_validate_new_image_dimensions(sample_gold_image_absolute_path):
+def given_a_diff_structure_and_size_limits_it_should_not_validate_new_image_dimensions(
+    sample_gold_image_absolute_path,
+):
 
     dvc_diff_with_added_image = {
         "added": [
@@ -70,7 +90,8 @@ def given_a_diff_structure_and_size_limits_it_should_not_validate_new_image_dime
 
     result = validate_images_dimensions(compact_json(dvc_diff_with_added_image), 8, 16)
 
-    expected_message = f"✗ Dimensions of {sample_gold_image_absolute_path} are not correct: File dimensions (1740 x 1160) bigger than maximum size of 16"
+    expected_message = ("✗ Error validating "+sample_gold_image_absolute_path+" dimensions:"
+    " File dimensions (1740 x 1160) bigger than maximum size of 16")
 
     assert result.code == ResultCode.ABORT
     assert expected_message.strip() == result.last_message_text()

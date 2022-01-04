@@ -16,9 +16,9 @@ RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-
     && poetry config virtualenvs.create false
 
 # Install libvips
-RUN apt-get update \
-	&& apt-get upgrade -y \
-	&& apt-get install -y libvips-dev 
+RUN rm -rf /var/lib/apt/lists/* \
+    apt-get update \
+	&& apt-get install -y  --no-install-recommends libvips-dev 
 
 # Install dependencies
 COPY pyproject.toml poetry.lock /app/
