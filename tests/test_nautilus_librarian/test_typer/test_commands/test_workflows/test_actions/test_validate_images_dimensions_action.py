@@ -25,7 +25,7 @@ def given_a_diff_structure_and_size_limits_it_should_validate_new_image_dimensio
 
     assert result.code == ResultCode.CONTINUE
     assert result.contains_text(
-        "Dimensions of " + sample_gold_image_absolute_path + " are 1740 x 1160 ✓"
+        "✓ Dimensions of " + sample_gold_image_absolute_path + " are 1740 x 1160"
     )
 
 
@@ -48,7 +48,7 @@ def given_a_diff_structure_and_size_limits_it_should_validate_modified_image_dim
 
     assert result.code == ResultCode.CONTINUE
     assert result.contains_text(
-        "Dimensions of " + sample_gold_image_absolute_path + " are 1740 x 1160 ✓"
+        "✓ Dimensions of " + sample_gold_image_absolute_path + " are 1740 x 1160"
     )
 
 
@@ -71,7 +71,7 @@ def given_a_diff_structure_and_size_limits_it_should_validate_renamed_image_dime
 
     assert result.code == ResultCode.CONTINUE
     assert result.contains_text(
-        "Dimensions of " + sample_gold_image_absolute_path + " are 1740 x 1160 ✓"
+        "✓ Dimensions of " + sample_gold_image_absolute_path + " are 1740 x 1160"
     )
 
 
@@ -91,8 +91,8 @@ def given_a_diff_structure_and_size_limits_it_should_not_validate_new_image_dime
     result = validate_images_dimensions(compact_json(dvc_diff_with_added_image), 8, 16)
 
     expected_message = (
-        "✗ Error validating " + sample_gold_image_absolute_path + " dimensions:"
-        " File dimensions (1740 x 1160) bigger than maximum size of 16"
+        "✗ Dimensions of " + sample_gold_image_absolute_path + " are wrong: "
+        "File dimensions (1740 x 1160) bigger than maximum size of 16"
     )
 
     assert result.code == ResultCode.ABORT

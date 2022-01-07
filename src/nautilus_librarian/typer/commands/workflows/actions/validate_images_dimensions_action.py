@@ -31,12 +31,12 @@ def validate_images_dimensions(dvc_diff, min_image_size, max_image_size):
                 filename, min_image_size, max_image_size
             )
             messages.append(
-                Message(f"Dimensions of {filename} are {width} x {height} ✓")
+                Message(f"✓ Dimensions of {filename} are {width} x {height}")
             )
         except ValueError as error:
             return ActionResult(
                 ResultCode.ABORT,
-                [ErrorMessage(f"✗ Error validating {filename} dimensions: {error}")],
+                [ErrorMessage(f"✗ Dimensions of {filename} are wrong: {error}")],
             )
 
     return ActionResult(ResultCode.CONTINUE, messages)

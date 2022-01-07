@@ -186,7 +186,7 @@ def test_gold_images_processing_workflow_command(
     000001-32.600.2.tif ✓
     data/000001/32/000001-32.600.2.tif ✓
     ✓ data/000001/32/000001-32.600.2.tif pulled from dvc storage
-    Dimensions of data/000001/32/000001-32.600.2.tif are 1740 x 1160 ✓
+    ✓ Dimensions of data/000001/32/000001-32.600.2.tif are 1740 x 1160
     New Gold image found: 000001-32.600.2.tif -> Base image: data/000001/42/000001-42.600.2.tif ✓
     """
 
