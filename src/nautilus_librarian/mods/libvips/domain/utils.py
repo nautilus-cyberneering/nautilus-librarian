@@ -18,7 +18,7 @@ def save_image(image, destination_image_path):
 
 
 def resample_image(image, size):
-    return image.resize(get_image_resizing_factor(image, size), kernel='lanczos2')
+    return image.resize(get_image_resizing_factor(image, size), kernel="lanczos2")
 
 
 def get_image_dimensions(source_image_path):

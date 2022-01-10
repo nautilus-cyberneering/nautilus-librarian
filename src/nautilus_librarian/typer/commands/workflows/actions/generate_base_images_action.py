@@ -2,9 +2,7 @@ from nautilus_librarian.domain.file_locator import file_locator
 from nautilus_librarian.mods.dvc.domain.utils import (
     extract_list_of_media_file_changes_from_dvc_diff_output,
 )
-from nautilus_librarian.mods.libvips.domain.process_image import (
-    process_image,
-)
+from nautilus_librarian.mods.libvips.domain.process_image import process_image
 from nautilus_librarian.mods.namecodes.domain.filename import Filename
 from nautilus_librarian.typer.commands.workflows.actions.action_result import (
     ActionResult,
@@ -19,9 +17,7 @@ def get_base_image_absolute_path(git_repo_dir, gold_image):
     corresponding_base_image_relative_path = (
         file_locator(corresponding_base_image) + "/" + str(corresponding_base_image)
     )
-    return (
-        git_repo_dir + "/" + corresponding_base_image_relative_path
-    )
+    return git_repo_dir + "/" + corresponding_base_image_relative_path
 
 
 def generate_base_images(dvc_diff, git_repo_dir, base_images_size):
@@ -45,7 +41,7 @@ def generate_base_images(dvc_diff, git_repo_dir, base_images_size):
                 f"{git_repo_dir}/{filename}", f"{base_filename}", base_images_size
             )
             messages.append(
-                Message(f"✓ Base image of {filename} sucessfully generated")
+                Message(f"✓ Base image of {filename} successfully generated")
             )
         except ValueError as error:
             return ActionResult(

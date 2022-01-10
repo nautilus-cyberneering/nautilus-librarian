@@ -15,18 +15,18 @@ from nautilus_librarian.typer.commands.workflows.actions.auto_commit_base_images
 from nautilus_librarian.typer.commands.workflows.actions.dvc_pull_action import (
     dvc_pull_action,
 )
-from nautilus_librarian.typer.commands.workflows.actions.validate_filenames import (
-    validate_filenames,
-)
 from nautilus_librarian.typer.commands.workflows.actions.generate_base_images_action import (
     generate_base_images,
+)
+from nautilus_librarian.typer.commands.workflows.actions.validate_filenames import (
+    validate_filenames,
 )
 from nautilus_librarian.typer.commands.workflows.actions.validate_filepaths_action import (
     validate_filepaths_action,
 )
 from nautilus_librarian.typer.commands.workflows.actions.validate_images_dimensions_action import (
     validate_images_dimensions,
-)   
+)
 
 app = typer.Typer()
 
@@ -121,9 +121,7 @@ def gold_images_processing(
         validate_images_dimensions(dvc_diff, min_image_size, max_image_size)
     )
 
-    process_action_result(
-        generate_base_images(dvc_diff, git_repo_dir, base_image_size)
-    )
+    process_action_result(generate_base_images(dvc_diff, git_repo_dir, base_image_size))
 
     process_action_result(
         auto_commit_base_images(dvc_diff, git_repo_dir, gnupghome, git_user)
