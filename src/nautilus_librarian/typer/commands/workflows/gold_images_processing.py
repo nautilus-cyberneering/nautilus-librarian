@@ -18,12 +18,15 @@ from nautilus_librarian.typer.commands.workflows.actions.dvc_pull_action import 
 from nautilus_librarian.typer.commands.workflows.actions.validate_filenames import (
     validate_filenames,
 )
+from nautilus_librarian.typer.commands.workflows.actions.generate_base_images_action import (
+    generate_base_images,
+)
 from nautilus_librarian.typer.commands.workflows.actions.validate_filepaths_action import (
     validate_filepaths_action,
 )
 from nautilus_librarian.typer.commands.workflows.actions.validate_images_dimensions_action import (
     validate_images_dimensions,
-)
+)   
 
 app = typer.Typer()
 
@@ -64,6 +67,7 @@ def gold_images_processing(
     ),
     min_image_size: int = typer.Option(256, envvar="NL_MIN_IMAGE_SIZE"),
     max_image_size: int = typer.Option(16384, envvar="NL_MAX_IMAGE_SIZE"),
+    base_image_size: int = typer.Option(512, envvar="NL_BASE_IMAGE_SIZE"),
     dvc_diff: str = typer.Option(None, envvar="NL_DVC_DIFF"),
     previous_ref: str = typer.Option("HEAD", envvar="NL_PREVIOUS_REF"),
     current_ref: str = typer.Option(None, envvar="NL_CURRENT_REF"),
@@ -115,6 +119,10 @@ def gold_images_processing(
 
     process_action_result(
         validate_images_dimensions(dvc_diff, min_image_size, max_image_size)
+    )
+
+    process_action_result(
+        generate_base_images(dvc_diff, git_repo_dir, base_image_size)
     )
 
     process_action_result(
