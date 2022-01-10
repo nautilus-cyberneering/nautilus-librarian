@@ -1,7 +1,7 @@
 __pycache__/
 .coverage
+.DS_Store
+.secrets
 dist/
 report/
 site/
-.DS_Store
-
