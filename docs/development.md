@@ -111,10 +111,35 @@ mega-linter-runner --fix
 You can use [act](https://github.com/nektos/act) to run workflows locally. For example:
 
 ```shell
-act -W ./.github/workflows/test-gold-images-processing-workflow.yml -j build
+act -W ./.github/workflows/test.yml -j build
 ```
 
-With that command, you can run the `build` job in the `test-gold-images-processing-workflow.yml` workflow.
+With that command, you can run the `build` job in the `test.yml` workflow.
+
+If the workflow requires some environment variables you can add them in a local `.secrets` file (in the project root dir). In the [.secrets.template](../.secrets.template) file you will find an example with the environment variables you need for the [test.yml](../.github/workflows/test.yml) workflow.
+
+Running workflows with `act` can be very tricky. There are some GitHub Actions features that do not work locally even if you use the full `act` docker image. We recommend to use `act` if you are testing the integration between the Librarian and a GitHub workflow.
+
+If you just want to test a Librarian command with your development version of the Librarian you can run it with Poetry for a different target directory. For example, the `poetry run nautilus-librarian gold-images-processing ...` generates some auto-commits so you can not run it just like that because it will create commits on your development branch.
+
+In order to test the command you can create a temporary dir and pass that dir as an argument to the Librarian:
+
+First, setup for your test directory:
+
+```shell
+cd /tmp
+git clone git@github.com:Nautilus-Cyberneering/dvc-test-repo.git
+cd dvc-test-repo/
+...
+```
+
+You can do whatever you need to create the initial state you want to test. And then you can run the command with:
+
+```shell
+poetry run nautilus-librarian gold-images-processing --git-repo-dir=/tmp/dvc-test-repo --gnupghome=~/.gnupg --previous-ref=61f51f1 --current-ref=145851a ...
+```
+
+You can also overwrite other directories like the GPG home dir (`~/.gnupg`), a [DVC local remote storage](https://dvc.org/doc/command-reference/remote/add), etcetera.
 
 ## Releases
 
