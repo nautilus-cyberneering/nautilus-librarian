@@ -18,6 +18,12 @@ jobs:
         with:
           python-version: "3.9"
 
+      - name: Setup Libvips
+        run: |
+          sudo apt-get update
+          sudo apt-get upgrade -y
+          sudo apt-get install -y libvips-dev
+
       - name: Setup Poetry
         run: pip3 install poetry poetry-dynamic-versioning wheel
 

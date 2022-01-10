@@ -87,6 +87,7 @@
     "pytest",
     "Pytest",
     "PYTHONPATH",
+    "pyvips",
     "rcfile",
     "rdiv",
     "regexes",
