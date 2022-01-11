@@ -1,6 +1,8 @@
 import json
 import os
 
+from voluptuous.schema_builder import Object
+
 
 class DvcDiffParser:
     def __init__(self, dvc_diff: dict) -> None:
@@ -27,6 +29,13 @@ class DvcDiffParser:
     def basenames_of(self, filepaths: list[str]) -> list[str]:
         return [self.basename_of(filepath) for filepath in filepaths]
 
+    def basenames_of_old_and_new(self, filepaths: list[dict]) -> list[dict]:        
+        return [{ 
+                    "new": self.basename_of(filepath_dict["new"]), 
+                    "old": self.basename_of(filepath_dict["old"]), 
+                } for filepath_dict in filepaths]
+
+
     def added(self, only_basename=False):
         if only_basename:
             return self.basenames_of(self.added_list)
@@ -47,7 +56,7 @@ class DvcDiffParser:
 
     def renamed(self, only_basename=False):
         if only_basename:
-            return self.basenames_of(self.renamed_list)
+            return self.basenames_of_old_and_new(self.renamed_list)
 
         return self.renamed_list
 
