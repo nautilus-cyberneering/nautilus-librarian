@@ -116,7 +116,7 @@ act -W ./.github/workflows/test.yml -j build
 
 With that command, you can run the `build` job in the `test.yml` workflow.
 
-If the workflow requires some environment variables you can add them in a local `.secrets` file (in the project root dir). In the [.secrets.template](../.secrets.template) file you will find an example with the environment variables you need for the [test.yml](../.github/workflows/test.yml) workflow.
+If the workflow requires some environment variables you can add them in a local `.secrets` file (in the project root dir). In the [.secrets.template](https://github.com/Nautilus-Cyberneering/nautilus-librarian/blob/main/.secrets.template) file you will find an example with the environment variables you need for the [test.yml](https://github.com/Nautilus-Cyberneering/nautilus-librarian/blob/main/.github/workflows/test.yml) workflow.
 
 Running workflows with `act` can be very tricky. There are some GitHub Actions features that do not work locally even if you use the full `act` docker image. We recommend to use `act` if you are testing the integration between the Librarian and a GitHub workflow.
 
