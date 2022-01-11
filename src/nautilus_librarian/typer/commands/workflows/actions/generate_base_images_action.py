@@ -37,9 +37,7 @@ def generate_base_images(dvc_diff, git_repo_dir, base_images_size):
         try:
             gold_filename = Filename(filename)
             base_filename = get_base_image_absolute_path(git_repo_dir, gold_filename)
-            process_image(
-                f"{filename}", f"{base_filename}", base_images_size
-            )
+            process_image(f"{filename}", f"{base_filename}", base_images_size)
             messages.append(
                 Message(f"✓ Base image of {filename} successfully generated")
             )

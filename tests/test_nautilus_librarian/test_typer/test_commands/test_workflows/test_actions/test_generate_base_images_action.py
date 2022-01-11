@@ -7,8 +7,7 @@ from nautilus_librarian.typer.commands.workflows.actions.generate_base_images_ac
 
 
 def given_a_diff_structure_and_size_limits_it_should_validate_new_image_dimensions(
-    sample_gold_image_absolute_path,
-    tmp_path_factory
+    sample_gold_image_absolute_path, tmp_path_factory
 ):
 
     dvc_diff_with_added_gold_image = {
@@ -23,9 +22,7 @@ def given_a_diff_structure_and_size_limits_it_should_validate_new_image_dimensio
     temp_path = tmp_path_factory.mktemp("repo")
 
     result = generate_base_images(
-        compact_json(dvc_diff_with_added_gold_image),
-        f"{temp_path}",
-        512
+        compact_json(dvc_diff_with_added_gold_image), f"{temp_path}", 512
     )
 
     assert result.code == ResultCode.CONTINUE
