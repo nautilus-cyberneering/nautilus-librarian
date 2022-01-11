@@ -1,5 +1,3 @@
-import pytest
-
 from nautilus_librarian.mods.libvips.domain.utils import get_image_dimensions
 from nautilus_librarian.mods.libvips.domain.process_image import process_image
 
