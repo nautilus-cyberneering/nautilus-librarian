@@ -17,7 +17,7 @@ def get_base_image_absolute_path(git_repo_dir, gold_image):
     corresponding_base_image_relative_path = (
         file_locator(corresponding_base_image) + "/" + str(corresponding_base_image)
     )
-    return git_repo_dir + "/" + corresponding_base_image_relative_path
+    return f"{git_repo_dir}/{corresponding_base_image_relative_path}"
 
 
 def generate_base_images(dvc_diff, git_repo_dir, base_images_size):
@@ -38,7 +38,7 @@ def generate_base_images(dvc_diff, git_repo_dir, base_images_size):
             gold_filename = Filename(filename)
             base_filename = get_base_image_absolute_path(git_repo_dir, gold_filename)
             process_image(
-                f"{git_repo_dir}/{filename}", f"{base_filename}", base_images_size
+                f"{filename}", f"{base_filename}", base_images_size
             )
             messages.append(
                 Message(f"✓ Base image of {filename} successfully generated")
