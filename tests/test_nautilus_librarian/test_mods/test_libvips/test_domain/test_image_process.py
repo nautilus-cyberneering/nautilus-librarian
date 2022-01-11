@@ -1,5 +1,5 @@
-from nautilus_librarian.mods.libvips.domain.utils import get_image_dimensions
 from nautilus_librarian.mods.libvips.domain.process_image import process_image
+from nautilus_librarian.mods.libvips.domain.utils import get_image_dimensions
 
 
 def it_should_generate_a_256_x_128_image(tmp_path_factory, libvips_fixtures_dir):
