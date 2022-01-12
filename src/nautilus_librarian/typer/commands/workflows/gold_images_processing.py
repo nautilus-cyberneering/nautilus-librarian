@@ -18,6 +18,9 @@ from nautilus_librarian.typer.commands.workflows.actions.dvc_pull_action import 
 from nautilus_librarian.typer.commands.workflows.actions.generate_base_images_action import (
     generate_base_images,
 )
+from nautilus_librarian.typer.commands.workflows.actions.rename_base_images import (
+    rename_base_images,
+)
 from nautilus_librarian.typer.commands.workflows.actions.validate_filenames import (
     validate_filenames,
 )
@@ -122,6 +125,8 @@ def gold_images_processing(
     )
 
     process_action_result(generate_base_images(dvc_diff, git_repo_dir, base_image_size))
+
+    process_action_result(rename_base_images(dvc_diff, git_repo_dir))
 
     process_action_result(
         auto_commit_base_images(dvc_diff, git_repo_dir, gnupghome, git_user)
