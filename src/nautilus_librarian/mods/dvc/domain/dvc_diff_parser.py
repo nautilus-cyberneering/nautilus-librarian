@@ -79,10 +79,13 @@ class DvcDiffParser:
         if not exclude_modified:
             files = files + self.modified_list
 
-        if not exclude_renamed:
-            files = files + self.renamed_list
-
         if only_basename:
-            return self.basenames_of(files)
+            files = self.basenames_of(files)
+
+        if not exclude_renamed:
+            if only_basename:
+                files = files + self.basenames_of_old_and_new(self.renamed_list)
+            else:
+                files = files + self.renamed_list
 
         return files

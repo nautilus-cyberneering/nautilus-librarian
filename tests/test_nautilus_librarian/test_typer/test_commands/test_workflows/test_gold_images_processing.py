@@ -6,6 +6,7 @@ from typer.testing import CliRunner
 from nautilus_librarian.domain.file_locator import file_locator
 from nautilus_librarian.main import app
 from nautilus_librarian.mods.console.domain.utils import execute_shell_command
+from nautilus_librarian.mods.libvips.domain.utils import resample_image
 from nautilus_librarian.mods.namecodes.domain.filename import Filename
 
 runner = CliRunner()

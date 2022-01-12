@@ -69,3 +69,17 @@ def extract_added_files_from_dvc_diff(dvc_diff_json):
     return dvc_diff.filter(
         exclude_deleted=True, exclude_modified=True, exclude_renamed=True
     )
+
+
+def get_new_filepath_if_is_a_renaming_dict(filepath_or_dict):
+    """
+    If the parametre is a dict with the "new" key, it will return its value. Otherwise it
+    will return the parameter as is.
+
+    This is useful to unify the processing of paths where they are "added/deleted/modified" or
+    "renamed"
+    """
+    if isinstance(filepath_or_dict, dict) and filepath_or_dict["new"]:
+        return filepath_or_dict["new"]
+    else:
+        return filepath_or_dict
