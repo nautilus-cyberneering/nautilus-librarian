@@ -42,3 +42,9 @@ def sample_base_image_absolute_path(workflows_fixtures_dir):
 def sample_gold_image_absolute_path(workflows_fixtures_dir):
     gold_image_path = f"{workflows_fixtures_dir}/images/000001-32.600.2.tif"
     return gold_image_path
+
+
+@pytest.fixture(scope="session")
+def renamed_sample_gold_image_absolute_path(workflows_fixtures_dir):
+    gold_image_path = f"{workflows_fixtures_dir}/images/000002-32.600.2.tif"
+    return gold_image_path

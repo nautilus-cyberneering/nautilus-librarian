@@ -24,7 +24,7 @@ def given_a_diff_structure_with_added_gold_image_it_should_generate_base_image(
     }
 
     temp_path = tmp_path_factory.mktemp("repo")
-    copy_fixtures_to_tmp_path(workflows_fixtures_dir, f"{temp_path}/test_repo")
+    copy_fixtures_to_tmp_path(f"{workflows_fixtures_dir}/images", f"{temp_path}/test_repo/images")
 
     result = generate_base_images(
         compact_json(dvc_diff_with_added_gold_image), f"{temp_path}/test_repo", 512

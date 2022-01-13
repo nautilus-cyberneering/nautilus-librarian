@@ -9,8 +9,15 @@ from nautilus_librarian.typer.commands.workflows.actions.action_result import (
     Message,
     ResultCode,
 )
-
+from os import (
+    path, makedirs
+)
 from shutil import move
+
+class BaseImageNotFoundError(FileNotFoundError):
+    """Raised when the base image that is to be renamed does not exsit"""
+
+    pass
 
 
 def get_base_image_absolute_path(git_repo_dir, gold_image):
@@ -19,6 +26,10 @@ def get_base_image_absolute_path(git_repo_dir, gold_image):
         file_locator(corresponding_base_image) + "/" + str(corresponding_base_image)
     )
     return f"{git_repo_dir}/{corresponding_base_image_relative_path}"
+
+
+def create_output_folder(destination_filename):
+    makedirs(path.dirname(destination_filename), exist_ok=True)
 
 
 def rename_base_images(dvc_diff, git_repo_dir):
@@ -30,22 +41,29 @@ def rename_base_images(dvc_diff, git_repo_dir):
     )
 
     if dvc_diff == "{}" or filenames == []:
-        return ActionResult(ResultCode.CONTINUE, [Message("No Gold image renames found")])
+        return ActionResult(ResultCode.EXIT, [Message("No Gold image renames found")])
 
     messages = []
 
     for filename in filenames:
         try:
-            gold_filename = Filename(filename)
-            base_filename = get_base_image_absolute_path(git_repo_dir, gold_filename)
-            move(f"{git_repo_dir}/{filename}", f"{base_filename}")
+            gold_filename_old = Filename(filename["old"])
+            gold_filename_new = Filename(filename["new"])
+            base_filename_old = get_base_image_absolute_path(git_repo_dir, gold_filename_old)
+            base_filename_new = get_base_image_absolute_path(git_repo_dir, gold_filename_new)
+            if not path.exists(base_filename_old):
+                raise BaseImageNotFoundError(
+                    f'The base image "{ base_filename_old }" that must be renamed could not be found"'
+                )
+            create_output_folder(base_filename_new)
+            move(f"{base_filename_old}", f"{base_filename_new}")
             messages.append(
-                Message(f"✓ Base image of {filename} successfully renamed")
+                Message(f"✓ Base image {base_filename_old} successfully renamed to {base_filename_new}")
             )
         except ValueError as error:
             return ActionResult(
                 ResultCode.ABORT,
-                [ErrorMessage(f"✗ Error renaming base image of {filename}: {error}")],
+                [ErrorMessage(f"✗ Error renaming base image of {gold_filename_new}: {error}")],
             )
 
     return ActionResult(ResultCode.CONTINUE, messages)

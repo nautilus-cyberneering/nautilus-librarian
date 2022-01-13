@@ -18,7 +18,7 @@ from nautilus_librarian.typer.commands.workflows.actions.dvc_pull_action import 
 from nautilus_librarian.typer.commands.workflows.actions.generate_base_images_action import (
     generate_base_images,
 )
-from nautilus_librarian.typer.commands.workflows.actions.rename_base_images import (
+from nautilus_librarian.typer.commands.workflows.actions.rename_base_images_action import (
     rename_base_images,
 )
 from nautilus_librarian.typer.commands.workflows.actions.validate_filenames import (
@@ -34,14 +34,14 @@ from nautilus_librarian.typer.commands.workflows.actions.validate_images_dimensi
 app = typer.Typer()
 
 
-def process_action_result(action_result):
+def process_action_result(action_result, manage_exit_or_error_codes = True):
     for message in action_result.messages:
         typer.echo(message.text, err=message.is_error)
 
-    if action_result.code is ResultCode.EXIT:
+    if action_result.code is ResultCode.EXIT and manage_exit_or_error_codes:
         raise typer.Exit()
 
-    if action_result.code is ResultCode.ABORT:
+    if action_result.code is ResultCode.ABORT and manage_exit_or_error_codes:
         raise typer.Abort()
 
 
@@ -124,9 +124,15 @@ def gold_images_processing(
         validate_images_dimensions(dvc_diff, min_image_size, max_image_size)
     )
 
-    process_action_result(generate_base_images(dvc_diff, git_repo_dir, base_image_size))
+    process_action_result(
+       generate_base_images(dvc_diff, git_repo_dir, base_image_size),
+       manage_exit_or_error_codes = False
+    )
 
-    process_action_result(rename_base_images(dvc_diff, git_repo_dir))
+    process_action_result(
+        rename_base_images(dvc_diff, git_repo_dir),
+        manage_exit_or_error_codes = False
+    )
 
     process_action_result(
         auto_commit_base_images(dvc_diff, git_repo_dir, gnupghome, git_user)
