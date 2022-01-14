@@ -67,8 +67,12 @@ def extract_renamed_files_from_dvc_diff(dvc_diff_json, only_basename=True):
     """
     dvc_diff = DvcDiffParser.from_json(dvc_diff_json)
     return dvc_diff.filter(
-        exclude_added=True, exclude_modified=True, exclude_deleted=True, exclude_renamed=False, only_basename=only_basename
-    )    
+        exclude_added=True,
+        exclude_modified=True,
+        exclude_deleted=True,
+        exclude_renamed=False,
+        only_basename=only_basename,
+    )
 
 
 def extract_list_of_media_file_changes_from_dvc_diff_output(

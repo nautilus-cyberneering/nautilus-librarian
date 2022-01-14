@@ -34,7 +34,7 @@ from nautilus_librarian.typer.commands.workflows.actions.validate_images_dimensi
 app = typer.Typer()
 
 
-def process_action_result(action_result, manage_exit_or_error_codes = True):
+def process_action_result(action_result, manage_exit_or_error_codes=True):
     for message in action_result.messages:
         typer.echo(message.text, err=message.is_error)
 
@@ -125,13 +125,12 @@ def gold_images_processing(
     )
 
     process_action_result(
-       generate_base_images(dvc_diff, git_repo_dir, base_image_size),
-       manage_exit_or_error_codes = False
+        generate_base_images(dvc_diff, git_repo_dir, base_image_size),
+        manage_exit_or_error_codes=False,
     )
 
     process_action_result(
-        rename_base_images(dvc_diff, git_repo_dir),
-        manage_exit_or_error_codes = False
+        rename_base_images(dvc_diff, git_repo_dir), manage_exit_or_error_codes=False
     )
 
     process_action_result(

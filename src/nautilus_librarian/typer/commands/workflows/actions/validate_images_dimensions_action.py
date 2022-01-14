@@ -1,6 +1,6 @@
 from nautilus_librarian.mods.dvc.domain.utils import (
     extract_list_of_media_file_changes_from_dvc_diff_output,
-    get_new_filepath_if_is_a_renaming_dict
+    get_new_filepath_if_is_a_renaming_dict,
 )
 from nautilus_librarian.mods.libvips.domain.validate_image_dimensions import (
     validate_image_dimensions,
@@ -38,7 +38,11 @@ def validate_images_dimensions(dvc_diff, min_image_size, max_image_size):
         except ValueError as error:
             return ActionResult(
                 ResultCode.ABORT,
-                [ErrorMessage(f"✗ Dimensions of {extracted_filename} are wrong: {error}")],
+                [
+                    ErrorMessage(
+                        f"✗ Dimensions of {extracted_filename} are wrong: {error}"
+                    )
+                ],
             )
 
     return ActionResult(ResultCode.CONTINUE, messages)

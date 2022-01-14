@@ -2,9 +2,9 @@ from test_nautilus_librarian.utils import compact_json
 
 from nautilus_librarian.mods.dvc.domain.utils import (
     extract_added_files_from_dvc_diff,
-    extract_renamed_files_from_dvc_diff,
     extract_list_of_media_file_changes_from_dvc_diff_output,
-    get_new_filepath_if_is_a_renaming_dict
+    extract_renamed_files_from_dvc_diff,
+    get_new_filepath_if_is_a_renaming_dict,
 )
 
 
@@ -52,8 +52,11 @@ def test_extract_renamed_files_from_dvc_diff():
         "deleted": [],
         "modified": [],
         "renamed": [
-            {"path":
-                {"old": "data/000001/32/000001-32.600.2.tif", "new": "data/000002/32/000002-32.600.2.tif"}
+            {
+                "path": {
+                    "old": "data/000001/32/000001-32.600.2.tif",
+                    "new": "data/000002/32/000002-32.600.2.tif",
+                }
             }
         ],
     }
@@ -65,13 +68,20 @@ def test_extract_renamed_files_from_dvc_diff():
 
 def test_get_new_path_in_a_renaming_dict():
 
-    assert get_new_filepath_if_is_a_renaming_dict(
-        {"old": "data/000001/32/000001-32.600.2.tif", "new": "data/000001/32/000001-32.601.2.tif"}
-    ) == "data/000001/32/000001-32.601.2.tif"
+    assert (
+        get_new_filepath_if_is_a_renaming_dict(
+            {
+                "old": "data/000001/32/000001-32.600.2.tif",
+                "new": "data/000001/32/000001-32.601.2.tif",
+            }
+        )
+        == "data/000001/32/000001-32.601.2.tif"
+    )
 
 
 def test_get_path_in_a_non_renaming_dict():
 
-    assert get_new_filepath_if_is_a_renaming_dict(
-        "data/000001/32/000001-32.600.2.tif"
-    ) == "data/000001/32/000001-32.600.2.tif"
+    assert (
+        get_new_filepath_if_is_a_renaming_dict("data/000001/32/000001-32.600.2.tif")
+        == "data/000001/32/000001-32.600.2.tif"
+    )

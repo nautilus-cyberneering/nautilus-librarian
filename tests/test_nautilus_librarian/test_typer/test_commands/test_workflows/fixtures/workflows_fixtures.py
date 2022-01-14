@@ -26,9 +26,10 @@ def git_user(gpg_signing_key_info):
         "A committer", "committer@example.com", gpg_signing_key_info["long_key"]
     )
 
+
 @pytest.fixture(scope="session")
 def sample_gold_image_relative_path(workflows_fixtures_dir):
-    base_image_path = f"images/000001-32.600.2.tif"
+    base_image_path = "images/000001-32.600.2.tif"
     return base_image_path
 
 

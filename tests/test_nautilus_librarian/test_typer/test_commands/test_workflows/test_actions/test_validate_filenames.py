@@ -48,9 +48,9 @@ def given_a_dvc_diff_object_it_should_validate_the_filename_of_the_renamed_media
         "modified": [],
         "renamed": [
             {
-            "path": {
-                "old": "data/000003/32/000003-32.600.2.tif",
-                "new": "data/000004/32/000004-32.600.2.tif",
+                "path": {
+                    "old": "data/000003/32/000003-32.600.2.tif",
+                    "new": "data/000004/32/000004-32.600.2.tif",
                 }
             },
         ],

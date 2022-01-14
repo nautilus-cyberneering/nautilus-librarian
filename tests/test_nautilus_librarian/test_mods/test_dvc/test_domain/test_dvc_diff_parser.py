@@ -147,14 +147,21 @@ def it_should_get_the_renamed_files():
             "deleted": [],
             "modified": [],
             "renamed": [
-                {"path":  {"old": "folder/original_file.txt", "new": "folder/renamed_file.txt"}},
+                {
+                    "path": {
+                        "old": "folder/original_file.txt",
+                        "new": "folder/renamed_file.txt",
+                    }
+                },
             ],
         }
     )
 
     renamed = dvc_diff.renamed()
 
-    assert renamed == [{"old": "folder/original_file.txt", "new": "folder/renamed_file.txt"}]
+    assert renamed == [
+        {"old": "folder/original_file.txt", "new": "folder/renamed_file.txt"}
+    ]
 
 
 def it_should_get_only_the_basenames_of_the_renamed_files():
@@ -165,7 +172,12 @@ def it_should_get_only_the_basenames_of_the_renamed_files():
             "deleted": [],
             "modified": [],
             "renamed": [
-                {"path": {"old": "folder/original_file.txt", "new": "folder/renamed_file.txt"}},
+                {
+                    "path": {
+                        "old": "folder/original_file.txt",
+                        "new": "folder/renamed_file.txt",
+                    }
+                },
             ],
         }
     )

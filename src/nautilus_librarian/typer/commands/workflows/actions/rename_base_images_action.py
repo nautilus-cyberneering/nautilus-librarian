@@ -1,7 +1,8 @@
+from os import makedirs, path
+from shutil import move
+
 from nautilus_librarian.domain.file_locator import file_locator
-from nautilus_librarian.mods.dvc.domain.utils import (
-    extract_renamed_files_from_dvc_diff,
-)
+from nautilus_librarian.mods.dvc.domain.utils import extract_renamed_files_from_dvc_diff
 from nautilus_librarian.mods.namecodes.domain.filename import Filename
 from nautilus_librarian.typer.commands.workflows.actions.action_result import (
     ActionResult,
@@ -9,13 +10,10 @@ from nautilus_librarian.typer.commands.workflows.actions.action_result import (
     Message,
     ResultCode,
 )
-from os import (
-    path, makedirs
-)
-from shutil import move
+
 
 class BaseImageNotFoundError(FileNotFoundError):
-    """Raised when the base image that is to be renamed does not exsit"""
+    """Raised when the base image that is to be renamed does not exist"""
 
     pass
 
@@ -36,9 +34,7 @@ def rename_base_images(dvc_diff, git_repo_dir):
     """
     It renames previously generated base images when gold images are renamed
     """
-    filenames = extract_renamed_files_from_dvc_diff(
-        dvc_diff, only_basename=False
-    )
+    filenames = extract_renamed_files_from_dvc_diff(dvc_diff, only_basename=False)
 
     if dvc_diff == "{}" or filenames == []:
         return ActionResult(ResultCode.EXIT, [Message("No Gold image renames found")])
@@ -49,8 +45,12 @@ def rename_base_images(dvc_diff, git_repo_dir):
         try:
             gold_filename_old = Filename(filename["old"])
             gold_filename_new = Filename(filename["new"])
-            base_filename_old = get_base_image_absolute_path(git_repo_dir, gold_filename_old)
-            base_filename_new = get_base_image_absolute_path(git_repo_dir, gold_filename_new)
+            base_filename_old = get_base_image_absolute_path(
+                git_repo_dir, gold_filename_old
+            )
+            base_filename_new = get_base_image_absolute_path(
+                git_repo_dir, gold_filename_new
+            )
             if not path.exists(base_filename_old):
                 raise BaseImageNotFoundError(
                     f'The base image "{ base_filename_old }" that must be renamed could not be found"'
@@ -58,12 +58,18 @@ def rename_base_images(dvc_diff, git_repo_dir):
             create_output_folder(base_filename_new)
             move(f"{base_filename_old}", f"{base_filename_new}")
             messages.append(
-                Message(f"✓ Base image {base_filename_old} successfully renamed to {base_filename_new}")
+                Message(
+                    f"✓ Base image {base_filename_old} successfully renamed to {base_filename_new}"
+                )
             )
         except ValueError as error:
             return ActionResult(
                 ResultCode.ABORT,
-                [ErrorMessage(f"✗ Error renaming base image of {gold_filename_new}: {error}")],
+                [
+                    ErrorMessage(
+                        f"✗ Error renaming base image of {gold_filename_new}: {error}"
+                    )
+                ],
             )
 
     return ActionResult(ResultCode.CONTINUE, messages)
