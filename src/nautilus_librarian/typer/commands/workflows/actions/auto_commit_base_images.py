@@ -1,7 +1,10 @@
 import os
 from typing import List
 
-from nautilus_librarian.domain.file_locator import file_locator
+from nautilus_librarian.domain.file_locator import (
+    file_locator,
+    guard_that_base_image_exists
+)
 from nautilus_librarian.mods.dvc.domain.api import DvcApiWrapper
 from nautilus_librarian.mods.dvc.domain.utils import extract_added_files_from_dvc_diff
 from nautilus_librarian.mods.git.domain.git_user import GitUser
@@ -15,12 +18,6 @@ from nautilus_librarian.typer.commands.workflows.actions.action_result import (
 )
 
 
-class FileNotFoundException(Exception):
-    """Raised when an expected file is not found"""
-
-    pass
-
-
 def get_new_gold_images_filenames_from_dvc_diff(dvc_diff) -> List[Filename]:
     """
     Parses the list of added Gold images from dvc diff output in json format
@@ -29,11 +26,6 @@ def get_new_gold_images_filenames_from_dvc_diff(dvc_diff) -> List[Filename]:
     added_files = extract_added_files_from_dvc_diff(dvc_diff)
     gold_images = filter_gold_images(added_files)
     return [Filename(gold_image) for gold_image in gold_images]
-
-
-def guard_that_base_image_exists(base_image_path):
-    if not os.path.isfile(base_image_path):
-        raise FileNotFoundException(f"Missing Base image: {base_image_path}")
 
 
 def files_to_commit(base_img_relative_path) -> List[str]:

@@ -1,7 +1,10 @@
 from os import makedirs, path
 from shutil import move
 
-from nautilus_librarian.domain.file_locator import file_locator
+from nautilus_librarian.domain.file_locator import (
+    file_locator,
+    guard_that_base_image_exists
+)
 from nautilus_librarian.mods.dvc.domain.utils import extract_renamed_files_from_dvc_diff
 from nautilus_librarian.mods.namecodes.domain.filename import Filename
 from nautilus_librarian.typer.commands.workflows.actions.action_result import (
@@ -51,10 +54,7 @@ def rename_base_images(dvc_diff, git_repo_dir):
             base_filename_new = get_base_image_absolute_path(
                 git_repo_dir, gold_filename_new
             )
-            if not path.exists(base_filename_old):
-                raise BaseImageNotFoundError(
-                    f'The base image "{ base_filename_old }" that must be renamed could not be found"'
-                )
+            guard_that_base_image_exists(base_filename_old)
             create_output_folder(base_filename_new)
             move(f"{base_filename_old}", f"{base_filename_new}")
             messages.append(
