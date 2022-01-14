@@ -38,7 +38,10 @@ def generate_base_images(dvc_diff, git_repo_dir, base_images_size):
             gold_filename = Filename(filename)
             base_filename = get_base_image_absolute_path(git_repo_dir, gold_filename)
             process_image(
-                f"{git_repo_dir}/{filename}", f"{base_filename}", base_images_size
+                f"{git_repo_dir}/{filename}",
+                f"{base_filename}",
+                base_images_size,
+                "sRGB",
             )
             messages.append(
                 Message(f"✓ Base image of {filename} successfully generated")

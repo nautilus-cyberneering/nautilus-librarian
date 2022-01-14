@@ -21,6 +21,14 @@ def resample_image(image, size):
     return image.resize(get_image_resizing_factor(image, size), kernel="lanczos2")
 
 
+def get_image_icc_profile(image):
+    return image.get("icc-profile-data")
+
+
+def modify_icc_profile(image, profile):
+    return image.icc_transform(profile)
+
+
 def get_image_dimensions(source_image_path):
     image = get_image(source_image_path)
     return image.width, image.height
