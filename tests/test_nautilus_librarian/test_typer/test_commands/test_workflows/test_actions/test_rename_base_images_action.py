@@ -43,5 +43,4 @@ def given_a_diff_structure_with_renamed_gold_image_it_should_rename_base_images(
     )
 
     assert result.code == ResultCode.CONTINUE
-    print(result.messages)
     assert result.contains_text("successfully renamed to")
