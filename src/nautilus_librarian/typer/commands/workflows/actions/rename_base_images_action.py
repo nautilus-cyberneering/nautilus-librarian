@@ -3,7 +3,7 @@ from shutil import move
 
 from nautilus_librarian.domain.file_locator import (
     file_locator,
-    guard_that_base_image_exists
+    guard_that_base_image_exists,
 )
 from nautilus_librarian.mods.dvc.domain.utils import extract_renamed_files_from_dvc_diff
 from nautilus_librarian.mods.namecodes.domain.filename import Filename
@@ -16,7 +16,7 @@ from nautilus_librarian.typer.commands.workflows.actions.action_result import (
 
 
 class BaseImageNotFoundError(FileNotFoundError):
-    """Raised when the base image that is to be renamed does not exist"""
+    """Raised when the base image that is to be deleted does not exist"""
 
     pass
 

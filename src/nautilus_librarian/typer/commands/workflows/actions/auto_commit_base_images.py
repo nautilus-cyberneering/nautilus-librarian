@@ -3,7 +3,7 @@ from typing import List
 
 from nautilus_librarian.domain.file_locator import (
     file_locator,
-    guard_that_base_image_exists
+    guard_that_base_image_exists,
 )
 from nautilus_librarian.mods.dvc.domain.api import DvcApiWrapper
 from nautilus_librarian.mods.dvc.domain.utils import extract_added_files_from_dvc_diff
