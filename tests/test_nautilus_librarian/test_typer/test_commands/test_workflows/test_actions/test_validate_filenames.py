@@ -47,14 +47,19 @@ def given_a_dvc_diff_object_it_should_validate_the_filename_of_the_renamed_media
         "deleted": [],
         "modified": [],
         "renamed": [
-            {"path": "data/000003/32/000003-32.600.2.tif"},
+            {
+                "path": {
+                    "old": "data/000003/32/000003-32.600.2.tif",
+                    "new": "data/000004/32/000004-32.600.2.tif",
+                }
+            },
         ],
     }
 
     result = validate_filenames(compact_json(dvc_diff_with_renamed_image))
 
     assert result.code == ResultCode.CONTINUE
-    assert result.contains_text("000003-32.600.2.tif ✓")
+    assert result.contains_text("000004-32.600.2.tif ✓")
 
 
 def given_a_wrong_media_filename_it_should_show_an_error():

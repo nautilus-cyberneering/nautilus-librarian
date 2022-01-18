@@ -27,6 +27,15 @@ class DvcDiffParser:
     def basenames_of(self, filepaths: list[str]) -> list[str]:
         return [self.basename_of(filepath) for filepath in filepaths]
 
+    def basenames_of_old_and_new(self, filepaths: list[dict]) -> list[dict]:
+        return [
+            {
+                "new": self.basename_of(filepath_dict["new"]),
+                "old": self.basename_of(filepath_dict["old"]),
+            }
+            for filepath_dict in filepaths
+        ]
+
     def added(self, only_basename=False):
         if only_basename:
             return self.basenames_of(self.added_list)
@@ -47,7 +56,7 @@ class DvcDiffParser:
 
     def renamed(self, only_basename=False):
         if only_basename:
-            return self.basenames_of(self.renamed_list)
+            return self.basenames_of_old_and_new(self.renamed_list)
 
         return self.renamed_list
 
@@ -70,10 +79,13 @@ class DvcDiffParser:
         if not exclude_modified:
             files = files + self.modified_list
 
-        if not exclude_renamed:
-            files = files + self.renamed_list
-
         if only_basename:
-            return self.basenames_of(files)
+            files = self.basenames_of(files)
+
+        if not exclude_renamed:
+            if only_basename:
+                files = files + self.basenames_of_old_and_new(self.renamed_list)
+            else:
+                files = files + self.renamed_list
 
         return files

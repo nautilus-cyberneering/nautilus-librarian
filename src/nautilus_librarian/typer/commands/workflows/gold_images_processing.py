@@ -12,8 +12,20 @@ from nautilus_librarian.typer.commands.workflows.actions.action_result import Re
 from nautilus_librarian.typer.commands.workflows.actions.auto_commit_base_images import (
     auto_commit_base_images,
 )
+from nautilus_librarian.typer.commands.workflows.actions.delete_base_images_action import (
+    delete_base_images,
+)
 from nautilus_librarian.typer.commands.workflows.actions.dvc_pull_action import (
     dvc_pull_action,
+)
+from nautilus_librarian.typer.commands.workflows.actions.generate_base_images_action import (
+    generate_base_images,
+)
+from nautilus_librarian.typer.commands.workflows.actions.rename_base_images_action import (
+    rename_base_images,
+)
+from nautilus_librarian.typer.commands.workflows.actions.check_images_changes import (
+    check_images_changes,
 )
 from nautilus_librarian.typer.commands.workflows.actions.validate_filenames import (
     validate_filenames,
@@ -64,6 +76,7 @@ def gold_images_processing(
     ),
     min_image_size: int = typer.Option(256, envvar="NL_MIN_IMAGE_SIZE"),
     max_image_size: int = typer.Option(16384, envvar="NL_MAX_IMAGE_SIZE"),
+    base_image_size: int = typer.Option(512, envvar="NL_BASE_IMAGE_SIZE"),
     dvc_diff: str = typer.Option(None, envvar="NL_DVC_DIFF"),
     previous_ref: str = typer.Option("HEAD", envvar="NL_PREVIOUS_REF"),
     current_ref: str = typer.Option(None, envvar="NL_CURRENT_REF"),
@@ -113,9 +126,17 @@ def gold_images_processing(
 
     process_action_result(dvc_pull_action(dvc_diff, git_repo_dir, dvc_remote))
 
+    process_action_result(check_images_changes(dvc_diff))
+
     process_action_result(
         validate_images_dimensions(dvc_diff, min_image_size, max_image_size)
     )
+
+    process_action_result(generate_base_images(dvc_diff, git_repo_dir, base_image_size))
+
+    process_action_result(rename_base_images(dvc_diff, git_repo_dir))
+
+    process_action_result(delete_base_images(dvc_diff, git_repo_dir))
 
     process_action_result(
         auto_commit_base_images(dvc_diff, git_repo_dir, gnupghome, git_user)

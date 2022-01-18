@@ -13,6 +13,7 @@
   "words": [
     "-ible",
     "abstractproperty",
+    "adobergb",
     "apkadd",
     "asdict",
     "atoml",
@@ -54,6 +55,7 @@
     "keygrip",
     "Keygrip",
     "keyid",
+    "lanczos",
     "Libvips",
     "markdownlint",
     "megalinter",
