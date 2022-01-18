@@ -2,8 +2,8 @@ from os import makedirs, path
 from shutil import move
 
 from nautilus_librarian.domain.file_locator import (
-    file_locator,
     guard_that_base_image_exists,
+    get_base_image_absolute_path
 )
 from nautilus_librarian.mods.dvc.domain.utils import extract_renamed_files_from_dvc_diff
 from nautilus_librarian.mods.namecodes.domain.filename import Filename
@@ -13,20 +13,6 @@ from nautilus_librarian.typer.commands.workflows.actions.action_result import (
     Message,
     ResultCode,
 )
-
-
-class BaseImageNotFoundError(FileNotFoundError):
-    """Raised when the base image that is to be deleted does not exist"""
-
-    pass
-
-
-def get_base_image_absolute_path(git_repo_dir, gold_image):
-    corresponding_base_image = gold_image.generate_base_image_filename()
-    corresponding_base_image_relative_path = (
-        file_locator(corresponding_base_image) + "/" + str(corresponding_base_image)
-    )
-    return f"{git_repo_dir}/{corresponding_base_image_relative_path}"
 
 
 def create_output_folder(destination_filename):
