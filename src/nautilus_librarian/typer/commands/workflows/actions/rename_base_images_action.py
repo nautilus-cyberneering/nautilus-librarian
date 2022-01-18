@@ -2,8 +2,8 @@ from os import makedirs, path
 from shutil import move
 
 from nautilus_librarian.domain.file_locator import (
+    get_base_image_absolute_path,
     guard_that_base_image_exists,
-    get_base_image_absolute_path
 )
 from nautilus_librarian.mods.dvc.domain.utils import extract_renamed_files_from_dvc_diff
 from nautilus_librarian.mods.namecodes.domain.filename import Filename
@@ -26,7 +26,9 @@ def rename_base_images(dvc_diff, git_repo_dir):
     filenames = extract_renamed_files_from_dvc_diff(dvc_diff, only_basename=False)
 
     if dvc_diff == "{}" or filenames == []:
-        return ActionResult(ResultCode.EXIT, [Message("No Gold image renames found")])
+        return ActionResult(
+            ResultCode.CONTINUE, [Message("No Gold image renames found")]
+        )
 
     messages = []
 

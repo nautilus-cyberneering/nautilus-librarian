@@ -29,7 +29,9 @@ def generate_base_images(dvc_diff, git_repo_dir, base_images_size):
     )
 
     if dvc_diff == "{}" or filenames == []:
-        return ActionResult(ResultCode.EXIT, [Message("No Gold image changes found")])
+        return ActionResult(
+            ResultCode.CONTINUE, [Message("No Gold image changes found")]
+        )
 
     messages = []
 

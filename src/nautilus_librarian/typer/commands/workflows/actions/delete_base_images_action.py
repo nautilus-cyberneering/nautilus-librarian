@@ -25,7 +25,9 @@ def delete_base_images(dvc_diff, git_repo_dir):
     filenames = extract_deleted_files_from_dvc_diff(dvc_diff, only_basename=False)
 
     if dvc_diff == "{}" or filenames == []:
-        return ActionResult(ResultCode.EXIT, [Message("No Gold image deletions found")])
+        return ActionResult(
+            ResultCode.CONTINUE, [Message("No Gold image deletions found")]
+        )
 
     messages = []
 

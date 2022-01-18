@@ -86,5 +86,5 @@ def given_a_diff_structure_with_renamed_gold_image_it_should_not_generate_base_i
 
     result = generate_base_images(compact_json(dvc_diff_with_added_gold_image), "", 512)
 
-    assert result.code == ResultCode.EXIT
+    assert result.code == ResultCode.CONTINUE
     assert result.contains_text("No Gold image changes found")
