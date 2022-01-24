@@ -81,7 +81,6 @@ def test_add(temp_dvc_dir_with_test_content):
     assert path.exists(f"{temp_dvc_dir_with_test_content}/.gitignore")
 
 
-
 def test_move(temp_dvc_dir_with_test_content):
     api = DvcApiWrapper(temp_dvc_dir_with_test_content)
 

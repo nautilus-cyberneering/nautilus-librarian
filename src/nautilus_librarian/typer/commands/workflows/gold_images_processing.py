@@ -12,6 +12,9 @@ from nautilus_librarian.typer.commands.workflows.actions.action_result import Re
 from nautilus_librarian.typer.commands.workflows.actions.auto_commit_base_images import (
     auto_commit_base_images,
 )
+from nautilus_librarian.typer.commands.workflows.actions.check_images_changes import (
+    check_images_changes,
+)
 from nautilus_librarian.typer.commands.workflows.actions.delete_base_images_action import (
     delete_base_images,
 )
@@ -23,9 +26,6 @@ from nautilus_librarian.typer.commands.workflows.actions.generate_base_images_ac
 )
 from nautilus_librarian.typer.commands.workflows.actions.rename_base_images_action import (
     rename_base_images,
-)
-from nautilus_librarian.typer.commands.workflows.actions.check_images_changes import (
-    check_images_changes,
 )
 from nautilus_librarian.typer.commands.workflows.actions.validate_filenames import (
     validate_filenames,

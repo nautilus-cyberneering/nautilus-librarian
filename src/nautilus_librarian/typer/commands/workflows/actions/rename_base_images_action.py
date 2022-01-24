@@ -1,5 +1,4 @@
 from os import makedirs, path
-from shutil import move
 
 from nautilus_librarian.domain.file_locator import (
     get_base_image_absolute_path,
@@ -45,7 +44,7 @@ def rename_base_images(dvc_diff, git_repo_dir):
             )
             guard_that_base_image_exists(base_filename_old)
             create_output_folder(base_filename_new)
-            dvc_api_wrapper = DvcApiWrapper(git_repo_dir)            
+            dvc_api_wrapper = DvcApiWrapper(git_repo_dir)
             dvc_api_wrapper.move(f"{base_filename_old}", f"{base_filename_new}")
             messages.append(
                 Message(
