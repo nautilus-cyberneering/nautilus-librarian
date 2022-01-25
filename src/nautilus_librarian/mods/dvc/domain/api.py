@@ -87,6 +87,10 @@ class DvcApiWrapper:
         change_current_working_directory(self.repo_path)
         return self.dvc_repo.remove(target)
 
+    def move(self, from_path: str, to_path: str):
+        change_current_working_directory(self.repo_path)
+        return self.dvc_repo.move(from_path, to_path)
+
     def gc(
         self,
         workspace=False,
