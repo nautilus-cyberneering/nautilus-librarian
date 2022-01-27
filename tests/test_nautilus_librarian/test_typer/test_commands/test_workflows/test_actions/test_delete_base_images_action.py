@@ -1,6 +1,9 @@
-from os import makedirs, path
-from shutil import copy
+# jscpd:ignore-start
+from os import path
 
+from test_nautilus_librarian.test_typer.test_commands.test_workflows.test_actions.test_rename_base_images_action import (  # noqa: E501
+    copy_base_image_to_destination,
+)
 from test_nautilus_librarian.test_typer.test_commands.test_workflows.test_gold_images_processing import (
     create_initial_state,
 )
@@ -12,13 +15,7 @@ from nautilus_librarian.typer.commands.workflows.actions.delete_base_images_acti
     delete_base_images,
 )
 
-
-def copy_base_image(temp_git_dir, sample_base_image_absolute_path):
-    makedirs(f"{temp_git_dir}/data/000001/42/", exist_ok=True)
-    copy(
-        sample_base_image_absolute_path,
-        f"{temp_git_dir}/data/000001/42/000001-42.600.2.tif",
-    )
+# jscpd:ignore-end
 
 
 def given_a_diff_structure_with_deleted_gold_image_it_should_delete_base_images(
@@ -46,7 +43,7 @@ def given_a_diff_structure_with_deleted_gold_image_it_should_delete_base_images(
         temp_gpg_home_dir,
         git_user,
     )
-    copy_base_image(temp_git_dir, sample_base_image_absolute_path)
+    copy_base_image_to_destination(sample_base_image_absolute_path, temp_git_dir)
 
     execute_shell_command(
         """
