@@ -2,6 +2,7 @@ from test_nautilus_librarian.utils import compact_json
 
 from nautilus_librarian.mods.dvc.domain.utils import (
     extract_added_files_from_dvc_diff,
+    extract_modified_files_from_dvc_diff,
     extract_deleted_files_from_dvc_diff,
     extract_list_of_media_file_changes_from_dvc_diff_output,
     extract_renamed_files_from_dvc_diff,
@@ -43,6 +44,26 @@ def test_extract_added_files_from_dvc_diff():
     assert result == [
         "data/000001/32/000001-32.600.2.tif",
         "data/000001/42/000001-42.600.2.tif",
+    ]
+
+
+def test_modified_files_from_dvc_diff():
+
+    dvc_diff = {
+        "added": [],
+        "deleted": [],
+        "modified": [
+            {"path": "data/000001/32/000001-32.600.2.tif"},
+            {"path": "data/000001/42/000001-42.600.2.tif"},
+        ],
+        "renamed": [],
+    }
+
+    result = extract_modified_files_from_dvc_diff(compact_json(dvc_diff))
+
+    assert result == [
+        "000001-32.600.2.tif",
+        "000001-42.600.2.tif",
     ]
 
 
