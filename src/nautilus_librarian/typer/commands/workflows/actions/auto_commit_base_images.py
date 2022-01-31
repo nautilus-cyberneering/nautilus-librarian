@@ -71,12 +71,21 @@ def files_to_commit(base_img_relative_path) -> List[str]:
     return filepaths
 
 
-def commit_base_image(git_repo_dir, base_img_relative_path, gnupghome, git_user):
+def commit_new_base_image(git_repo_dir, base_img_relative_path, gnupghome, git_user):
     repo = GitRepo(git_repo_dir, git_user, gnupghome)
 
     return repo.commit(
         files_to_commit(base_img_relative_path),
         commit_message=f"feat: new base image: {os.path.basename(base_img_relative_path)}",
+    )
+
+
+def commit_deleted_base_image(git_repo_dir, base_img_relative_path, gnupghome, git_user):
+    repo = GitRepo(git_repo_dir, git_user, gnupghome)
+
+    return repo.commit(
+        files_to_commit(base_img_relative_path),
+        commit_message=f"feat: deleted base image: {os.path.basename(base_img_relative_path)}",
     )
 
 
@@ -115,11 +124,36 @@ def process_added_base_images(gold_images_list, messages, git_repo_dir, gnupghom
         dvc_api_wrapper.add(base_img_relative_path)
         dvc_api_wrapper.push(f"{base_img_relative_path}.dvc")
 
-        commit_base_image(git_repo_dir, base_img_relative_path, gnupghome, git_user)
+        commit_new_base_image(git_repo_dir, base_img_relative_path, gnupghome, git_user)
 
         messages.append(
             Message(
                 f"New Gold image found: {gold_image} -> Base image: {base_img_relative_path} ✓"
+            )
+        )
+
+
+def process_deleted_base_images(gold_images_list, messages, git_repo_dir, gnupghome, git_user):
+    
+    for gold_image in gold_images_list:
+        (
+            base_img_relative_path,
+            base_img_absolute_path,
+        ) = calculate_the_corresponding_base_image_from_gold_image(
+            git_repo_dir, gold_image
+        )
+
+        guard_that_base_image_exists(base_img_absolute_path)
+
+        dvc_api_wrapper = DvcApiWrapper(git_repo_dir)
+        dvc_api_wrapper.remove(base_img_relative_path)
+        dvc_api_wrapper.push(f"{base_img_relative_path}.dvc")
+
+        commit_deleted_base_image(git_repo_dir, base_img_relative_path, gnupghome, git_user)
+
+        messages.append(
+            Message(
+                f"New Gold image deleted: {gold_image} -> Base image: {base_img_relative_path} ✓"
             )
         )
 
@@ -132,10 +166,6 @@ def process_renamed_base_images(gold_images_list, messages, git_repo_dir, gnupgh
     # See note at https://dvc.org/doc/command-reference/diff#example-renamed-files
     # dvc diff only detects files which have been renamed but are otherwise unmodified.
     # Also, remember to commit new and OLD pointers
-    return
-
-
-def process_deleted_base_images(gold_images_list, messages, git_repo_dir, gnupghome, git_user):
     return
 
 
