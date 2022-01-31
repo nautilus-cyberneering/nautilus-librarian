@@ -60,6 +60,7 @@ def test_calculate_the_corresponding_base_image_from_gold_image():
         "/home/repo/data/000001/42/000001-42.600.2.tif",  # absolute path
     )
 
+
 def remove_base_image_dvc_files(temp_git_dir):
     os.remove(f"{temp_git_dir}/data/000001/42/000001-42.600.2.tif.dvc")
     os.remove(f"{temp_git_dir}/data/000001/42/.gitignore")
@@ -87,7 +88,6 @@ def given_a_dvc_diff_object_with_a_new_gold_image_it_should_commit_the_added_bas
     sample_base_image_absolute_path,
     temp_gpg_home_dir,
     git_user,
-    
 ):
     create_initial_state(
         temp_git_dir,
@@ -177,7 +177,7 @@ def given_a_dvc_diff_object_with_a_gold_image_deleton_it_should_commit_the_base_
         "modified": [],
         "renamed": [],
     }
-    
+
     result = auto_commit_base_images(
         compact_json(dvc_diff), str(temp_git_dir), str(temp_gpg_home_dir), git_user
     )

@@ -209,16 +209,24 @@ def auto_commit_base_images(dvc_diff, git_repo_dir, gnupghome, git_user: GitUser
     messages = []
 
     new_gold_images = get_new_gold_images_filenames_from_dvc_diff(dvc_diff)
-    process_added_base_images(new_gold_images, messages, git_repo_dir, gnupghome, git_user)
+    process_added_base_images(
+        new_gold_images, messages, git_repo_dir, gnupghome, git_user
+    )
 
     modified_gold_images = get_modified_gold_images_filenames_from_dvc_diff(dvc_diff)
-    process_modified_base_images(modified_gold_images, messages, git_repo_dir, gnupghome, git_user)
+    process_modified_base_images(
+        modified_gold_images, messages, git_repo_dir, gnupghome, git_user
+    )
 
     renamed_gold_images = get_renamed_gold_images_filenames_from_dvc_diff(dvc_diff)
-    process_renamed_base_images(renamed_gold_images, messages, git_repo_dir, gnupghome, git_user)
+    process_renamed_base_images(
+        renamed_gold_images, messages, git_repo_dir, gnupghome, git_user
+    )
 
     deleted_gold_images = get_deleted_gold_images_filenames_from_dvc_diff(dvc_diff)
-    process_deleted_base_images(deleted_gold_images, messages, git_repo_dir, gnupghome, git_user)
+    process_deleted_base_images(
+        deleted_gold_images, messages, git_repo_dir, gnupghome, git_user
+    )
 
 
     return ActionResult(ResultCode.CONTINUE, messages)
