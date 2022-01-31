@@ -1,6 +1,9 @@
 import os
 
 from git.repo.base import Repo
+from test_nautilus_librarian.test_typer.test_commands.test_workflows.test_actions.test_rename_base_images_action import (  # noqa: E501
+    copy_base_image_to_destination,
+)
 from test_nautilus_librarian.test_typer.test_commands.test_workflows.test_gold_images_processing import (
     create_initial_state,
 )
@@ -57,21 +60,12 @@ def test_calculate_the_corresponding_base_image_from_gold_image():
         "/home/repo/data/000001/42/000001-42.600.2.tif",  # absolute path
     )
 
+def remove_base_image_dvc_files(temp_git_dir):
+    os.remove(f"{temp_git_dir}/data/000001/42/000001-42.600.2.tif.dvc")
+    os.remove(f"{temp_git_dir}/data/000001/42/.gitignore")
 
-def given_a_dvc_diff_object_with_a_new_gold_image_it_should_commit_the_added_base_image_to_dvc(
-    temp_git_dir,
-    temp_dvc_local_remote_storage_dir,
-    sample_base_image_absolute_path,
-    temp_gpg_home_dir,
-    git_user,
-):
-    create_initial_state(
-        temp_git_dir,
-        temp_dvc_local_remote_storage_dir,
-        sample_base_image_absolute_path,
-        temp_gpg_home_dir,
-        git_user,
-    )
+
+def commit_added_base_images(temp_git_dir, temp_gpg_home_dir, git_user):
 
     dvc_diff = {
         "added": [
@@ -82,9 +76,28 @@ def given_a_dvc_diff_object_with_a_new_gold_image_it_should_commit_the_added_bas
         "renamed": [],
     }
 
-    result = auto_commit_base_images(
+    return auto_commit_base_images(
         compact_json(dvc_diff), str(temp_git_dir), str(temp_gpg_home_dir), git_user
     )
+
+
+def given_a_dvc_diff_object_with_a_new_gold_image_it_should_commit_the_added_base_image_to_dvc(
+    temp_git_dir,
+    temp_dvc_local_remote_storage_dir,
+    sample_base_image_absolute_path,
+    temp_gpg_home_dir,
+    git_user,
+    
+):
+    create_initial_state(
+        temp_git_dir,
+        temp_dvc_local_remote_storage_dir,
+        sample_base_image_absolute_path,
+        temp_gpg_home_dir,
+        git_user,
+    )    
+
+    result = commit_added_base_images(temp_git_dir, temp_gpg_home_dir, git_user)
 
     # Assert command runned successfully
     assert result.code == ResultCode.CONTINUE
@@ -122,6 +135,71 @@ def given_a_dvc_diff_object_with_a_new_gold_image_it_should_commit_the_added_bas
         "data/000001/42/000001-42.600.2.tif.dvc": {
             "insertions": 4,
             "deletions": 0,
+            "lines": 4,
+        },
+    }
+    assert commit.stats.files == expected_commit_stats_files
+
+    # Assert the commit was created by the right user
+    assert commit.committer.name == git_user.name
+    assert commit.committer.email == git_user.email
+
+    # Assert the commit was signed with the right signing key
+    assert (
+        git(temp_git_dir).get_commit_signing_key(commit.hexsha) == git_user.signingkey
+    )
+
+
+def given_a_dvc_diff_object_with_a_gold_image_deleton_it_should_commit_the_base_image_deletion_to_git(
+    temp_git_dir,
+    temp_dvc_local_remote_storage_dir,
+    sample_base_image_absolute_path,
+    temp_gpg_home_dir,
+    git_user,
+):
+    create_initial_state(
+        temp_git_dir,
+        temp_dvc_local_remote_storage_dir,
+        sample_base_image_absolute_path,
+        temp_gpg_home_dir,
+        git_user,
+    )
+
+    commit_added_base_images(temp_git_dir, temp_gpg_home_dir, git_user)
+
+    remove_base_image_dvc_files(temp_git_dir)
+
+    dvc_diff = {
+        "added": [],
+        "deleted": [
+            {"path": "data/000001/32/000001-32.600.2.tif"},
+        ],
+        "modified": [],
+        "renamed": [],
+    }
+    
+    result = auto_commit_base_images(
+        compact_json(dvc_diff), str(temp_git_dir), str(temp_gpg_home_dir), git_user
+    )
+
+    # Assert command runned successfully
+    assert result.code == ResultCode.CONTINUE
+
+    # Git commit Asserts
+
+    # Assert Base commit was created
+    repo = Repo(temp_git_dir)
+    commit = repo.commit(repo.heads[0].commit)  # latest commit on the branch
+
+    # Assert the commit has the right message
+    assert commit.summary == "feat: deleted base image: 000001-42.600.2.tif"
+
+    # Assert the commit contains the right files
+    expected_commit_stats_files = {
+        "data/000001/42/.gitignore": {"insertions": 0, "deletions": 1, "lines": 1},
+        "data/000001/42/000001-42.600.2.tif.dvc": {
+            "insertions": 0,
+            "deletions": 4,
             "lines": 4,
         },
     }

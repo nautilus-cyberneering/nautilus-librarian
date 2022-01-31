@@ -75,7 +75,9 @@ def commit_new_base_image(git_repo_dir, base_img_relative_path, gnupghome, git_u
     repo = GitRepo(git_repo_dir, git_user, gnupghome)
 
     return repo.commit(
-        files_to_commit(base_img_relative_path),
+        {
+            'added': files_to_commit(base_img_relative_path)
+        },
         commit_message=f"feat: new base image: {os.path.basename(base_img_relative_path)}",
     )
 
@@ -83,8 +85,15 @@ def commit_new_base_image(git_repo_dir, base_img_relative_path, gnupghome, git_u
 def commit_deleted_base_image(git_repo_dir, base_img_relative_path, gnupghome, git_user):
     repo = GitRepo(git_repo_dir, git_user, gnupghome)
 
+    print("Files to commit:")
+    for file in files_to_commit(base_img_relative_path):
+        print("  "+file)
+    # return
+
     return repo.commit(
-        files_to_commit(base_img_relative_path),
+        {
+            'deleted': files_to_commit(base_img_relative_path)
+        },
         commit_message=f"feat: deleted base image: {os.path.basename(base_img_relative_path)}",
     )
 
@@ -142,12 +151,6 @@ def process_deleted_base_images(gold_images_list, messages, git_repo_dir, gnupgh
         ) = calculate_the_corresponding_base_image_from_gold_image(
             git_repo_dir, gold_image
         )
-
-        guard_that_base_image_exists(base_img_absolute_path)
-
-        dvc_api_wrapper = DvcApiWrapper(git_repo_dir)
-        dvc_api_wrapper.remove(base_img_relative_path)
-        dvc_api_wrapper.push(f"{base_img_relative_path}.dvc")
 
         commit_deleted_base_image(git_repo_dir, base_img_relative_path, gnupghome, git_user)
 
