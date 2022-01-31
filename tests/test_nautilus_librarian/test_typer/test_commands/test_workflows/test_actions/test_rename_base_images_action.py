@@ -13,11 +13,11 @@ from nautilus_librarian.typer.commands.workflows.actions.rename_base_images_acti
 )
 
 
-def copy_base_image(temp_git_dir, sample_base_image_absolute_path):
-    makedirs(f"{temp_git_dir}/data/000001/42/", exist_ok=True)
+def copy_base_image_to_destination(sample_base_image_absolute_path, destination_dir):
+    makedirs(f"{destination_dir}/data/000001/42/", exist_ok=True)
     copy(
         sample_base_image_absolute_path,
-        f"{temp_git_dir}/data/000001/42/000001-42.600.2.tif",
+        f"{destination_dir}/data/000001/42/000001-42.600.2.tif",
     )
 
 
@@ -51,7 +51,7 @@ def given_a_diff_structure_with_renamed_gold_image_it_should_rename_base_images(
         temp_gpg_home_dir,
         git_user,
     )
-    copy_base_image(temp_git_dir, sample_base_image_absolute_path)
+    copy_base_image_to_destination(sample_base_image_absolute_path, temp_git_dir)
 
     execute_shell_command(
         """
