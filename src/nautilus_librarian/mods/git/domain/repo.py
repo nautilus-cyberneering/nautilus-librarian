@@ -25,11 +25,11 @@ class GitRepo:
             "renamed": [],
         }
         """
-        if 'added' in filepaths:
-            self.repo.index.add(filepaths['added'])
+        if "added" in filepaths:
+            self.repo.index.add(filepaths["added"])
 
-        if 'deleted' in filepaths:
-            self.repo.index.remove(filepaths['deleted'])
+        if "deleted" in filepaths:
+            self.repo.index.remove(filepaths["deleted"])
 
         # Write index. Needed for commit with signature:
         # https://github.com/gitpython-developers/GitPython/issues/580#issuecomment-282474086

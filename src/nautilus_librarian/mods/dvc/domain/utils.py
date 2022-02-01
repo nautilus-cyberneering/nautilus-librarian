@@ -89,7 +89,10 @@ def extract_modified_files_from_dvc_diff(dvc_diff_json, only_basename=True):
     """
     dvc_diff = DvcDiffParser.from_json(dvc_diff_json)
     return dvc_diff.filter(
-        exclude_added=True, exclude_deleted=True, exclude_renamed=True, only_basename=only_basename
+        exclude_added=True,
+        exclude_deleted=True,
+        exclude_renamed=True,
+        only_basename=only_basename,
     )
 
 

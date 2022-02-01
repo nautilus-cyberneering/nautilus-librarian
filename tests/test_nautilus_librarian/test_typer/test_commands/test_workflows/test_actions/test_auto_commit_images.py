@@ -1,9 +1,6 @@
 import os
 
 from git.repo.base import Repo
-from test_nautilus_librarian.test_typer.test_commands.test_workflows.test_actions.test_rename_base_images_action import (  # noqa: E501
-    copy_base_image_to_destination,
-)
 from test_nautilus_librarian.test_typer.test_commands.test_workflows.test_gold_images_processing import (
     create_initial_state,
 )
@@ -82,7 +79,9 @@ def commit_added_base_images(temp_git_dir, temp_gpg_home_dir, git_user):
     )
 
 
-def check_commit_assertions(commit, expected_commit_stats_files, temp_git_dir, git_user):
+def check_commit_assertions(
+    commit, expected_commit_stats_files, temp_git_dir, git_user
+):
 
     assert commit.stats.files == expected_commit_stats_files
 
@@ -93,7 +92,7 @@ def check_commit_assertions(commit, expected_commit_stats_files, temp_git_dir, g
     # Assert the commit was signed with the right signing key
     assert (
         git(temp_git_dir).get_commit_signing_key(commit.hexsha) == git_user.signingkey
-    )    
+    )
 
 
 def given_a_dvc_diff_object_with_a_new_gold_image_it_should_commit_the_added_base_image_to_dvc(
@@ -109,7 +108,7 @@ def given_a_dvc_diff_object_with_a_new_gold_image_it_should_commit_the_added_bas
         sample_base_image_absolute_path,
         temp_gpg_home_dir,
         git_user,
-    )    
+    )
 
     result = commit_added_base_images(temp_git_dir, temp_gpg_home_dir, git_user)
 
@@ -152,7 +151,7 @@ def given_a_dvc_diff_object_with_a_new_gold_image_it_should_commit_the_added_bas
             "lines": 4,
         },
     }
-    
+
     check_commit_assertions(commit, expected_commit_stats_files, temp_git_dir, git_user)
 
 
@@ -211,4 +210,3 @@ def given_a_dvc_diff_object_with_a_gold_image_deleton_it_should_commit_the_base_
     }
 
     check_commit_assertions(commit, expected_commit_stats_files, temp_git_dir, git_user)
-

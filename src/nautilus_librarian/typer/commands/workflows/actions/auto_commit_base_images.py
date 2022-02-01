@@ -8,9 +8,9 @@ from nautilus_librarian.domain.file_locator import (
 from nautilus_librarian.mods.dvc.domain.api import DvcApiWrapper
 from nautilus_librarian.mods.dvc.domain.utils import (
     extract_added_files_from_dvc_diff,
-    extract_modified_files_from_dvc_diff,
     extract_deleted_files_from_dvc_diff,
-    extract_renamed_files_from_dvc_diff
+    extract_modified_files_from_dvc_diff,
+    extract_renamed_files_from_dvc_diff,
 )
 from nautilus_librarian.mods.git.domain.git_user import GitUser
 from nautilus_librarian.mods.git.domain.repo import GitRepo
@@ -75,25 +75,18 @@ def commit_new_base_image(git_repo_dir, base_img_relative_path, gnupghome, git_u
     repo = GitRepo(git_repo_dir, git_user, gnupghome)
 
     return repo.commit(
-        {
-            'added': files_to_commit(base_img_relative_path)
-        },
+        {"added": files_to_commit(base_img_relative_path)},
         commit_message=f"feat: new base image: {os.path.basename(base_img_relative_path)}",
     )
 
 
-def commit_deleted_base_image(git_repo_dir, base_img_relative_path, gnupghome, git_user):
+def commit_deleted_base_image(
+    git_repo_dir, base_img_relative_path, gnupghome, git_user
+):
     repo = GitRepo(git_repo_dir, git_user, gnupghome)
 
-    print("Files to commit:")
-    for file in files_to_commit(base_img_relative_path):
-        print("  "+file)
-    # return
-
     return repo.commit(
-        {
-            'deleted': files_to_commit(base_img_relative_path)
-        },
+        {"deleted": files_to_commit(base_img_relative_path)},
         commit_message=f"feat: deleted base image: {os.path.basename(base_img_relative_path)}",
     )
 
@@ -117,8 +110,10 @@ def calculate_the_corresponding_base_image_from_gold_image(git_repo_dir, gold_im
     )
 
 
-def process_added_base_images(gold_images_list, messages, git_repo_dir, gnupghome, git_user):
-    
+def process_added_base_images(
+    gold_images_list, messages, git_repo_dir, gnupghome, git_user
+):
+
     for gold_image in gold_images_list:
         (
             base_img_relative_path,
@@ -142,8 +137,10 @@ def process_added_base_images(gold_images_list, messages, git_repo_dir, gnupghom
         )
 
 
-def process_deleted_base_images(gold_images_list, messages, git_repo_dir, gnupghome, git_user):
-    
+def process_deleted_base_images(
+    gold_images_list, messages, git_repo_dir, gnupghome, git_user
+):
+
     for gold_image in gold_images_list:
         (
             base_img_relative_path,
@@ -152,7 +149,9 @@ def process_deleted_base_images(gold_images_list, messages, git_repo_dir, gnupgh
             git_repo_dir, gold_image
         )
 
-        commit_deleted_base_image(git_repo_dir, base_img_relative_path, gnupghome, git_user)
+        commit_deleted_base_image(
+            git_repo_dir, base_img_relative_path, gnupghome, git_user
+        )
 
         messages.append(
             Message(
@@ -161,11 +160,15 @@ def process_deleted_base_images(gold_images_list, messages, git_repo_dir, gnupgh
         )
 
 
-def process_modified_base_images(gold_images_list, messages, git_repo_dir, gnupghome, git_user):
+def process_modified_base_images(
+    gold_images_list, messages, git_repo_dir, gnupghome, git_user
+):
     return
 
 
-def process_renamed_base_images(gold_images_list, messages, git_repo_dir, gnupghome, git_user):
+def process_renamed_base_images(
+    gold_images_list, messages, git_repo_dir, gnupghome, git_user
+):
     # See note at https://dvc.org/doc/command-reference/diff#example-renamed-files
     # dvc diff only detects files which have been renamed but are otherwise unmodified.
     # Also, remember to commit new and OLD pointers
@@ -205,8 +208,8 @@ def auto_commit_base_images(dvc_diff, git_repo_dir, gnupghome, git_user: GitUser
     Pending to define:
     https://github.com/Nautilus-Cyberneering/chinese-ideographs/pull/122#issuecomment-972844365
     """
-    
-    messages = []
+
+    messages: List[str] = []
 
     new_gold_images = get_new_gold_images_filenames_from_dvc_diff(dvc_diff)
     process_added_base_images(
@@ -227,6 +230,5 @@ def auto_commit_base_images(dvc_diff, git_repo_dir, gnupghome, git_user: GitUser
     process_deleted_base_images(
         deleted_gold_images, messages, git_repo_dir, gnupghome, git_user
     )
-
 
     return ActionResult(ResultCode.CONTINUE, messages)
