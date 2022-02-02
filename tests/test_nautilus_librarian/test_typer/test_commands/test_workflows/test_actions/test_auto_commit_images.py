@@ -79,16 +79,15 @@ def commit_added_base_images(temp_git_dir, temp_gpg_home_dir, git_user):
     )
 
 
-def check_commit_assertions(
-    commit, expected_commit_stats_files, temp_git_dir, git_user
-):
-
+def assert_commit_content(commit, expected_commit_stats_files, git_user):
     assert commit.stats.files == expected_commit_stats_files
 
     # Assert the commit was created by the right user
     assert commit.committer.name == git_user.name
     assert commit.committer.email == git_user.email
 
+
+def assert_commit_signingkey(commit, temp_git_dir, git_user):
     # Assert the commit was signed with the right signing key
     assert (
         git(temp_git_dir).get_commit_signing_key(commit.hexsha) == git_user.signingkey
@@ -152,7 +151,8 @@ def given_a_dvc_diff_object_with_a_new_gold_image_it_should_commit_the_added_bas
         },
     }
 
-    check_commit_assertions(commit, expected_commit_stats_files, temp_git_dir, git_user)
+    assert_commit_content(commit, expected_commit_stats_files, git_user)
+    assert_commit_signingkey(commit, temp_git_dir, git_user)
 
 
 def given_a_dvc_diff_object_with_a_gold_image_deleton_it_should_commit_the_base_image_deletion_to_git(
@@ -209,4 +209,5 @@ def given_a_dvc_diff_object_with_a_gold_image_deleton_it_should_commit_the_base_
         },
     }
 
-    check_commit_assertions(commit, expected_commit_stats_files, temp_git_dir, git_user)
+    assert_commit_content(commit, expected_commit_stats_files, git_user)
+    assert_commit_signingkey(commit, temp_git_dir, git_user)
