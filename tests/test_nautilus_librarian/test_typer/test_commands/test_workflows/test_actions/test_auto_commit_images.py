@@ -6,6 +6,7 @@ from test_nautilus_librarian.test_typer.test_commands.test_workflows.test_gold_i
 )
 from test_nautilus_librarian.utils import compact_json
 
+from nautilus_librarian.mods.console.domain.utils import execute_shell_command
 from nautilus_librarian.mods.dvc.domain.dvc_command_wrapper import dvc
 from nautilus_librarian.mods.git.domain.git_command_wrapper import git
 from nautilus_librarian.mods.namecodes.domain.filename import Filename
@@ -61,6 +62,17 @@ def test_calculate_the_corresponding_base_image_from_gold_image():
 def remove_base_image_dvc_files(temp_git_dir):
     os.remove(f"{temp_git_dir}/data/000001/42/000001-42.600.2.tif.dvc")
     os.remove(f"{temp_git_dir}/data/000001/42/.gitignore")
+
+
+def rename_base_image(temp_git_dir):
+    execute_shell_command(
+        """
+        mkdir -p data/000002/42
+        dvc move data/000001/42/000001-42.600.2.tif data/000002/42/000002-42.600.2.tif
+    """,
+        cwd=temp_git_dir,
+        print_output=True,
+    )
 
 
 def commit_added_base_images(temp_git_dir, temp_gpg_home_dir, git_user):
@@ -206,6 +218,69 @@ def given_a_dvc_diff_object_with_a_gold_image_deleton_it_should_commit_the_base_
             "insertions": 0,
             "deletions": 4,
             "lines": 4,
+        },
+    }
+
+    assert_commit_content(commit, expected_commit_stats_files, git_user)
+    assert_commit_signingkey(commit, temp_git_dir, git_user)
+
+
+def given_a_dvc_diff_object_with_a_gold_image_rename_it_should_commit_the_base_image_rename_to_git(
+    temp_git_dir,
+    temp_dvc_local_remote_storage_dir,
+    sample_base_image_absolute_path,
+    temp_gpg_home_dir,
+    git_user,
+):
+
+    create_initial_state(
+        temp_git_dir,
+        temp_dvc_local_remote_storage_dir,
+        sample_base_image_absolute_path,
+        temp_gpg_home_dir,
+        git_user,
+    )
+
+    commit_added_base_images(temp_git_dir, temp_gpg_home_dir, git_user)
+    rename_base_image(temp_git_dir)
+
+    dvc_diff = {
+        "added": [],
+        "deleted": [],
+        "modified": [],
+        "renamed": [
+            {
+                "path": {
+                    "old": "data/000001/32/000001-32.600.2.tif",
+                    "new": "data/000002/32/000002-32.600.2.tif",
+                }
+            }
+        ],
+    }
+
+    result = auto_commit_base_images(
+        compact_json(dvc_diff), str(temp_git_dir), str(temp_gpg_home_dir), git_user
+    )
+
+    assert result.code == ResultCode.CONTINUE
+
+    repo = Repo(temp_git_dir)
+    commit = repo.commit(repo.heads[0].commit)
+
+    # Assert the commit has the right message
+    assert (
+        commit.summary
+        == "feat: renamed base image: 000001-42.600.2.tif -> 000002-42.600.2.tif"
+    )
+
+    # Assert the commit contains the right files
+    expected_commit_stats_files = {
+        "data/000001/42/.gitignore": {"insertions": 0, "deletions": 1, "lines": 1},
+        "data/000002/42/.gitignore": {"insertions": 3, "deletions": 0, "lines": 3},
+        "data/{000001/42/000001-42.600.2.tif.dvc => 000002/42/000002-42.600.2.tif.dvc}": {
+            "insertions": 1,
+            "deletions": 1,
+            "lines": 2,
         },
     }
 

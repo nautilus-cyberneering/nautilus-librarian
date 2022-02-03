@@ -44,8 +44,17 @@ def get_deleted_gold_images_filenames_from_dvc_diff(dvc_diff) -> List[Filename]:
     return format_extracted_files(extract_deleted_files_from_dvc_diff(dvc_diff))
 
 
-def get_renamed_gold_images_filenames_from_dvc_diff(dvc_diff) -> List[Filename]:
-    return format_extracted_files(extract_renamed_files_from_dvc_diff(dvc_diff))
+def get_renamed_gold_images_filenames_from_dvc_diff(
+    dvc_diff,
+) -> List[tuple[Filename, Filename]]:
+    extracted_filenames = extract_renamed_files_from_dvc_diff(dvc_diff)
+    old_filenames = [element["old"] for element in extracted_filenames]
+    new_filenames = [element["new"] for element in extracted_filenames]
+    return list(
+        zip(
+            format_extracted_files(old_filenames), format_extracted_files(new_filenames)
+        )
+    )
 
 
 def files_to_commit(base_img_relative_path) -> List[str]:
@@ -88,6 +97,29 @@ def commit_deleted_base_image(
     return repo.commit(
         {"deleted": files_to_commit(base_img_relative_path)},
         commit_message=f"feat: deleted base image: {os.path.basename(base_img_relative_path)}",
+    )
+
+
+def commit_renamed_base_image(
+    git_repo_dir,
+    old_base_img_relative_path,
+    new_base_img_relative_path,
+    gnupghome,
+    git_user,
+):
+    repo = GitRepo(git_repo_dir, git_user, gnupghome)
+
+    return repo.commit(
+        {
+            "renamed": {
+                "old": files_to_commit(old_base_img_relative_path),
+                "new": files_to_commit(new_base_img_relative_path),
+            }
+        },
+        commit_message=(
+            f"feat: renamed base image: {os.path.basename(old_base_img_relative_path)}"
+            f" -> {os.path.basename(new_base_img_relative_path)}"
+        ),
     )
 
 
@@ -144,7 +176,7 @@ def process_deleted_base_images(
     for gold_image in gold_images_list:
         (
             base_img_relative_path,
-            base_img_absolute_path,
+            _,
         ) = calculate_the_corresponding_base_image_from_gold_image(
             git_repo_dir, gold_image
         )
@@ -163,15 +195,47 @@ def process_deleted_base_images(
 def process_modified_base_images(
     gold_images_list, messages, git_repo_dir, gnupghome, git_user
 ):
+
     return
 
 
 def process_renamed_base_images(
-    gold_images_list, messages, git_repo_dir, gnupghome, git_user
+    old_and_new_gold_images_list, messages, git_repo_dir, gnupghome, git_user
 ):
     # See note at https://dvc.org/doc/command-reference/diff#example-renamed-files
     # dvc diff only detects files which have been renamed but are otherwise unmodified.
     # Also, remember to commit new and OLD pointers
+    for gold_image_duple in old_and_new_gold_images_list:
+        old_gold_image = gold_image_duple[0]
+        new_gold_image = gold_image_duple[1]
+        (
+            old_base_img_relative_path,
+            _,
+        ) = calculate_the_corresponding_base_image_from_gold_image(
+            git_repo_dir, old_gold_image
+        )
+        (
+            new_base_img_relative_path,
+            _,
+        ) = calculate_the_corresponding_base_image_from_gold_image(
+            git_repo_dir, new_gold_image
+        )
+
+        commit_renamed_base_image(
+            git_repo_dir,
+            old_base_img_relative_path,
+            new_base_img_relative_path,
+            gnupghome,
+            git_user,
+        )
+
+        messages.append(
+            Message(
+                f"New Gold image renamed: {old_gold_image} -> {new_gold_image} "
+                f"Base image: {new_base_img_relative_path} -> {old_base_img_relative_path} ✓"
+            )
+        )
+
     return
 
 

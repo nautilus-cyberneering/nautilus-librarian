@@ -30,7 +30,7 @@ def given_a_diff_structure_with_renamed_gold_image_it_should_rename_base_images(
     git_user,
 ):
 
-    dvc_diff_with_added_gold_image = {
+    dvc_diff_with_renamed_gold_image = {
         "added": [],
         "deleted": [],
         "modified": [],
@@ -62,7 +62,7 @@ def given_a_diff_structure_with_renamed_gold_image_it_should_rename_base_images(
     )
 
     result = rename_base_images(
-        compact_json(dvc_diff_with_added_gold_image), temp_git_dir
+        compact_json(dvc_diff_with_renamed_gold_image), temp_git_dir
     )
 
     print(f"{result.messages[0]}")
