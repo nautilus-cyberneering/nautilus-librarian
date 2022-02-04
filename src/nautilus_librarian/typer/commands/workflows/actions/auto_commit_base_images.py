@@ -57,34 +57,15 @@ def get_renamed_gold_images_filenames_from_dvc_diff(
     )
 
 
-def files_to_commit(base_img_relative_path) -> List[str]:
-    """
-    Given the relative path of a Base image it returns the relative paths
-    of the files we have to include in the git repo.
-
-    For example:
-
-    For the Base image "data/000001/42/000001-42.600.2.tif", these are
-    the files tracked on the git repo:
-
-    - data/000001/42/.gitignore
-    - data/000001/42/000001-42.600.2.tif.dvc
-    """
-    base_img_dir = os.path.dirname(base_img_relative_path)
-
-    filepaths = [
-        f"{base_img_dir}/.gitignore",
-        f"{base_img_relative_path}.dvc",
-    ]
-
-    return filepaths
-
-
 def commit_new_base_image(git_repo_dir, base_img_relative_path, gnupghome, git_user):
+
     repo = GitRepo(git_repo_dir, git_user, gnupghome)
+    dvc_api_wrapper = DvcApiWrapper(git_repo_dir)
+
+    files_to_commit = dvc_api_wrapper.get_files_to_commit(base_img_relative_path)
 
     return repo.commit(
-        {"added": files_to_commit(base_img_relative_path)},
+        {"added": files_to_commit},
         commit_message=f"feat: new base image: {os.path.basename(base_img_relative_path)}",
     )
 
@@ -93,9 +74,10 @@ def commit_deleted_base_image(
     git_repo_dir, base_img_relative_path, gnupghome, git_user
 ):
     repo = GitRepo(git_repo_dir, git_user, gnupghome)
+    dvc_api_wrapper = DvcApiWrapper(git_repo_dir)
 
     return repo.commit(
-        {"deleted": files_to_commit(base_img_relative_path)},
+        {"deleted": dvc_api_wrapper.get_files_to_commit(base_img_relative_path)},
         commit_message=f"feat: deleted base image: {os.path.basename(base_img_relative_path)}",
     )
 
@@ -108,12 +90,13 @@ def commit_renamed_base_image(
     git_user,
 ):
     repo = GitRepo(git_repo_dir, git_user, gnupghome)
+    dvc_api_wrapper = DvcApiWrapper(git_repo_dir)
 
     return repo.commit(
         {
             "renamed": {
-                "old": files_to_commit(old_base_img_relative_path),
-                "new": files_to_commit(new_base_img_relative_path),
+                "old": dvc_api_wrapper.get_files_to_commit(old_base_img_relative_path),
+                "new": dvc_api_wrapper.get_files_to_commit(new_base_img_relative_path),
             }
         },
         commit_message=(

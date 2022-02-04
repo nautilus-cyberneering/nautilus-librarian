@@ -147,6 +147,18 @@ def test_list(temp_dvc_dir_with_test_content):
     assert api.list(temp_dvc_dir_with_test_content) == expected_list_output
 
 
+def test_files_to_commit(temp_dvc_dir_with_test_content):
+
+    api = DvcApiWrapper(temp_dvc_dir_with_test_content)
+
+    filepaths = api.get_files_to_commit("data/000001/42/000001-42.600.2.tif")
+
+    assert filepaths == [
+        "data/000001/42/.gitignore",
+        "data/000001/42/000001-42.600.2.tif.dvc",
+    ]
+
+
 def test_dvc_default_remote(temp_dvc_dir_with_test_content):
     api = DvcApiWrapper(temp_dvc_dir_with_test_content)
 

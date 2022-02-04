@@ -14,7 +14,6 @@ from nautilus_librarian.typer.commands.workflows.actions.action_result import Re
 from nautilus_librarian.typer.commands.workflows.actions.auto_commit_base_images import (
     auto_commit_base_images,
     calculate_the_corresponding_base_image_from_gold_image,
-    files_to_commit,
     get_new_gold_images_filenames_from_dvc_diff,
 )
 
@@ -34,15 +33,6 @@ def test_get_new_gold_images_from_dvc_diff():
     result = get_new_gold_images_filenames_from_dvc_diff(compact_json(dvc_diff))
 
     assert result == [Filename("data/000001/32/000001-32.600.2.tif")]
-
-
-def test_files_to_commit():
-    filepaths = files_to_commit("data/000001/42/000001-42.600.2.tif")
-
-    assert filepaths == [
-        "data/000001/42/.gitignore",
-        "data/000001/42/000001-42.600.2.tif.dvc",
-    ]
 
 
 def test_calculate_the_corresponding_base_image_from_gold_image():
