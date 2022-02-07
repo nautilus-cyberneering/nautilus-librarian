@@ -1,4 +1,5 @@
 from nautilus_librarian.domain.file_locator import file_locator
+from nautilus_librarian.mods.dvc.domain.api import DvcApiWrapper
 from nautilus_librarian.mods.dvc.domain.utils import (
     extract_added_and_modified_files_from_dvc_diff,
 )
@@ -12,12 +13,22 @@ from nautilus_librarian.typer.commands.workflows.actions.action_result import (
 )
 
 
-def get_base_image_absolute_path(git_repo_dir, gold_image):
+def get_base_image_path(git_repo_dir, gold_image, absolute_path=True):
     corresponding_base_image = gold_image.generate_base_image_filename()
     corresponding_base_image_relative_path = (
         file_locator(corresponding_base_image) + "/" + str(corresponding_base_image)
     )
-    return f"{git_repo_dir}/{corresponding_base_image_relative_path}"
+    if absolute_path:
+        return f"{git_repo_dir}/{corresponding_base_image_relative_path}"
+    else:
+        return f"{corresponding_base_image_relative_path}"
+
+
+def add_base_image_to_dvc(git_repo_dir, gold_image):
+    base_img_relative_path = get_base_image_path(git_repo_dir, gold_image, False)
+    dvc_api_wrapper = DvcApiWrapper(git_repo_dir)
+    dvc_api_wrapper.add(base_img_relative_path)
+    dvc_api_wrapper.push(f"{base_img_relative_path}.dvc")
 
 
 def generate_base_images(dvc_diff, git_repo_dir, base_images_size):
@@ -38,13 +49,16 @@ def generate_base_images(dvc_diff, git_repo_dir, base_images_size):
     for filename in filenames:
         try:
             gold_filename = Filename(filename)
-            base_filename = get_base_image_absolute_path(git_repo_dir, gold_filename)
+            base_filename = get_base_image_path(git_repo_dir, gold_filename)
             process_image(
                 f"{git_repo_dir}/{filename}",
                 f"{base_filename}",
                 base_images_size,
                 "sRGB",
             )
+
+            add_base_image_to_dvc(git_repo_dir, gold_filename)
+
             messages.append(
                 Message(f"✓ Base image of {filename} successfully generated")
             )

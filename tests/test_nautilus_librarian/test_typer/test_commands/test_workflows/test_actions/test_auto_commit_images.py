@@ -7,7 +7,6 @@ from test_nautilus_librarian.test_typer.test_commands.test_workflows.test_gold_i
 from test_nautilus_librarian.utils import compact_json
 
 from nautilus_librarian.mods.console.domain.utils import execute_shell_command
-from nautilus_librarian.mods.dvc.domain.dvc_command_wrapper import dvc
 from nautilus_librarian.mods.git.domain.git_command_wrapper import git
 from nautilus_librarian.mods.namecodes.domain.filename import Filename
 from nautilus_librarian.typer.commands.workflows.actions.action_result import ResultCode
@@ -65,6 +64,16 @@ def rename_base_image(temp_git_dir):
     )
 
 
+def add_base_image_to_dvc(temp_git_dir):
+    execute_shell_command(
+        """
+        dvc add data/000001/42/000001-42.600.2.tif
+    """,
+        cwd=temp_git_dir,
+        print_output=True,
+    )
+
+
 def commit_added_base_images(temp_git_dir, temp_gpg_home_dir, git_user):
 
     dvc_diff = {
@@ -111,28 +120,12 @@ def given_a_dvc_diff_object_with_a_new_gold_image_it_should_commit_the_added_bas
         git_user,
     )
 
+    add_base_image_to_dvc(temp_git_dir)
+
     result = commit_added_base_images(temp_git_dir, temp_gpg_home_dir, git_user)
 
     # Assert command runned successfully
     assert result.code == ResultCode.CONTINUE
-
-    # Assert Base image was created
-    assert os.path.isfile(f"{temp_git_dir}/data/000001/42/000001-42.600.2.tif")
-
-    # DVC Asserts
-
-    # Assert dvc files were created
-    assert os.path.isfile(f"{temp_git_dir}/data/000001/42/000001-42.600.2.tif.dvc")
-    assert os.path.isfile(f"{temp_git_dir}/data/000001/42/.gitignore")
-
-    # Assert Base image was pushed to local "remote" storage
-    dvc_status_output_json = dvc(temp_git_dir).status_remote("localremote")
-    expected_status_new = {"data/000001/42/000001-42.600.2.tif": "new"}
-    expected_status_empty = {}
-    assert (
-        expected_status_new == dvc_status_output_json
-        or expected_status_empty == dvc_status_output_json
-    )
 
     # Git commit Asserts
 
@@ -172,8 +165,8 @@ def given_a_dvc_diff_object_with_a_gold_image_deleton_it_should_commit_the_base_
         git_user,
     )
 
+    add_base_image_to_dvc(temp_git_dir)
     commit_added_base_images(temp_git_dir, temp_gpg_home_dir, git_user)
-
     remove_base_image_dvc_files(temp_git_dir)
 
     dvc_diff = {
@@ -230,7 +223,7 @@ def given_a_dvc_diff_object_with_a_gold_image_rename_it_should_commit_the_base_i
         temp_gpg_home_dir,
         git_user,
     )
-
+    add_base_image_to_dvc(temp_git_dir)
     commit_added_base_images(temp_git_dir, temp_gpg_home_dir, git_user)
     rename_base_image(temp_git_dir)
 

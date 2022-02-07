@@ -139,10 +139,6 @@ def process_added_base_images(
 
         guard_that_base_image_exists(base_img_absolute_path)
 
-        dvc_api_wrapper = DvcApiWrapper(git_repo_dir)
-        dvc_api_wrapper.add(base_img_relative_path)
-        dvc_api_wrapper.push(f"{base_img_relative_path}.dvc")
-
         commit_new_base_image(git_repo_dir, base_img_relative_path, gnupghome, git_user)
 
         messages.append(
