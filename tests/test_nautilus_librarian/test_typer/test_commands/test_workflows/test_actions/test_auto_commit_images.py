@@ -106,6 +106,10 @@ def assert_commit_content(commit, expected_commit_stats_files, git_user):
     assert commit.committer.email == git_user.email
 
 
+def assert_commit_summary(commit, expected_commit_summary):
+    assert commit.summary == expected_commit_summary
+
+
 def assert_commit_signingkey(commit, temp_git_dir, git_user):
     # Assert the commit was signed with the right signing key
     assert (
@@ -141,8 +145,7 @@ def given_a_dvc_diff_object_with_a_new_gold_image_it_should_commit_the_added_bas
     repo = Repo(temp_git_dir)
     commit = repo.commit(repo.heads[0].commit)  # latest commit on the branch
 
-    # Assert the commit has the right message
-    assert commit.summary == "feat: new base image: 000001-42.600.2.tif"
+    assert_commit_summary(commit, "feat: new base image: 000001-42.600.2.tif")
 
     # Assert the commit contains the right files
     expected_commit_stats_files = {
@@ -195,14 +198,11 @@ def given_a_dvc_diff_object_with_a_gold_image_deleton_it_should_commit_the_base_
 
     # Git commit Asserts
 
-    # Assert Base commit was created
     repo = Repo(temp_git_dir)
     commit = repo.commit(repo.heads[0].commit)  # latest commit on the branch
 
-    # Assert the commit has the right message
-    assert commit.summary == "feat: deleted base image: 000001-42.600.2.tif"
+    assert_commit_summary(commit, "feat: deleted base image: 000001-42.600.2.tif")
 
-    # Assert the commit contains the right files
     expected_commit_stats_files = {
         "data/000001/42/.gitignore": {"insertions": 0, "deletions": 1, "lines": 1},
         "data/000001/42/000001-42.600.2.tif.dvc": {
@@ -211,7 +211,6 @@ def given_a_dvc_diff_object_with_a_gold_image_deleton_it_should_commit_the_base_
             "lines": 4,
         },
     }
-
     assert_commit_content(commit, expected_commit_stats_files, git_user)
     assert_commit_signingkey(commit, temp_git_dir, git_user)
 
@@ -258,13 +257,6 @@ def given_a_dvc_diff_object_with_a_gold_image_rename_it_should_commit_the_base_i
     repo = Repo(temp_git_dir)
     commit = repo.commit(repo.heads[0].commit)
 
-    # Assert the commit has the right message
-    assert (
-        commit.summary
-        == "feat: renamed base image: 000001-42.600.2.tif -> 000002-42.600.2.tif"
-    )
-
-    # Assert the commit contains the right files
     expected_commit_stats_files = {
         "data/000001/42/.gitignore": {"insertions": 0, "deletions": 1, "lines": 1},
         "data/000002/42/.gitignore": {"insertions": 3, "deletions": 0, "lines": 3},
@@ -274,7 +266,9 @@ def given_a_dvc_diff_object_with_a_gold_image_rename_it_should_commit_the_base_i
             "lines": 2,
         },
     }
-
+    assert_commit_summary(
+        commit, "feat: renamed base image: 000001-42.600.2.tif -> 000002-42.600.2.tif"
+    )
     assert_commit_content(commit, expected_commit_stats_files, git_user)
     assert_commit_signingkey(commit, temp_git_dir, git_user)
 
@@ -316,10 +310,8 @@ def given_a_dvc_diff_object_with_a_gold_image_modification_it_should_commit_the_
     repo = Repo(temp_git_dir)
     commit = repo.commit(repo.heads[0].commit)
 
-    # Assert the commit has the right message
-    assert commit.summary == "feat: modified base image: 000001-42.600.2.tif"
+    assert_commit_summary(commit, "feat: modified base image: 000001-42.600.2.tif")
 
-    # Assert the commit contains the right files
     expected_commit_stats_files = {
         "data/000001/42/000001-42.600.2.tif.dvc": {
             "insertions": 2,
@@ -327,6 +319,5 @@ def given_a_dvc_diff_object_with_a_gold_image_modification_it_should_commit_the_
             "lines": 4,
         }
     }
-
     assert_commit_content(commit, expected_commit_stats_files, git_user)
     assert_commit_signingkey(commit, temp_git_dir, git_user)
