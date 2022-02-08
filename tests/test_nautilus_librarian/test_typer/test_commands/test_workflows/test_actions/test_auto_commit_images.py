@@ -299,7 +299,7 @@ def given_a_dvc_diff_object_with_a_gold_image_modification_it_should_commit_the_
         "added": [],
         "deleted": [],
         "modified": [{"path": "data/000001/32/000001-32.600.2.tif"}],
-        "renamed": [],  
+        "renamed": [],
     }
 
     result = auto_commit_base_images(
