@@ -234,6 +234,8 @@ def given_a_dvc_diff_object_with_a_gold_image_rename_it_should_commit_the_base_i
     commit_added_base_images(temp_git_dir, temp_gpg_home_dir, git_user)
     rename_base_image(temp_git_dir)
 
+    repo = Repo(temp_git_dir)
+
     dvc_diff = {
         "added": [],
         "deleted": [],
@@ -247,14 +249,11 @@ def given_a_dvc_diff_object_with_a_gold_image_rename_it_should_commit_the_base_i
             }
         ],
     }
-
     result = auto_commit_base_images(
         compact_json(dvc_diff), str(temp_git_dir), str(temp_gpg_home_dir), git_user
     )
-
     assert result.code == ResultCode.CONTINUE
 
-    repo = Repo(temp_git_dir)
     commit = repo.commit(repo.heads[0].commit)
 
     expected_commit_stats_files = {
@@ -294,20 +293,20 @@ def given_a_dvc_diff_object_with_a_gold_image_modification_it_should_commit_the_
     overwrite_base_image(workflows_fixtures_dir, temp_git_dir)
     add_base_image_to_dvc(temp_git_dir)
 
+    repo = Repo(temp_git_dir)
+
     dvc_diff = {
         "added": [],
         "deleted": [],
         "modified": [{"path": "data/000001/32/000001-32.600.2.tif"}],
-        "renamed": [],
+        "renamed": [],  
     }
 
     result = auto_commit_base_images(
         compact_json(dvc_diff), str(temp_git_dir), str(temp_gpg_home_dir), git_user
     )
-
     assert result.code == ResultCode.CONTINUE
 
-    repo = Repo(temp_git_dir)
     commit = repo.commit(repo.heads[0].commit)
 
     assert_commit_summary(commit, "feat: modified base image: 000001-42.600.2.tif")
