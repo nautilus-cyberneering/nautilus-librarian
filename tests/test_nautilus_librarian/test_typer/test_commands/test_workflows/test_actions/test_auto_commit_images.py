@@ -1,4 +1,5 @@
 import os
+import shutil
 
 from git.repo.base import Repo
 from test_nautilus_librarian.test_typer.test_commands.test_workflows.test_gold_images_processing import (
@@ -51,6 +52,13 @@ def test_calculate_the_corresponding_base_image_from_gold_image():
 def remove_base_image_dvc_files(temp_git_dir):
     os.remove(f"{temp_git_dir}/data/000001/42/000001-42.600.2.tif.dvc")
     os.remove(f"{temp_git_dir}/data/000001/42/.gitignore")
+
+
+def overwrite_base_image(fixtures_dir, temp_git_dir):
+    shutil.copyfile(
+        f"{fixtures_dir}/images/000001-42.600.2-modified.tif",
+        f"{temp_git_dir}/data/000001/42/000001-42.600.2.tif",
+    )
 
 
 def rename_base_image(temp_git_dir):
@@ -265,6 +273,59 @@ def given_a_dvc_diff_object_with_a_gold_image_rename_it_should_commit_the_base_i
             "deletions": 1,
             "lines": 2,
         },
+    }
+
+    assert_commit_content(commit, expected_commit_stats_files, git_user)
+    assert_commit_signingkey(commit, temp_git_dir, git_user)
+
+
+def given_a_dvc_diff_object_with_a_gold_image_modification_it_should_commit_the_base_image_rename_to_git(
+    temp_git_dir,
+    temp_dvc_local_remote_storage_dir,
+    sample_base_image_absolute_path,
+    temp_gpg_home_dir,
+    git_user,
+    workflows_fixtures_dir,
+):
+
+    create_initial_state(
+        temp_git_dir,
+        temp_dvc_local_remote_storage_dir,
+        sample_base_image_absolute_path,
+        temp_gpg_home_dir,
+        git_user,
+    )
+    add_base_image_to_dvc(temp_git_dir)
+    commit_added_base_images(temp_git_dir, temp_gpg_home_dir, git_user)
+    overwrite_base_image(workflows_fixtures_dir, temp_git_dir)
+    add_base_image_to_dvc(temp_git_dir)
+
+    dvc_diff = {
+        "added": [],
+        "deleted": [],
+        "modified": [{"path": "data/000001/32/000001-32.600.2.tif"}],
+        "renamed": [],
+    }
+
+    result = auto_commit_base_images(
+        compact_json(dvc_diff), str(temp_git_dir), str(temp_gpg_home_dir), git_user
+    )
+
+    assert result.code == ResultCode.CONTINUE
+
+    repo = Repo(temp_git_dir)
+    commit = repo.commit(repo.heads[0].commit)
+
+    # Assert the commit has the right message
+    assert commit.summary == "feat: modified base image: 000001-42.600.2.tif"
+
+    # Assert the commit contains the right files
+    expected_commit_stats_files = {
+        "data/000001/42/000001-42.600.2.tif.dvc": {
+            "insertions": 2,
+            "deletions": 2,
+            "lines": 4,
+        }
     }
 
     assert_commit_content(commit, expected_commit_stats_files, git_user)

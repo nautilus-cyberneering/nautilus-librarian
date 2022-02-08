@@ -57,16 +57,19 @@ def get_renamed_gold_images_filenames_from_dvc_diff(
     )
 
 
-def commit_new_base_image(git_repo_dir, base_img_relative_path, gnupghome, git_user):
+def commit_new_modified_base_image(
+    git_repo_dir, base_img_relative_path, gnupghome, git_user, is_new=True
+):
 
     repo = GitRepo(git_repo_dir, git_user, gnupghome)
     dvc_api_wrapper = DvcApiWrapper(git_repo_dir)
 
     files_to_commit = dvc_api_wrapper.get_files_to_commit(base_img_relative_path)
+    verb = "new" if is_new else "modified"
 
     return repo.commit(
         {"added": files_to_commit},
-        commit_message=f"feat: new base image: {os.path.basename(base_img_relative_path)}",
+        commit_message=f"feat: {verb} base image: {os.path.basename(base_img_relative_path)}",
     )
 
 
@@ -139,7 +142,9 @@ def process_added_base_images(
 
         guard_that_base_image_exists(base_img_absolute_path)
 
-        commit_new_base_image(git_repo_dir, base_img_relative_path, gnupghome, git_user)
+        commit_new_modified_base_image(
+            git_repo_dir, base_img_relative_path, gnupghome, git_user
+        )
 
         messages.append(
             Message(
@@ -172,10 +177,30 @@ def process_deleted_base_images(
 
 
 def process_modified_base_images(
-    gold_images_list, messages, git_repo_dir, gnupghome, git_user
+    gold_images_list,
+    messages,
+    git_repo_dir,
+    gnupghome,
+    git_user,
 ):
+    for gold_image in gold_images_list:
+        (
+            base_img_relative_path,
+            base_img_absolute_path,
+        ) = calculate_the_corresponding_base_image_from_gold_image(
+            git_repo_dir, gold_image
+        )
+        guard_that_base_image_exists(base_img_absolute_path)
 
-    return
+        commit_new_modified_base_image(
+            git_repo_dir, base_img_relative_path, gnupghome, git_user, is_new=False
+        )
+
+        messages.append(
+            Message(
+                f"Modified Gold image found: {gold_image} -> Base image: {base_img_relative_path} ✓"
+            )
+        )
 
 
 def process_renamed_base_images(
