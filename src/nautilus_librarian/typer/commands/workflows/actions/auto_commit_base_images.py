@@ -57,7 +57,7 @@ def get_renamed_gold_images_filenames_from_dvc_diff(
     )
 
 
-def commit_new_modified_base_image(
+def commit_new_and_modified_base_image(
     git_repo_dir, base_img_relative_path, gnupghome, git_user, is_new=True
 ):
 
@@ -142,7 +142,7 @@ def process_added_base_images(
 
         guard_that_base_image_exists(base_img_absolute_path)
 
-        commit_new_modified_base_image(
+        commit_new_and_modified_base_image(
             git_repo_dir, base_img_relative_path, gnupghome, git_user
         )
 
@@ -192,7 +192,7 @@ def process_modified_base_images(
         )
         guard_that_base_image_exists(base_img_absolute_path)
 
-        commit_new_modified_base_image(
+        commit_new_and_modified_base_image(
             git_repo_dir, base_img_relative_path, gnupghome, git_user, is_new=False
         )
 
