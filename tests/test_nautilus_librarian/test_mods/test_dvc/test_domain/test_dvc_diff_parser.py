@@ -149,8 +149,14 @@ def it_should_get_the_renamed_files():
             "renamed": [
                 {
                     "path": {
-                        "old": "folder/original_file.txt",
-                        "new": "folder/renamed_file.txt",
+                        "old": "data/000001/32/000001-32.600.2.tif",
+                        "new": "data/000002/32/000002-32.600.2.tif",
+                    }
+                },
+                {
+                    "path": {
+                        "old": "data/000003/32/000003-32.600.2.tif",
+                        "new": "data/000004/32/000004-32.600.2.tif",
                     }
                 },
             ],
@@ -160,7 +166,14 @@ def it_should_get_the_renamed_files():
     renamed = dvc_diff.renamed()
 
     assert renamed == [
-        {"old": "folder/original_file.txt", "new": "folder/renamed_file.txt"}
+        {
+            "old": "data/000001/32/000001-32.600.2.tif",
+            "new": "data/000002/32/000002-32.600.2.tif",
+        },
+        {
+            "old": "data/000003/32/000003-32.600.2.tif",
+            "new": "data/000004/32/000004-32.600.2.tif",
+        },
     ]
 
 

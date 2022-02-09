@@ -10,11 +10,30 @@ class GitRepo:
         self.gnupghome = gnupghome
         self.set_git_global_user_config(git_user)
 
+    # def add(self, filepaths):
+
+    # def commit(self, commit_message)
+
     def commit(self, filepaths, commit_message):
         """
-        It creates a commit
+        It creates a commit.
+        Filepath is an object with four optional file lists:
+        {
+            "added": [],
+            "deleted": [],
+            "modified": [],
+            "renamed": [],
+        }
         """
-        self.repo.index.add(filepaths)
+        if "added" in filepaths:
+            self.repo.index.add(filepaths["added"])
+
+        if "deleted" in filepaths:
+            self.repo.index.remove(filepaths["deleted"])
+
+        if "renamed" in filepaths:
+            self.repo.index.add(filepaths["renamed"]["new"])
+            self.repo.index.remove(filepaths["renamed"]["old"])
 
         # Write index. Needed for commit with signature:
         # https://github.com/gitpython-developers/GitPython/issues/580#issuecomment-282474086

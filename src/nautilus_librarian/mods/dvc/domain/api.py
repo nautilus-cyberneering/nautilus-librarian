@@ -1,4 +1,5 @@
 import os.path
+from typing import List
 
 import dvc.api as native
 from dvc.repo import Repo as DvcRepo
@@ -116,6 +117,28 @@ class DvcApiWrapper:
         return self.dvc_repo.ls(
             self.repo_path, path=list_path, recursive=recursive, dvc_only=dvc_only
         )
+
+    def get_files_to_commit(self, base_img_relative_path) -> List[str]:
+        """
+        Given the relative path of a Base image it returns the relative paths
+        of the files we have to include in the git repo.
+
+        For example:
+
+        For the Base image "data/000001/42/000001-42.600.2.tif", these are
+        the files tracked on the git repo:
+
+        - data/000001/42/.gitignore
+        - data/000001/42/000001-42.600.2.tif.dvc
+        """
+        base_img_dir = os.path.dirname(base_img_relative_path)
+
+        filepaths = [
+            f"{base_img_dir}/.gitignore",
+            f"{base_img_relative_path}.dvc",
+        ]
+
+        return filepaths
 
     # Wrappers for console commands
 

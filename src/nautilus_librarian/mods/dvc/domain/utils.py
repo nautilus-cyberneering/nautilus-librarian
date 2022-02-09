@@ -75,6 +75,27 @@ def extract_added_and_modified_files_from_dvc_diff(dvc_diff_json, only_basename=
     )
 
 
+def extract_modified_files_from_dvc_diff(dvc_diff_json, only_basename=True):
+    """
+    It gets a plain string list with the modified files from the dvc diff json.
+
+    With only_basename=True
+    Input: {"added": [], "deleted": [], "modified": [{"path": "data/000001/32/000001-32.600.2.tif"}], "renamed": []}
+    Output: ['000001-32.600.2.tif']
+
+    only_basename=False
+    Input: {"added": [], "deleted": [], "modified": [{"path": "data/000001/32/000001-32.600.2.tif"}], "renamed": []}
+    Output: ['data/000001/32/000001-32.600.2.tif']
+    """
+    dvc_diff = DvcDiffParser.from_json(dvc_diff_json)
+    return dvc_diff.filter(
+        exclude_added=True,
+        exclude_deleted=True,
+        exclude_renamed=True,
+        only_basename=only_basename,
+    )
+
+
 def extract_renamed_files_from_dvc_diff(dvc_diff_json, only_basename=True):
     """
     It gets a plain string list with the renamed files from the dvc diff json.
