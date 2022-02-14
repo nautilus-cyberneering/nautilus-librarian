@@ -6,6 +6,7 @@ from os import path
 
 import pytest
 from git import Repo
+
 from nautilus_librarian.mods.dvc.domain.api import DvcApiWrapper
 from nautilus_librarian.mods.dvc.domain.dvc_command_wrapper import dvc
 from nautilus_librarian.mods.dvc.domain.dvc_services_api import DvcServicesApi
@@ -52,7 +53,9 @@ def test_add(temp_dvc_dir_with_librarian_test_content):
 
     api.add(f"{temp_dvc_dir_with_librarian_test_content}/000001-32.600.2.tif")
 
-    assert path.exists(f"{temp_dvc_dir_with_librarian_test_content}/000001-32.600.2.tif.dvc")
+    assert path.exists(
+        f"{temp_dvc_dir_with_librarian_test_content}/000001-32.600.2.tif.dvc"
+    )
     assert path.exists(f"{temp_dvc_dir_with_librarian_test_content}/.gitignore")
 
 
