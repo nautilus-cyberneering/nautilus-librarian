@@ -47,7 +47,7 @@ class DvcServicesApi:
         check_filename_is_an_existing_library_image(f"{filename}")
         return self.dvc_api.push(targets=filename)
 
-    def pull(self, filename = None, remote = None):
+    def pull(self, filename=None, remote=None):
         if filename is not None:
             check_filename_is_library_image(filename)
         return self.dvc_api.pull(targets=filename, remote=remote)
