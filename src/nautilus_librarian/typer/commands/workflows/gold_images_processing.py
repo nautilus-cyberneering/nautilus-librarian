@@ -1,7 +1,7 @@
 import typer
 
 from nautilus_librarian.mods.console.domain.utils import get_current_working_directory
-from nautilus_librarian.mods.dvc.domain.api import DvcApiWrapper
+from nautilus_librarian.mods.dvc.domain.dvc_services_api import DvcServicesApi
 from nautilus_librarian.mods.git.domain.config import (
     default_git_user_email,
     default_git_user_name,
@@ -54,7 +54,7 @@ def process_action_result(action_result):
 def get_dvc_diff_if_not_provided(dvc_diff, repo_dir, previous_ref, current_ref):
     if not dvc_diff:
         return str(
-            DvcApiWrapper(repo_dir).diff(a_rev=previous_ref, b_rev=current_ref)
+            DvcServicesApi(repo_dir).diff(a_rev=previous_ref, b_rev=current_ref)
         ).replace("'", '"')
     else:
         return dvc_diff
@@ -122,7 +122,7 @@ def gold_images_processing(
     process_action_result(validate_filepaths_action(dvc_diff))
 
     if dvc_remote is None:
-        dvc_remote = DvcApiWrapper(git_repo_dir).dvc_default_remote()
+        dvc_remote = DvcServicesApi(git_repo_dir).dvc_default_remote()
 
     process_action_result(dvc_pull_action(dvc_diff, git_repo_dir, dvc_remote))
 

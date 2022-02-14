@@ -61,5 +61,8 @@ class DvcServicesApi:
         check_filename_is_library_image(to_path)
         return self.dvc_api.move(from_path, to_path)
 
+    def dvc_default_remote(self):
+        return self.dvc_api.dvc_default_remote()
+
     def get_files_to_commit(self, base_img_relative_path: str) -> List[str]:
         return self.dvc_api.get_files_to_commit(base_img_relative_path)
