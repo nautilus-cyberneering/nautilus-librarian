@@ -1,4 +1,4 @@
-from nautilus_librarian.mods.dvc.domain.dvc_services_api import DvcServicesApi
+from nautilus_librarian.domain.dvc_services_api import DvcServicesApi
 from nautilus_librarian.mods.dvc.domain.utils import (
     extract_added_and_modified_files_from_dvc_diff,
 )
