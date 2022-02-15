@@ -5,7 +5,7 @@ from nautilus_librarian.domain.file_locator import (
     file_locator,
     guard_that_base_image_exists,
 )
-from nautilus_librarian.mods.dvc.domain.api import DvcApiWrapper
+from nautilus_librarian.domain.dvc_services_api import DvcServicesApi
 from nautilus_librarian.mods.dvc.domain.utils import (
     extract_added_files_from_dvc_diff,
     extract_deleted_files_from_dvc_diff,
@@ -62,9 +62,9 @@ def commit_new_and_modified_base_image(
 ):
 
     repo = GitRepo(git_repo_dir, git_user, gnupghome)
-    dvc_api_wrapper = DvcApiWrapper(git_repo_dir)
+    dvc_services = DvcServicesApi(git_repo_dir)
 
-    files_to_commit = dvc_api_wrapper.get_files_to_commit(base_img_relative_path)
+    files_to_commit = dvc_services.get_files_to_commit(base_img_relative_path)
     verb = "new" if is_new else "modified"
 
     return repo.commit(
@@ -77,10 +77,10 @@ def commit_deleted_base_image(
     git_repo_dir, base_img_relative_path, gnupghome, git_user
 ):
     repo = GitRepo(git_repo_dir, git_user, gnupghome)
-    dvc_api_wrapper = DvcApiWrapper(git_repo_dir)
+    dvc_services = DvcServicesApi(git_repo_dir)
 
     return repo.commit(
-        {"deleted": dvc_api_wrapper.get_files_to_commit(base_img_relative_path)},
+        {"deleted": dvc_services.get_files_to_commit(base_img_relative_path)},
         commit_message=f"feat: deleted base image: {os.path.basename(base_img_relative_path)}",
     )
 
@@ -93,13 +93,13 @@ def commit_renamed_base_image(
     git_user,
 ):
     repo = GitRepo(git_repo_dir, git_user, gnupghome)
-    dvc_api_wrapper = DvcApiWrapper(git_repo_dir)
+    dvc_services = DvcServicesApi(git_repo_dir)
 
     return repo.commit(
         {
             "renamed": {
-                "old": dvc_api_wrapper.get_files_to_commit(old_base_img_relative_path),
-                "new": dvc_api_wrapper.get_files_to_commit(new_base_img_relative_path),
+                "old": dvc_services.get_files_to_commit(old_base_img_relative_path),
+                "new": dvc_services.get_files_to_commit(new_base_img_relative_path),
             }
         },
         commit_message=(

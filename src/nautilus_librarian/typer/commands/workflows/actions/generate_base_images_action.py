@@ -1,5 +1,5 @@
 from nautilus_librarian.domain.file_locator import file_locator
-from nautilus_librarian.mods.dvc.domain.api import DvcApiWrapper
+from nautilus_librarian.domain.dvc_services_api import DvcServicesApi
 from nautilus_librarian.mods.dvc.domain.utils import (
     extract_added_and_modified_files_from_dvc_diff,
 )
@@ -26,9 +26,9 @@ def get_base_image_path(git_repo_dir, gold_image, absolute_path=True):
 
 def add_base_image_to_dvc(git_repo_dir, gold_image):
     base_img_relative_path = get_base_image_path(git_repo_dir, gold_image, False)
-    dvc_api_wrapper = DvcApiWrapper(git_repo_dir)
-    dvc_api_wrapper.add(base_img_relative_path)
-    dvc_api_wrapper.push(f"{base_img_relative_path}.dvc")
+    dvc_services = DvcServicesApi(git_repo_dir)
+    dvc_services.add(base_img_relative_path)
+    dvc_services.push(base_img_relative_path)
 
 
 def generate_base_images(dvc_diff, git_repo_dir, base_images_size):

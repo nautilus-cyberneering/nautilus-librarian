@@ -1,4 +1,4 @@
-from nautilus_librarian.mods.dvc.domain.api import DvcApiWrapper
+from nautilus_librarian.domain.dvc_services_api import DvcServicesApi
 from nautilus_librarian.mods.dvc.domain.utils import (
     extract_added_and_modified_files_from_dvc_diff,
 )
@@ -22,13 +22,13 @@ def dvc_pull_action(dvc_diff, git_repo_dir, remote_name):
         dvc_diff, only_basename=False
     )
 
-    dvc_api_wrapper = DvcApiWrapper(git_repo_dir)
+    dvc_services = DvcServicesApi(git_repo_dir)
 
     messages = []
 
     for filename in filenames:
         try:
-            dvc_api_wrapper.pull(filename, remote_name)
+            dvc_services.pull(filename, remote_name)
 
             messages.append(Message(f"✓ {filename} pulled from dvc storage"))
         except ValueError as error:

@@ -11,18 +11,6 @@ from nautilus_librarian.mods.dvc.domain.api import DvcApiWrapper
 from nautilus_librarian.mods.dvc.domain.dvc_command_wrapper import dvc
 
 
-@pytest.fixture()
-def temp_dir(tmp_path_factory):
-    fn = tmp_path_factory.mktemp("test_dir")
-    return fn
-
-
-@pytest.fixture()
-def temp_dvc_remote(tmp_path_factory):
-    fn = tmp_path_factory.mktemp("test_dvc_remote_dir")
-    return fn
-
-
 def create_test_contents(temp_dir):
     with open(path.join(temp_dir, "test.data"), "w") as file:
         file.write("lorem ipsum")
@@ -32,14 +20,10 @@ def remove_test_contents(temp_dir):
     os.remove(f"{temp_dir}/test.data")
 
 
-def add_remote_to_dvc(dvc_dir, remote_temp_dir):
-    dvc(dvc_dir).add_local_remote_as_default("localremote", remote_temp_dir)
-
-
 @pytest.fixture()
 def temp_dvc_dir_with_test_content(temp_dir, temp_dvc_remote):
     DvcApiWrapper.init(temp_dir)
-    add_remote_to_dvc(temp_dir, temp_dvc_remote)
+    dvc(temp_dir).add_local_remote_as_default("localremote", temp_dvc_remote)
     create_test_contents(temp_dir)
     return temp_dir
 
@@ -92,6 +76,18 @@ def test_move(temp_dvc_dir_with_test_content):
     assert path.exists(f"{temp_dvc_dir_with_test_content}/test_renamed.data")
     assert not path.exists(f"{temp_dvc_dir_with_test_content}/test.data")
     assert path.exists(f"{temp_dvc_dir_with_test_content}/.gitignore")
+
+
+def test_remove(temp_dvc_dir_with_test_content):
+    api = DvcApiWrapper(temp_dvc_dir_with_test_content)
+
+    api.add("test.data")
+
+    assert path.exists(f"{temp_dvc_dir_with_test_content}/test.data.dvc")
+
+    api.remove("test.data.dvc")
+
+    assert not path.exists(f"{temp_dvc_dir_with_test_content}/test.data.dvc")
 
 
 def test_status(temp_dvc_dir_with_test_content):
