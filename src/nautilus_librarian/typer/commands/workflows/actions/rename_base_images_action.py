@@ -1,10 +1,10 @@
 from os import makedirs, path
 
+from nautilus_librarian.domain.dvc_services_api import DvcServicesApi
 from nautilus_librarian.domain.file_locator import (
     get_base_image_absolute_path,
     guard_that_base_image_exists,
 )
-from nautilus_librarian.domain.dvc_services_api import DvcServicesApi
 from nautilus_librarian.mods.dvc.domain.utils import extract_renamed_files_from_dvc_diff
 from nautilus_librarian.mods.namecodes.domain.filename import Filename
 from nautilus_librarian.typer.commands.workflows.actions.action_result import (
