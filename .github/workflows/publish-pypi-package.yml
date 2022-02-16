@@ -4,7 +4,6 @@ on:
   push:
     tags:
       - "*.*.*"
-  workflow_dispatch:
 
 jobs:
   build:
@@ -65,3 +64,8 @@ jobs:
 
       - name: Build Python package
         run: poetry build
+
+      - name: Publish to PyPI
+        env:
+          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_API_TOKEN }}
+        run: poetry publish
