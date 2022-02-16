@@ -7,9 +7,9 @@ from os import path
 import pytest
 from git import Repo
 
+from nautilus_librarian.domain.dvc_services_api import DvcServicesApi
 from nautilus_librarian.mods.dvc.domain.api import DvcApiWrapper
 from nautilus_librarian.mods.dvc.domain.dvc_command_wrapper import dvc
-from nautilus_librarian.domain.dvc_services_api import DvcServicesApi
 
 
 def create_librarian_test_contents(temp_dir):

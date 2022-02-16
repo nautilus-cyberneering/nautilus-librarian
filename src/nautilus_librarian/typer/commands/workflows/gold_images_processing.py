@@ -1,7 +1,7 @@
 import typer
 
-from nautilus_librarian.mods.console.domain.utils import get_current_working_directory
 from nautilus_librarian.domain.dvc_services_api import DvcServicesApi
+from nautilus_librarian.mods.console.domain.utils import get_current_working_directory
 from nautilus_librarian.mods.git.domain.config import (
     default_git_user_email,
     default_git_user_name,

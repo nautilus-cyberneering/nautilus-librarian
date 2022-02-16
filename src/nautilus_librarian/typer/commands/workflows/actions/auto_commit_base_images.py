@@ -1,11 +1,11 @@
 import os
 from typing import List
 
+from nautilus_librarian.domain.dvc_services_api import DvcServicesApi
 from nautilus_librarian.domain.file_locator import (
     file_locator,
     guard_that_base_image_exists,
 )
-from nautilus_librarian.domain.dvc_services_api import DvcServicesApi
 from nautilus_librarian.mods.dvc.domain.utils import (
     extract_added_files_from_dvc_diff,
     extract_deleted_files_from_dvc_diff,

@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - "*.*.*"
+  workflow_dispatch:
 
 jobs:
   build:
@@ -17,6 +18,12 @@ jobs:
         uses: actions/setup-python@v2.3.1
         with:
           python-version: "3.9"
+
+      - name: Setup Libvips
+        run: |
+          sudo apt-get update
+          sudo apt-get upgrade -y
+          sudo apt-get install -y libvips-dev
 
       - name: Setup Poetry
         run: pip3 install poetry poetry-dynamic-versioning
@@ -43,8 +50,3 @@ jobs:
 
       - name: Build Python package
         run: poetry build
-
-      - name: Publish to PyPI
-        env:
-          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_API_TOKEN }}
-        run: poetry publish
