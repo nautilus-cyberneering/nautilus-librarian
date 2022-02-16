@@ -71,4 +71,3 @@ jobs:
           images: |
             nautiluscyberneering/librarian
             ghcr.io/${{ github.repository }}
-
