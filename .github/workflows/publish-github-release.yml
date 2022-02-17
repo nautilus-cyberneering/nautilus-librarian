@@ -23,12 +23,7 @@ jobs:
           passphrase: ${{ secrets.TEST_PASSPHRASE }}
           git_user_signingkey: true
           git_commit_gpgsign: true
-
-      - name: Set GPG key user as the Git global user
-        run: |
-          git config --global user.email "${{ steps.import-gpg.outputs.email }}"
-          git config --global user.name "${{ steps.import-gpg.outputs.name }}"
-          git config --global user.signingkey "${{ steps.import-gpg.outputs.keyid }}"
+          git_config_global: true
 
       - name: Setup Python
         uses: actions/setup-python@v2.3.1
