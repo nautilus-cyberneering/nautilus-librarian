@@ -4,7 +4,6 @@ on:
   push:
     tags:
       - "*.*.*"
-  workflow_dispatch:
 
 jobs:
   build:
@@ -13,6 +12,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Import GPG key used for testing
+        id: import-gpg
+        uses: crazy-max/ghaction-import-gpg@v4
+        with:
+          gpg_private_key: ${{ secrets.TEST_GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.TEST_PASSPHRASE }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+          git_config_global: true
 
       - name: Setup Python
         uses: actions/setup-python@v2.3.1
@@ -50,3 +59,8 @@ jobs:
 
       - name: Build Python package
         run: poetry build
+
+      - name: Publish to PyPI
+        env:
+          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_API_TOKEN }}
+        run: poetry publish
