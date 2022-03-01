@@ -21,7 +21,7 @@ def copy_base_image_to_destination(sample_base_image_absolute_path, destination_
     )
 
 
-def given_a_diff_structure_with_renamed_gold_image_it_should_rename_base_images(
+def given_a_diff_structure_with_a_renamed_gold_image_it_should_rename_the_corresponding_base_image(
     sample_gold_image_absolute_path,
     sample_base_image_absolute_path,
     temp_git_dir,
@@ -69,3 +69,43 @@ def given_a_diff_structure_with_renamed_gold_image_it_should_rename_base_images(
     assert result.code == ResultCode.CONTINUE
     assert path.exists(f"{temp_git_dir}/data/000002/52/000002-52.600.2.tif")
     assert result.contains_text("successfully renamed to")
+
+
+def given_a_diff_structure_with_a_renamed_not_gold_image_it_should_not_rename_any_base_images(
+    sample_gold_image_absolute_path,
+    sample_base_image_absolute_path,
+    temp_git_dir,
+    temp_dvc_local_remote_storage_dir,
+    temp_gpg_home_dir,
+    git_user,
+):
+
+    dvc_diff_with_renamed_base_image = {
+        "added": [],
+        "deleted": [],
+        "modified": [],
+        "renamed": [
+            {
+                "path": {
+                    "old": "data/000001/52/000001-52.600.2.tif",
+                    "new": "data/000001/52/000002-52.600.2.tif",
+                }
+            },
+        ],
+    }
+
+    create_initial_state(
+        temp_git_dir,
+        temp_dvc_local_remote_storage_dir,
+        sample_gold_image_absolute_path,
+        temp_gpg_home_dir,
+        git_user,
+    )
+
+    result = rename_base_images(
+        compact_json(dvc_diff_with_renamed_base_image), temp_git_dir
+    )
+
+    assert result.code == ResultCode.CONTINUE
+    assert not path.exists(f"{temp_git_dir}/data/000002/52/000002-52.600.2.tif")
+    assert not result.contains_text("successfully renamed to")

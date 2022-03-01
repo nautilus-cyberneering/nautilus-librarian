@@ -8,7 +8,7 @@ class DvcDiffParser:
         self.added_list = None
         self.deleted_list = None
         self.modified_list = None
-        self.renamed_list = None
+
         self.parse()
 
     @staticmethod
@@ -68,24 +68,24 @@ class DvcDiffParser:
         exclude_renamed=False,
         only_basename=False,
     ):
-        files = []
+        all_files = []
 
         if not exclude_added:
-            files = files + self.added_list
+            all_files = all_files + self.added_list
 
         if not exclude_deleted:
-            files = files + self.deleted_list
+            all_files = all_files + self.deleted_list
 
         if not exclude_modified:
-            files = files + self.modified_list
+            all_files = all_files + self.modified_list
 
         if only_basename:
-            files = self.basenames_of(files)
+            all_files = self.basenames_of(all_files)
 
         if not exclude_renamed:
             if only_basename:
-                files = files + self.basenames_of_old_and_new(self.renamed_list)
+                all_files = all_files + self.basenames_of_old_and_new(self.renamed_list)
             else:
-                files = files + self.renamed_list
+                all_files = all_files + self.renamed_list
 
-        return files
+        return all_files

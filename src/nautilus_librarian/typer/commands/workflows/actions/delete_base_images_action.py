@@ -11,7 +11,7 @@ from nautilus_librarian.typer.commands.workflows.actions.action_result import (
 )
 
 
-def get_base_image_absolute_path(git_repo_dir, gold_image):
+def get_base_image_absolute_path_from_gold(git_repo_dir, gold_image):
     corresponding_base_image = gold_image.generate_base_image_filename()
     corresponding_base_image_relative_path = (
         file_locator(corresponding_base_image) + "/" + str(corresponding_base_image)
@@ -41,7 +41,9 @@ def delete_base_images(dvc_diff, git_repo_dir):
 
     for filename in filenames:
         gold_filename = Filename(filename)
-        base_filename = get_base_image_absolute_path(git_repo_dir, gold_filename)
+        base_filename = get_base_image_absolute_path_from_gold(
+            git_repo_dir, gold_filename
+        )
         if path.exists(f"{base_filename}.dvc"):
             remove_base_pointer_and_file_if_exists(base_filename, dvc_services)
             messages.append(

@@ -10,7 +10,13 @@ class FileNotFoundException(Exception):
 
 
 class BaseImageNotFoundError(FileNotFoundError):
-    """Raised when a base image does not exist"""
+    """Raised when a Base image does not exist"""
+
+    pass
+
+
+class ExpectedGoldImageError(Exception):
+    """Raised when a Gold image is expected"""
 
     pass
 
@@ -23,7 +29,10 @@ def get_base_image_filename_from_gold_image(gold_image: Filename) -> Filename:
     return gold_image.generate_base_image_filename()
 
 
-def get_base_image_absolute_path(git_repo_dir, gold_image):
+def get_base_image_absolute_path_from_gold(git_repo_dir, gold_image: Filename):
+    if not gold_image.is_gold_image:
+        raise ExpectedGoldImageError(f"Expected Gold image: {gold_image}")
+
     corresponding_base_image = gold_image.generate_base_image_filename()
     corresponding_base_image_relative_path = (
         file_locator(corresponding_base_image) + "/" + str(corresponding_base_image)

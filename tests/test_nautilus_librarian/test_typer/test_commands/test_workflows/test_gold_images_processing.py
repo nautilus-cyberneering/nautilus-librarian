@@ -124,7 +124,7 @@ def it_should_show_a_message_if_there_is_not_any_change_in_gold_images(
         },
     )
     assert result.exit_code == 0
-    assert "No Gold image changes found" in result.stdout
+    assert "No filenames to validate, empty DVC diff" in result.stdout
 
 
 def copy_media_file_to_its_folder(src_media_file_path, git_dir):
@@ -188,7 +188,7 @@ def test_gold_images_processing_workflow_command(
     ✓ data/000001/32/000001-32.600.2.tif pulled from dvc storage
     ✓ Dimensions of data/000001/32/000001-32.600.2.tif are 1740 x 1160
     ✓ Base image of data/000001/32/000001-32.600.2.tif successfully generated
-    No Gold image renames found
+    No Gold renamed images found
     No Gold image deletions found
     New Gold image found: 000001-32.600.2.tif -> Base image: data/000001/52/000001-52.600.2.tif ✓
     """

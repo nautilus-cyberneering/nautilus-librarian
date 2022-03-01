@@ -34,7 +34,7 @@ def given_a_diff_structure_with_changes_it_should_return_an_continue_result_code
     dvc_diff_with_added_gold_image = {
         "added": [],
         "deleted": [
-            {"path": "path/to/image"},
+            {"path": "data/000001/52/000001-52.600.2.tif"},
         ],
         "modified": [],
         "renamed": [],

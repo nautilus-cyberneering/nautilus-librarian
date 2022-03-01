@@ -1,7 +1,15 @@
 from nautilus_librarian.mods.dvc.domain.dvc_diff_parser import DvcDiffParser
+from nautilus_librarian.mods.namecodes.domain.filename_filters import (
+    filter_media_library_files,
+)
+from nautilus_librarian.mods.namecodes.domain.validate_filenames import (
+    is_a_library_file,
+)
+
+# TODO: move this file to app domain. DVC mod should be generic.
 
 
-def extract_added_and_modified_and_renamed_files_from_dvc_diff(
+def extract_all_added_and_modified_and_renamed_files_from_dvc_diff(
     dvc_diff_json, only_basename=True
 ):
     """
@@ -16,7 +24,18 @@ def extract_added_and_modified_and_renamed_files_from_dvc_diff(
     Output: ['data/000001/32/000001-32.600.2.tif']
     """
     dvc_diff = DvcDiffParser.from_json(dvc_diff_json)
-    return dvc_diff.filter(exclude_deleted=True, only_basename=only_basename)
+    all_files = dvc_diff.filter(exclude_deleted=True, only_basename=only_basename)
+    return all_files
+
+
+def extract_added_and_modified_and_renamed_files_from_dvc_diff(
+    dvc_diff_json, only_basename=True
+):
+    all_files = extract_all_added_and_modified_and_renamed_files_from_dvc_diff(
+        dvc_diff_json, only_basename
+    )
+    files = filter_media_library_files(all_files)
+    return files
 
 
 def extract_all_changed_files_from_dvc_diff(dvc_diff_json, only_basename=True):
@@ -32,7 +51,9 @@ def extract_all_changed_files_from_dvc_diff(dvc_diff_json, only_basename=True):
     Output: ['data/000001/32/000001-32.600.2.tif']
     """
     dvc_diff = DvcDiffParser.from_json(dvc_diff_json)
-    return dvc_diff.filter(only_basename=only_basename)
+    all_files = dvc_diff.filter(only_basename=only_basename)
+    files = filter_media_library_files(all_files)
+    return files
 
 
 def extract_deleted_files_from_dvc_diff(dvc_diff_json, only_basename=True):
@@ -48,13 +69,15 @@ def extract_deleted_files_from_dvc_diff(dvc_diff_json, only_basename=True):
     Output: ['data/000001/32/000001-32.600.2.tif']
     """
     dvc_diff = DvcDiffParser.from_json(dvc_diff_json)
-    return dvc_diff.filter(
+    all_files = dvc_diff.filter(
         exclude_added=True,
         exclude_modified=True,
         exclude_deleted=False,
         exclude_renamed=True,
         only_basename=only_basename,
     )
+    files = filter_media_library_files(all_files)
+    return files
 
 
 def extract_added_and_modified_files_from_dvc_diff(dvc_diff_json, only_basename=True):
@@ -70,9 +93,11 @@ def extract_added_and_modified_files_from_dvc_diff(dvc_diff_json, only_basename=
     Output: ['data/000001/32/000001-32.600.2.tif']
     """
     dvc_diff = DvcDiffParser.from_json(dvc_diff_json)
-    return dvc_diff.filter(
+    all_files = dvc_diff.filter(
         exclude_deleted=True, exclude_renamed=True, only_basename=only_basename
     )
+    files = filter_media_library_files(all_files)
+    return files
 
 
 def extract_modified_files_from_dvc_diff(dvc_diff_json, only_basename=True):
@@ -88,12 +113,14 @@ def extract_modified_files_from_dvc_diff(dvc_diff_json, only_basename=True):
     Output: ['data/000001/32/000001-32.600.2.tif']
     """
     dvc_diff = DvcDiffParser.from_json(dvc_diff_json)
-    return dvc_diff.filter(
+    all_files = dvc_diff.filter(
         exclude_added=True,
         exclude_deleted=True,
         exclude_renamed=True,
         only_basename=only_basename,
     )
+    files = filter_media_library_files(all_files)
+    return files
 
 
 def extract_renamed_files_from_dvc_diff(dvc_diff_json, only_basename=True):
@@ -125,13 +152,18 @@ def extract_renamed_files_from_dvc_diff(dvc_diff_json, only_basename=True):
     ]
     """
     dvc_diff = DvcDiffParser.from_json(dvc_diff_json)
-    return dvc_diff.filter(
+    all_files = dvc_diff.filter(
         exclude_added=True,
         exclude_modified=True,
         exclude_deleted=True,
         exclude_renamed=False,
         only_basename=only_basename,
     )
+
+    media_files = list(
+        filter(lambda filename: is_a_library_file(filename["new"]), all_files)
+    )
+    return media_files
 
 
 def extract_list_of_media_file_changes_from_dvc_diff_output(
