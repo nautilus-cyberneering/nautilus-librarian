@@ -32,7 +32,7 @@ def test_extract_added_files_from_dvc_diff():
     dvc_diff = {
         "added": [
             {"path": "data/000001/32/000001-32.600.2.tif"},
-            {"path": "data/000001/42/000001-42.600.2.tif"},
+            {"path": "data/000001/52/000001-52.600.2.tif"},
         ],
         "deleted": [],
         "modified": [],
@@ -43,7 +43,7 @@ def test_extract_added_files_from_dvc_diff():
 
     assert result == [
         "data/000001/32/000001-32.600.2.tif",
-        "data/000001/42/000001-42.600.2.tif",
+        "data/000001/52/000001-52.600.2.tif",
     ]
 
 
@@ -54,7 +54,7 @@ def test_modified_files_from_dvc_diff():
         "deleted": [],
         "modified": [
             {"path": "data/000001/32/000001-32.600.2.tif"},
-            {"path": "data/000001/42/000001-42.600.2.tif"},
+            {"path": "data/000001/52/000001-52.600.2.tif"},
         ],
         "renamed": [],
     }
@@ -63,7 +63,7 @@ def test_modified_files_from_dvc_diff():
 
     assert result == [
         "000001-32.600.2.tif",
-        "000001-42.600.2.tif",
+        "000001-52.600.2.tif",
     ]
 
 
@@ -72,7 +72,7 @@ def test_extract_deleted_files_from_dvc_diff():
     dvc_diff = {
         "deleted": [
             {"path": "data/000001/32/000001-32.600.2.tif"},
-            {"path": "data/000001/42/000001-42.600.2.tif"},
+            {"path": "data/000001/52/000001-52.600.2.tif"},
         ],
         "added": [],
         "modified": [],
@@ -85,7 +85,7 @@ def test_extract_deleted_files_from_dvc_diff():
 
     assert result == [
         "data/000001/32/000001-32.600.2.tif",
-        "data/000001/42/000001-42.600.2.tif",
+        "data/000001/52/000001-52.600.2.tif",
     ]
 
 

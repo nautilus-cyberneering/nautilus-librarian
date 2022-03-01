@@ -14,10 +14,10 @@ from nautilus_librarian.typer.commands.workflows.actions.rename_base_images_acti
 
 
 def copy_base_image_to_destination(sample_base_image_absolute_path, destination_dir):
-    makedirs(f"{destination_dir}/data/000001/42/", exist_ok=True)
+    makedirs(f"{destination_dir}/data/000001/52/", exist_ok=True)
     copy(
         sample_base_image_absolute_path,
-        f"{destination_dir}/data/000001/42/000001-42.600.2.tif",
+        f"{destination_dir}/data/000001/52/000001-52.600.2.tif",
     )
 
 
@@ -56,7 +56,7 @@ def given_a_diff_structure_with_renamed_gold_image_it_should_rename_base_images(
     execute_shell_command(
         """
         ls -la
-        dvc add data/000001/42/000001-42.600.2.tif
+        dvc add data/000001/52/000001-52.600.2.tif
     """,
         cwd=temp_git_dir,
     )
@@ -67,5 +67,5 @@ def given_a_diff_structure_with_renamed_gold_image_it_should_rename_base_images(
 
     print(f"{result.messages[0]}")
     assert result.code == ResultCode.CONTINUE
-    assert path.exists(f"{temp_git_dir}/data/000002/42/000002-42.600.2.tif")
+    assert path.exists(f"{temp_git_dir}/data/000002/52/000002-52.600.2.tif")
     assert result.contains_text("successfully renamed to")

@@ -116,9 +116,9 @@ def test_files_to_commit(temp_dvc_dir_with_librarian_test_content):
 
     api = DvcServicesApi(temp_dvc_dir_with_librarian_test_content)
 
-    filepaths = api.get_files_to_commit("data/000001/42/000001-42.600.2.tif")
+    filepaths = api.get_files_to_commit("data/000001/52/000001-52.600.2.tif")
 
     assert filepaths == [
-        "data/000001/42/.gitignore",
-        "data/000001/42/000001-42.600.2.tif.dvc",
+        "data/000001/52/.gitignore",
+        "data/000001/52/000001-52.600.2.tif.dvc",
     ]

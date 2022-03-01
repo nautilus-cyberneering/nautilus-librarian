@@ -125,11 +125,11 @@ class DvcApiWrapper:
 
         For example:
 
-        For the Base image "data/000001/42/000001-42.600.2.tif", these are
+        For the Base image "data/000001/52/000001-52.600.2.tif", these are
         the files tracked on the git repo:
 
-        - data/000001/42/.gitignore
-        - data/000001/42/000001-42.600.2.tif.dvc
+        - data/000001/52/.gitignore
+        - data/000001/52/000001-52.600.2.tif.dvc
         """
         base_img_dir = os.path.dirname(base_img_relative_path)
 

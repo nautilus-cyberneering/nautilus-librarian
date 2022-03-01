@@ -52,17 +52,17 @@ def given_a_diff_structure_with_added_gold_image_it_should_generate_base_image(
     )
 
     # Assert Base image was created
-    assert os.path.isfile(f"{temp_git_dir}/data/000001/42/000001-42.600.2.tif")
+    assert os.path.isfile(f"{temp_git_dir}/data/000001/52/000001-52.600.2.tif")
 
     # DVC Asserts
 
     # Assert dvc files were created
-    assert os.path.isfile(f"{temp_git_dir}/data/000001/42/000001-42.600.2.tif.dvc")
-    assert os.path.isfile(f"{temp_git_dir}/data/000001/42/.gitignore")
+    assert os.path.isfile(f"{temp_git_dir}/data/000001/52/000001-52.600.2.tif.dvc")
+    assert os.path.isfile(f"{temp_git_dir}/data/000001/52/.gitignore")
 
     # Assert Base image was pushed to local "remote" storage
     dvc_status_output_json = dvc(temp_git_dir).status_remote("localremote")
-    expected_status_new = {"data/000001/42/000001-42.600.2.tif": "new"}
+    expected_status_new = {"data/000001/52/000001-52.600.2.tif": "new"}
     expected_status_empty = {}
     assert (
         expected_status_new == dvc_status_output_json

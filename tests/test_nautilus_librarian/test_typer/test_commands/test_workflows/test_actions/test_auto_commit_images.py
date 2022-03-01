@@ -23,7 +23,7 @@ def test_get_new_gold_images_from_dvc_diff():
     dvc_diff = {
         "added": [
             {"path": "data/000001/32/000001-32.600.2.tif"},
-            {"path": "data/000001/42/000001-42.600.2.tif"},
+            {"path": "data/000001/52/000001-52.600.2.tif"},
         ],
         "deleted": [],
         "modified": [],
@@ -44,28 +44,28 @@ def test_calculate_the_corresponding_base_image_from_gold_image():
     )
 
     assert base_image_path == (
-        "data/000001/42/000001-42.600.2.tif",  # relative path
-        "/home/repo/data/000001/42/000001-42.600.2.tif",  # absolute path
+        "data/000001/52/000001-52.600.2.tif",  # relative path
+        "/home/repo/data/000001/52/000001-52.600.2.tif",  # absolute path
     )
 
 
 def remove_base_image_dvc_files(temp_git_dir):
-    os.remove(f"{temp_git_dir}/data/000001/42/000001-42.600.2.tif.dvc")
-    os.remove(f"{temp_git_dir}/data/000001/42/.gitignore")
+    os.remove(f"{temp_git_dir}/data/000001/52/000001-52.600.2.tif.dvc")
+    os.remove(f"{temp_git_dir}/data/000001/52/.gitignore")
 
 
 def overwrite_base_image(fixtures_dir, temp_git_dir):
     shutil.copyfile(
-        f"{fixtures_dir}/images/000001-42.600.2-modified.tif",
-        f"{temp_git_dir}/data/000001/42/000001-42.600.2.tif",
+        f"{fixtures_dir}/images/000001-52.600.2-modified.tif",
+        f"{temp_git_dir}/data/000001/52/000001-52.600.2.tif",
     )
 
 
 def rename_base_image(temp_git_dir):
     execute_shell_command(
         """
-        mkdir -p data/000002/42
-        dvc move data/000001/42/000001-42.600.2.tif data/000002/42/000002-42.600.2.tif
+        mkdir -p data/000002/52
+        dvc move data/000001/52/000001-52.600.2.tif data/000002/52/000002-52.600.2.tif
     """,
         cwd=temp_git_dir,
         print_output=True,
@@ -75,7 +75,7 @@ def rename_base_image(temp_git_dir):
 def add_base_image_to_dvc(temp_git_dir):
     execute_shell_command(
         """
-        dvc add data/000001/42/000001-42.600.2.tif
+        dvc add data/000001/52/000001-52.600.2.tif
     """,
         cwd=temp_git_dir,
         print_output=True,
@@ -145,12 +145,12 @@ def given_a_dvc_diff_object_with_a_new_gold_image_it_should_commit_the_added_bas
     repo = Repo(temp_git_dir)
     commit = repo.commit(repo.heads[0].commit)  # latest commit on the branch
 
-    assert_commit_summary(commit, "feat: new base image: 000001-42.600.2.tif")
+    assert_commit_summary(commit, "feat: new base image: 000001-52.600.2.tif")
 
     # Assert the commit contains the right files
     expected_commit_stats_files = {
-        "data/000001/42/.gitignore": {"insertions": 1, "deletions": 0, "lines": 1},
-        "data/000001/42/000001-42.600.2.tif.dvc": {
+        "data/000001/52/.gitignore": {"insertions": 1, "deletions": 0, "lines": 1},
+        "data/000001/52/000001-52.600.2.tif.dvc": {
             "insertions": 4,
             "deletions": 0,
             "lines": 4,
@@ -201,11 +201,11 @@ def given_a_dvc_diff_object_with_a_gold_image_deleton_it_should_commit_the_base_
     repo = Repo(temp_git_dir)
     commit = repo.commit(repo.heads[0].commit)  # latest commit on the branch
 
-    assert_commit_summary(commit, "feat: deleted base image: 000001-42.600.2.tif")
+    assert_commit_summary(commit, "feat: deleted base image: 000001-52.600.2.tif")
 
     expected_commit_stats_files = {
-        "data/000001/42/.gitignore": {"insertions": 0, "deletions": 1, "lines": 1},
-        "data/000001/42/000001-42.600.2.tif.dvc": {
+        "data/000001/52/.gitignore": {"insertions": 0, "deletions": 1, "lines": 1},
+        "data/000001/52/000001-52.600.2.tif.dvc": {
             "insertions": 0,
             "deletions": 4,
             "lines": 4,
@@ -257,16 +257,16 @@ def given_a_dvc_diff_object_with_a_gold_image_rename_it_should_commit_the_base_i
     commit = repo.commit(repo.heads[0].commit)
 
     expected_commit_stats_files = {
-        "data/000001/42/.gitignore": {"insertions": 0, "deletions": 1, "lines": 1},
-        "data/000002/42/.gitignore": {"insertions": 3, "deletions": 0, "lines": 3},
-        "data/{000001/42/000001-42.600.2.tif.dvc => 000002/42/000002-42.600.2.tif.dvc}": {
+        "data/000001/52/.gitignore": {"insertions": 0, "deletions": 1, "lines": 1},
+        "data/000002/52/.gitignore": {"insertions": 3, "deletions": 0, "lines": 3},
+        "data/{000001/52/000001-52.600.2.tif.dvc => 000002/52/000002-52.600.2.tif.dvc}": {
             "insertions": 1,
             "deletions": 1,
             "lines": 2,
         },
     }
     assert_commit_summary(
-        commit, "feat: renamed base image: 000001-42.600.2.tif -> 000002-42.600.2.tif"
+        commit, "feat: renamed base image: 000001-52.600.2.tif -> 000002-52.600.2.tif"
     )
     assert_commit_content(commit, expected_commit_stats_files, git_user)
     assert_commit_signingkey(commit, temp_git_dir, git_user)
@@ -309,10 +309,10 @@ def given_a_dvc_diff_object_with_a_gold_image_modification_it_should_commit_the_
 
     commit = repo.commit(repo.heads[0].commit)
 
-    assert_commit_summary(commit, "feat: modified base image: 000001-42.600.2.tif")
+    assert_commit_summary(commit, "feat: modified base image: 000001-52.600.2.tif")
 
     expected_commit_stats_files = {
-        "data/000001/42/000001-42.600.2.tif.dvc": {
+        "data/000001/52/000001-52.600.2.tif.dvc": {
             "insertions": 2,
             "deletions": 2,
             "lines": 4,

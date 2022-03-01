@@ -22,7 +22,7 @@ def test_invalid_artwork_id(filename):
         validate_filename(filename)
 
 
-@pytest.mark.parametrize("filename", [("000001-32.600.2.tif"), ("000001-42.600.2.tif")])
+@pytest.mark.parametrize("filename", [("000001-32.600.2.tif"), ("000001-52.600.2.tif")])
 def test_valid_purpose_code(filename):
     validate_filename(filename)
 
