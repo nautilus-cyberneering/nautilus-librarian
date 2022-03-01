@@ -52,7 +52,7 @@ def given_a_diff_structure_and_size_limits_it_should_validate_modified_image_dim
     )
 
 
-def given_a_diff_structure_and_size_limits_it_should_validate_renamed_image_dimensions(
+def given_a_diff_structure_and_size_limits_it_should_not_validate_renamed_image_dimensions(
     sample_gold_image_absolute_path,
 ):
 
@@ -70,7 +70,7 @@ def given_a_diff_structure_and_size_limits_it_should_validate_renamed_image_dime
     )
 
     assert result.code == ResultCode.CONTINUE
-    assert result.contains_text(
+    assert not result.contains_text(
         "✓ Dimensions of " + sample_gold_image_absolute_path + " are 1740 x 1160"
     )
 
