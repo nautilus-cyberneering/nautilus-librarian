@@ -1,5 +1,5 @@
 from nautilus_librarian.mods.dvc.domain.utils import (
-    extract_list_of_media_file_changes_from_dvc_diff_output,
+    extract_added_and_modified_files_from_dvc_diff,
     get_new_filepath_if_is_a_renaming_dict,
 )
 from nautilus_librarian.mods.libvips.domain.validate_image_dimensions import (
@@ -22,7 +22,7 @@ def validate_images_dimensions(dvc_diff, min_image_size, max_image_size):
             ResultCode.CONTINUE, [Message("No Gold image changes found")]
         )
 
-    filenames = extract_list_of_media_file_changes_from_dvc_diff_output(
+    filenames = extract_added_and_modified_files_from_dvc_diff(
         dvc_diff, only_basename=False
     )
 
