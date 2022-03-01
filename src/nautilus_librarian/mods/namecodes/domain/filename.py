@@ -6,9 +6,9 @@ class PurposeCode(Enum):
     GOLD_INDEX = 30
     GOLD_METADATA = 31
     GOLD_IMAGE = 32
-    BASE_INDEX = 40
-    BASE_METADATA = 41
-    BASE_IMAGE = 42
+    BASE_INDEX = 50
+    BASE_METADATA = 51
+    BASE_IMAGE = 52
 
     def __str__(self):
         return "%s" % self.value

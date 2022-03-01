@@ -22,7 +22,7 @@ def validate_filename_command(filename: str):
 
     More information about the specification on: https://github.com/da2ce7/nautilus-namecodes.
 
-    Filename examples: 000000-32.600.2.tif, 000001-42.600.2.tif.
+    Filename examples: 000000-32.600.2.tif, 000001-52.600.2.tif.
 
     EXAMPLES:
 

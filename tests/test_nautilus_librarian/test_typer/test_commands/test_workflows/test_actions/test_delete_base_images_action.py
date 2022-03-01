@@ -48,17 +48,17 @@ def given_a_diff_structure_with_deleted_gold_image_it_should_delete_base_images(
     execute_shell_command(
         """
         ls -la
-        dvc add data/000001/42/000001-42.600.2.tif
+        dvc add data/000001/52/000001-52.600.2.tif
     """,
         cwd=temp_git_dir,
     )
 
-    assert path.exists(f"{temp_git_dir}/data/000001/42/000001-42.600.2.tif.dvc")
+    assert path.exists(f"{temp_git_dir}/data/000001/52/000001-52.600.2.tif.dvc")
 
     result = delete_base_images(
         compact_json(dvc_diff_with_added_gold_image), temp_git_dir
     )
 
     assert result.code == ResultCode.CONTINUE
-    assert not path.exists(f"{temp_git_dir}/data/000001/42/000001-42.600.2.tif.dvc")
+    assert not path.exists(f"{temp_git_dir}/data/000001/52/000001-52.600.2.tif.dvc")
     assert result.contains_text("successfully deleted")

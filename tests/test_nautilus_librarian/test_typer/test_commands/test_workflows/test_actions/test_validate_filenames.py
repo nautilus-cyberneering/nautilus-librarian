@@ -78,5 +78,5 @@ def given_a_wrong_media_filename_it_should_show_an_error():
     assert result.code == ResultCode.ABORT
 
     assert result.contains_text(
-        "000001-9999999.600.2.tif ✗ Wrong purpose code. Purpose code should be: 32 or 42"
+        "000001-9999999.600.2.tif ✗ Wrong purpose code. Purpose code should be: 32 (Gold) or 52 (Base)"
     )

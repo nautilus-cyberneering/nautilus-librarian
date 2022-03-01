@@ -62,7 +62,7 @@ def test_filter_gold_images_from_file_list():
 
     original_file_list = [
         "data/000001/32/000001-32.600.2.tif",
-        "data/000001/42/000001-42.600.2.tif",
+        "data/000001/52/000001-52.600.2.tif",
     ]
 
     filtered_file_list = filter_gold_images(original_file_list)
@@ -76,11 +76,11 @@ def test_filter_base_images_from_file_list():
 
     original_file_list = [
         "data/000001/32/000001-32.600.2.tif",
-        "data/000001/42/000001-42.600.2.tif",
+        "data/000001/52/000001-52.600.2.tif",
     ]
 
     filtered_file_list = filter_base_images(original_file_list)
 
-    expected_file_list = ["data/000001/42/000001-42.600.2.tif"]
+    expected_file_list = ["data/000001/52/000001-52.600.2.tif"]
 
     assert filtered_file_list == expected_file_list

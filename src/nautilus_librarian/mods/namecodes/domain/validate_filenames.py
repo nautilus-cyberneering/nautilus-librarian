@@ -28,10 +28,12 @@ def validate_artwork_id(artwork_id):
 def validate_purpose_code(purpose_code):
     if purpose_code == "":
         raise FilenameException(
-            "Missing purpose code. Purpose code should be: 32 or 42"
+            "Missing purpose code. Purpose code should be: 32 (Gold) or 52 (Base)"
         )
-    if int(purpose_code) not in [32, 42]:
-        raise FilenameException("Wrong purpose code. Purpose code should be: 32 or 42")
+    if int(purpose_code) not in [32, 52]:
+        raise FilenameException(
+            "Wrong purpose code. Purpose code should be: 32 (Gold) or 52 (Base)"
+        )
 
 
 def validate_transformation_code(transformation_code):

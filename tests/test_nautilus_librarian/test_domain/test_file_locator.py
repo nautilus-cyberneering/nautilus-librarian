@@ -14,11 +14,11 @@ def test_gold_image_localization():
 
 
 def test_base_image_localization():
-    gold_image_filename = Filename("000001-42.600.2.tif")
+    gold_image_filename = Filename("000001-52.600.2.tif")
 
     folder = file_locator(gold_image_filename)
 
-    assert folder == "data/000001/42"
+    assert folder == "data/000001/52"
 
 
 def it_should_return_the_corresponding_base_image_filename_from_the_gold_image():
@@ -26,4 +26,4 @@ def it_should_return_the_corresponding_base_image_filename_from_the_gold_image()
 
     base_image_filename = get_base_image_filename_from_gold_image(gold_image_filename)
 
-    assert base_image_filename == Filename("000001-42.600.2.tif")
+    assert base_image_filename == Filename("000001-52.600.2.tif")
