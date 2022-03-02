@@ -23,7 +23,7 @@ def given_a_dvc_diff_object_it_should_validate_the_filepath_of_the_new_media_fil
     assert result.contains_text("000001-32.600.2.tif ✓")
 
 
-def given_a_dvc_diff_object_it_should_validate_the_filepath_of_the_modified_media_files():
+def given_a_dvc_diff_object_it_should_not_validate_the_filepath_of_the_modified_media_files():
 
     dvc_diff_with_modified_image = {
         "added": [],
@@ -37,7 +37,7 @@ def given_a_dvc_diff_object_it_should_validate_the_filepath_of_the_modified_medi
     result = validate_filepaths_action(compact_json(dvc_diff_with_modified_image))
 
     assert result.code == ResultCode.CONTINUE
-    assert result.contains_text("000002-32.600.2.tif ✓")
+    assert not result.contains_text("000002-32.600.2.tif ✓")
 
 
 def given_a_dvc_diff_object_it_should_validate_the_filepath_of_the_renamed_media_files():
@@ -47,14 +47,20 @@ def given_a_dvc_diff_object_it_should_validate_the_filepath_of_the_renamed_media
         "deleted": [],
         "modified": [],
         "renamed": [
-            {"path": "data/000003/32/000003-32.600.2.tif"},
+            {
+                "path": {
+                    "old": "data/000001/32/000001-32.600.2.tif",
+                    "new": "data/000002/32/000002-32.600.2.tif",
+                }
+            }
         ],
     }
 
     result = validate_filepaths_action(compact_json(dvc_diff_with_renamed_image))
 
     assert result.code == ResultCode.CONTINUE
-    assert result.contains_text("000003-32.600.2.tif ✓")
+    assert result.contains_text("000002-32.600.2.tif ✓")
+    assert not result.contains_text("000001-32.600.2.tif ✓")
 
 
 def given_a_wrong_media_filepath_it_should_show_an_error():
