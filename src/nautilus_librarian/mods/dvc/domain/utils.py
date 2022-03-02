@@ -28,16 +28,6 @@ def extract_all_added_and_modified_and_renamed_files_from_dvc_diff(
     return all_files
 
 
-def extract_added_and_modified_and_renamed_files_from_dvc_diff(
-    dvc_diff_json, only_basename=True
-):
-    all_files = extract_all_added_and_modified_and_renamed_files_from_dvc_diff(
-        dvc_diff_json, only_basename
-    )
-    files = filter_media_library_files(all_files)
-    return files
-
-
 def extract_all_changed_files_from_dvc_diff(dvc_diff_json, only_basename=True):
     """
     It gets a plain string list with the added, modified, deleted or renamed files from the dvc diff json.
@@ -166,12 +156,39 @@ def extract_renamed_files_from_dvc_diff(dvc_diff_json, only_basename=True):
     return media_files
 
 
-def extract_list_of_media_file_changes_from_dvc_diff_output(
-    dvc_diff, only_basename=True
-):
-    return extract_added_and_modified_and_renamed_files_from_dvc_diff(
-        dvc_diff, only_basename
+def extract_list_of_new_or_renamed_files_from_dvc_diff_output(dvc_diff_json):
+    dvc_diff = DvcDiffParser.from_json(dvc_diff_json)
+
+    added_files = dvc_diff.filter(
+        exclude_added=False,
+        exclude_modified=True,
+        exclude_deleted=True,
+        exclude_renamed=True,
+        only_basename=False,
     )
+
+    renamed_files = dvc_diff.filter(
+        exclude_added=True,
+        exclude_modified=True,
+        exclude_deleted=True,
+        exclude_renamed=False,
+        only_basename=False,
+    )
+
+    # Renamed files are not plain filename list. They are a dict like this:
+    # {
+    #     "new": "000002-32.600.2.tif",
+    #     "old": "000001-32.600.2.tif",
+    # }
+    # That means the image was renamed from "000001-32.600.2.tif" to "000002-32.600.2.tif"
+
+    flat_renamed_files = map(lambda file: file["new"], renamed_files)
+
+    all_files = added_files + list(flat_renamed_files)
+
+    files = filter_media_library_files(all_files)
+
+    return files
 
 
 def extract_added_files_from_dvc_diff(dvc_diff_json):
