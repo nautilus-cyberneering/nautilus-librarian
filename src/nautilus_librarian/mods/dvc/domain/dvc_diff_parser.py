@@ -8,6 +8,7 @@ class DvcDiffParser:
         self.added_list = None
         self.deleted_list = None
         self.modified_list = None
+        self.renamed_list = None
 
         self.parse()
 
