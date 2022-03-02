@@ -93,7 +93,7 @@ def gold_images_processing(
 
     This workflow process new or updated Gold images in a pull request:
 
-    1. Get new or modified Gold images using dvc diff (TODO).
+    1. Get new or modified Gold images using dvc diff.
 
     2. Pull images from dvc remote storage.
 
@@ -101,14 +101,14 @@ def gold_images_processing(
 
     4. Validate filepaths.
 
-    5. Validate image size (TODO).
+    5. Validate image size.
 
-    6. Generate Base image from Gold (change size and icc profile) (TODO).
+    6. Generate Base image from Gold (change size and icc profile).
 
     7. Auto-commit new Base images.
 
     Example:
-        poetry run nautilus-librarian gold-images-processing /path/to/repo '{"added":[{"path":"data/000001/32/000001-32.600.2.tif"}],"deleted":[],"modified":[],"renamed":[]}' # noqa
+        poetry run nautilus-librarian gold-images-processing ... # noqa
     """
 
     git_user = GitUser(git_user_name, git_user_email, git_user_signingkey)
