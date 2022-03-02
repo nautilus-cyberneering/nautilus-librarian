@@ -6,7 +6,16 @@ from nautilus_librarian.typer.commands.workflows.actions.check_images_changes im
 )
 
 
-def given_a_diff_structure_with_no_changes_it_should_return_an_exit_result_code():
+def given_an_empty_dvc_diff_it_should_exit():
+
+    dvc_diff_with_added_gold_image = {}
+
+    result = check_images_changes(compact_json(dvc_diff_with_added_gold_image))
+
+    assert result.code == ResultCode.EXIT
+
+
+def given_a_diff_structure_with_no_changes_it_should_exit():
 
     dvc_diff_with_added_gold_image = {
         "added": [],
@@ -20,16 +29,23 @@ def given_a_diff_structure_with_no_changes_it_should_return_an_exit_result_code(
     assert result.code == ResultCode.EXIT
 
 
-def given_an_empty_structure_it_should_return_an_exit_result_code():
+def given_a_diff_structure_with_added_files_it_should_continue():
 
-    dvc_diff_with_added_gold_image = {}
+    dvc_diff_with_added_gold_image = {
+        "added": [
+            {"path": "data/000001/52/000001-52.600.2.tif"},
+        ],
+        "deleted": [],
+        "modified": [],
+        "renamed": [],
+    }
 
     result = check_images_changes(compact_json(dvc_diff_with_added_gold_image))
 
-    assert result.code == ResultCode.EXIT
+    assert result.code == ResultCode.CONTINUE
 
 
-def given_a_diff_structure_with_changes_it_should_return_an_continue_result_code():
+def given_a_diff_structure_with_deleted_files_it_should_continue():
 
     dvc_diff_with_added_gold_image = {
         "added": [],
@@ -38,6 +54,43 @@ def given_a_diff_structure_with_changes_it_should_return_an_continue_result_code
         ],
         "modified": [],
         "renamed": [],
+    }
+
+    result = check_images_changes(compact_json(dvc_diff_with_added_gold_image))
+
+    assert result.code == ResultCode.CONTINUE
+
+
+def given_a_diff_structure_with_modified_files_it_should_continue():
+
+    dvc_diff_with_added_gold_image = {
+        "added": [],
+        "deleted": [],
+        "modified": [
+            {"path": "data/000001/52/000001-52.600.2.tif"},
+        ],
+        "renamed": [],
+    }
+
+    result = check_images_changes(compact_json(dvc_diff_with_added_gold_image))
+
+    assert result.code == ResultCode.CONTINUE
+
+
+def given_a_diff_structure_with_renamed_files_it_should_continue():
+
+    dvc_diff_with_added_gold_image = {
+        "added": [],
+        "deleted": [],
+        "modified": [],
+        "renamed": [
+            {
+                "path": {
+                    "old": "data/000001/32/000001-32.600.2.tif",
+                    "new": "data/000002/32/000002-32.600.2.tif",
+                }
+            }
+        ],
     }
 
     result = check_images_changes(compact_json(dvc_diff_with_added_gold_image))

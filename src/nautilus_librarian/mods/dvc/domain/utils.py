@@ -41,8 +41,20 @@ def extract_all_changed_files_from_dvc_diff(dvc_diff_json, only_basename=True):
     Output: ['data/000001/32/000001-32.600.2.tif']
     """
     dvc_diff = DvcDiffParser.from_json(dvc_diff_json)
-    all_files = dvc_diff.filter(only_basename=only_basename)
+    all_files_except_renamed = dvc_diff.filter(
+        exclude_added=False,
+        exclude_modified=False,
+        exclude_deleted=False,
+        exclude_renamed=True,
+        only_basename=only_basename,
+    )
+
+    flat_renamed_files = extract_flat_list_of_renamed_files(dvc_diff_json)
+
+    all_files = all_files_except_renamed + flat_renamed_files
+
     files = filter_media_library_files(all_files)
+
     return files
 
 
@@ -153,19 +165,12 @@ def extract_renamed_files_from_dvc_diff(dvc_diff_json, only_basename=True):
     media_files = list(
         filter(lambda filename: is_a_library_file(filename["new"]), all_files)
     )
+
     return media_files
 
 
-def extract_list_of_new_or_renamed_files_from_dvc_diff_output(dvc_diff_json):
+def extract_flat_list_of_renamed_files(dvc_diff_json):
     dvc_diff = DvcDiffParser.from_json(dvc_diff_json)
-
-    added_files = dvc_diff.filter(
-        exclude_added=False,
-        exclude_modified=True,
-        exclude_deleted=True,
-        exclude_renamed=True,
-        only_basename=False,
-    )
 
     renamed_files = dvc_diff.filter(
         exclude_added=True,
@@ -183,6 +188,22 @@ def extract_list_of_new_or_renamed_files_from_dvc_diff_output(dvc_diff_json):
     # That means the image was renamed from "000001-32.600.2.tif" to "000002-32.600.2.tif"
 
     flat_renamed_files = map(lambda file: file["new"], renamed_files)
+
+    return list(flat_renamed_files)
+
+
+def extract_list_of_new_or_renamed_files_from_dvc_diff_output(dvc_diff_json):
+    dvc_diff = DvcDiffParser.from_json(dvc_diff_json)
+
+    added_files = dvc_diff.filter(
+        exclude_added=False,
+        exclude_modified=True,
+        exclude_deleted=True,
+        exclude_renamed=True,
+        only_basename=False,
+    )
+
+    flat_renamed_files = extract_flat_list_of_renamed_files(dvc_diff_json)
 
     all_files = added_files + list(flat_renamed_files)
 
