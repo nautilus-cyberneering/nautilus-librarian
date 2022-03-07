@@ -1,8 +1,8 @@
-from nautilus_librarian.domain.dvc_services_api import DvcServicesApi
-from nautilus_librarian.domain.file_locator import file_locator
-from nautilus_librarian.mods.dvc.domain.utils import (
+from nautilus_librarian.domain.dvc_diff_parser import (
     extract_added_and_modified_files_from_dvc_diff,
 )
+from nautilus_librarian.domain.dvc_services_api import DvcServicesApi
+from nautilus_librarian.domain.file_locator import file_locator
 from nautilus_librarian.mods.libvips.domain.process_image import process_image
 from nautilus_librarian.mods.namecodes.domain.filename import Filename
 from nautilus_librarian.typer.commands.workflows.actions.action_result import (

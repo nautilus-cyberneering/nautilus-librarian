@@ -1,5 +1,7 @@
-from nautilus_librarian.mods.dvc.domain.utils import (
+from nautilus_librarian.domain.dvc_diff_parser import (
     extract_added_and_modified_files_from_dvc_diff,
+)
+from nautilus_librarian.mods.dvc.domain.utils import (
     get_new_filepath_if_is_a_renaming_dict,
 )
 from nautilus_librarian.mods.libvips.domain.validate_image_dimensions import (

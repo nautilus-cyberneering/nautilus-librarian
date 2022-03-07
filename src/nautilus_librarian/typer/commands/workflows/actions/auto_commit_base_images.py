@@ -1,17 +1,17 @@
 import os
 from typing import List
 
+from nautilus_librarian.domain.dvc_diff_parser import (
+    extract_deleted_files_from_dvc_diff,
+    extract_modified_files_from_dvc_diff,
+    extract_renamed_files_from_dvc_diff,
+)
 from nautilus_librarian.domain.dvc_services_api import DvcServicesApi
 from nautilus_librarian.domain.file_locator import (
     file_locator,
     guard_that_base_image_exists,
 )
-from nautilus_librarian.mods.dvc.domain.utils import (
-    extract_added_files_from_dvc_diff,
-    extract_deleted_files_from_dvc_diff,
-    extract_modified_files_from_dvc_diff,
-    extract_renamed_files_from_dvc_diff,
-)
+from nautilus_librarian.mods.dvc.domain.utils import extract_added_files_from_dvc_diff
 from nautilus_librarian.mods.git.domain.git_user import GitUser
 from nautilus_librarian.mods.git.domain.repo import GitRepo
 from nautilus_librarian.mods.namecodes.domain.filename import Filename
