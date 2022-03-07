@@ -4,6 +4,8 @@ The Nautilus Librarian console commands.
 
 ## Gold Images Processing
 
+`Gold` images are a type of image in terms of its purpose,  defined on the [Nautilus Filename Specification](https://github.com/Nautilus-Cyberneering/nautilus-namecodes).
+
 It is a command to handle `Gold` image changes in an image dataset (we call it "Library").
 
 ### Description
@@ -20,7 +22,7 @@ nautilus-librarian gold-images-processing \
 
 Where `PREVIOUS_REF` and `CURRENT_REF` ar  the git first and last commit references defining the list of commits you want to process.
 
-If you handle a dataset of images following the [Nautilus Filename Specification](https://github.com/Nautilus-Cyberneering/nautilus-namecodes), there is an special type of image called "Gold" image. That is the first artifact after the acquired media, for example via scanning.
+If you handle a dataset of images following the [Nautilus Filename Specification](https://github.com/Nautilus-Cyberneering/nautilus-namecodes), there is a special type of image called "Gold" image. That is the first artifact after the acquired media, for example via scanning.
 
 [Chinese Ideographs](https://github.com/Nautilus-Cyberneering/chinese-ideographs) is a sample library which follows the [Nautilus Filename Specification](https://github.com/Nautilus-Cyberneering/nautilus-namecodes). It contains some Chinese drawings related to Chinese ideographs.
 
@@ -50,7 +52,7 @@ data
 27 directories, 32 files
 ```
 
-In fact, it does not contain the image itself but the "pointer" to the file in the remote DVC storage (`.dvc` extensions). [DVC](https://dvc.org/) is a wrapper on top of Git to version and store store binary files. It is an alternative to [Git LFS](https://git-lfs.github.com/). You can get (`pull`) the real images from the remote DVC storage into your local file system and they are ignored in the Git repository.
+In fact, it does not contain the image itself but the "pointer" to the file in the remote DVC storage (`.dvc` extensions). [DVC](https://dvc.org/) is a wrapper on top of Git to version and store binary files. It is an alternative to [Git LFS](https://git-lfs.github.com/). You can get (`pull`) the real images from the remote DVC storage into your local file system and they are ignored in the Git repository.
 
 [DVC](https://dvc.org/) has a command similar to `git diff` called `dvd diff` which give you a list of the changes between two commits.
 
@@ -89,13 +91,13 @@ You will obtain this `json` object (it's has been truncated here):
 }
 ```
 
-That means some images were deleted and one image was modified.
+This means that some images were deleted and one image was modified.
 
 The `gold-images-processing` command helps you to handle all changes related to `Gold` images. `Gold` images are identified by their purpose code `32`. We know that the modified image is a `Gold` image because the second code in the name is `32`, following the art work ID: `000001-32.600.2.tif`.
 
 The main goal for this command is to generate `Base` images automatically. When you add a new `Gold` image to a library that image is usually too big, and very often you do not need a very high resolution image. `Base` images are a second type of image that have a lower resolution and can be used for a lot of use cases. The `gold-images-processing` command automatically generates and keep synced the set of `Base` images.
 
-The `gold-images-processing` command also helps to keep the library clean and tidy. These are the list of all tasks.
+The `gold-images-processing` command also helps to keep the library clean and tidy. This is the list of all tasks.
 
 - Get new or modified Gold images using `dvc diff` command.
 - Pull images that are going to be processed from DVC remote storage.
@@ -105,7 +107,7 @@ The `gold-images-processing` command also helps to keep the library clean and ti
 - Generate Base image from `Gold` (change size and [ICC profile](https://en.wikipedia.org/wiki/ICC_profile)).
 - Auto-commit new or changed `Base` images.
 
-They way you usually use this command is by invoking it on a GitHub (or other CI/CD tool) workflow. You can see an example [here](https://github.com/Nautilus-Cyberneering/chinese-ideographs/blob/main/.github/workflows/gold-drawings-processing.yml).
+The way you usually use this command is by invoking it on a GitHub (or other CI/CD tool) workflow. You can see an example [here](https://github.com/Nautilus-Cyberneering/chinese-ideographs/blob/main/.github/workflows/gold-drawings-processing.yml).
 
 Example of invoking the command in a GitHub workflow:
 
