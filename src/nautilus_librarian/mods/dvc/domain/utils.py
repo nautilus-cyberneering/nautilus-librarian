@@ -20,29 +20,6 @@ def extract_all_added_and_modified_and_renamed_files_from_dvc_diff(
     return all_files
 
 
-def extract_flat_list_of_renamed_files(dvc_diff_json, only_basename=True):
-    dvc_diff = DvcDiffParser.from_json(dvc_diff_json)
-
-    renamed_files = dvc_diff.filter(
-        exclude_added=True,
-        exclude_modified=True,
-        exclude_deleted=True,
-        exclude_renamed=False,
-        only_basename=only_basename,
-    )
-
-    # Renamed files are not plain filename list. They are a dict like this:
-    # {
-    #     "new": "000002-32.600.2.tif",
-    #     "old": "000001-32.600.2.tif",
-    # }
-    # That means the image was renamed from "000001-32.600.2.tif" to "000002-32.600.2.tif"
-
-    flat_renamed_files = map(lambda file: file["new"], renamed_files)
-
-    return list(flat_renamed_files)
-
-
 def extract_added_files_from_dvc_diff(dvc_diff_json):
     """
     Parses the list of added Gold images from dvc diff output in json format.

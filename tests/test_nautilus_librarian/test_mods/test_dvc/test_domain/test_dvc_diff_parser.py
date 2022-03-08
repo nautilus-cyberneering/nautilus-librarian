@@ -1,6 +1,40 @@
 import json
 
+from test_nautilus_librarian.utils import compact_json
+
 from nautilus_librarian.mods.dvc.domain.dvc_diff_parser import DvcDiffParser
+
+
+def dummy_full_dvc_diff():
+    dvc_diff = {
+        "added": [
+            {"path": "data/000001/32/000001-32.600.2.tif"},
+            {"path": "data/added-no-media-file-01.txt"},
+        ],
+        "deleted": [
+            {"path": "data/000002/32/000002-32.600.2.tif"},
+            {"path": "data/deleted-no-media-file-02.txt"},
+        ],
+        "modified": [
+            {"path": "data/000003/32/000003-32.600.2.tif"},
+            {"path": "data/modified-no-media-file-03.txt"},
+        ],
+        "renamed": [
+            {
+                "path": {
+                    "old": "data/000005/32/000005-32.600.2.tif",
+                    "new": "data/000004/32/000004-32.600.2.tif",
+                },
+            },
+            {
+                "path": {
+                    "old": "data/renamed-no-media-file-05.txt",
+                    "new": "data/renamed-no-media-file-04.txt",
+                }
+            },
+        ],
+    }
+    return compact_json(dvc_diff)
 
 
 def test_dvc_diff_parser_initialization():
@@ -141,63 +175,38 @@ def it_should_get_only_the_basenames_of_the_modified_files():
 
 def it_should_get_the_renamed_files():
 
-    dvc_diff = DvcDiffParser(
-        {
-            "added": [],
-            "deleted": [],
-            "modified": [],
-            "renamed": [
-                {
-                    "path": {
-                        "old": "data/000001/32/000001-32.600.2.tif",
-                        "new": "data/000002/32/000002-32.600.2.tif",
-                    }
-                },
-                {
-                    "path": {
-                        "old": "data/000003/32/000003-32.600.2.tif",
-                        "new": "data/000004/32/000004-32.600.2.tif",
-                    }
-                },
-            ],
-        }
-    )
+    dvc_diff = DvcDiffParser.from_json(dummy_full_dvc_diff())
 
-    renamed = dvc_diff.renamed()
+    renamed = dvc_diff.renamed(only_basename=False)
 
     assert renamed == [
         {
-            "old": "data/000001/32/000001-32.600.2.tif",
-            "new": "data/000002/32/000002-32.600.2.tif",
+            "old": "data/000005/32/000005-32.600.2.tif",
+            "new": "data/000004/32/000004-32.600.2.tif",
         },
         {
-            "old": "data/000003/32/000003-32.600.2.tif",
-            "new": "data/000004/32/000004-32.600.2.tif",
+            "old": "data/renamed-no-media-file-05.txt",
+            "new": "data/renamed-no-media-file-04.txt",
         },
     ]
 
 
 def it_should_get_only_the_basenames_of_the_renamed_files():
 
-    dvc_diff = DvcDiffParser(
+    dvc_diff = DvcDiffParser.from_json(dummy_full_dvc_diff())
+
+    renamed = dvc_diff.renamed(only_basename=True)
+
+    assert renamed == [
         {
-            "added": [],
-            "deleted": [],
-            "modified": [],
-            "renamed": [
-                {
-                    "path": {
-                        "old": "folder/original_file.txt",
-                        "new": "folder/renamed_file.txt",
-                    }
-                },
-            ],
-        }
-    )
-
-    added = dvc_diff.renamed(only_basename=True)
-
-    assert added == [{"old": "original_file.txt", "new": "renamed_file.txt"}]
+            "old": "000005-32.600.2.tif",
+            "new": "000004-32.600.2.tif",
+        },
+        {
+            "old": "renamed-no-media-file-05.txt",
+            "new": "renamed-no-media-file-04.txt",
+        },
+    ]
 
 
 def it_should_filter_by_type_of_change():

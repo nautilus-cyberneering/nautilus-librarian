@@ -57,6 +57,7 @@ class DvcDiffParser:
 
     def renamed(self, only_basename=False):
         if only_basename:
+            print("renamed:", self.renamed_list)
             return self.basenames_of_old_and_new(self.renamed_list)
 
         return self.renamed_list
