@@ -6,7 +6,9 @@ from typer.testing import CliRunner
 from nautilus_librarian.domain.file_locator import file_locator
 from nautilus_librarian.main import app
 from nautilus_librarian.mods.console.domain.utils import execute_shell_command
-from nautilus_librarian.mods.namecodes.domain.filename import MediaLibraryFilename
+from nautilus_librarian.mods.namecodes.domain.media_library_filename import (
+    MediaLibraryFilename,
+)
 
 runner = CliRunner()
 

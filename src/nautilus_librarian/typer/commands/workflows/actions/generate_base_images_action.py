@@ -4,7 +4,9 @@ from nautilus_librarian.domain.dvc_diff_media_parser import (
 from nautilus_librarian.domain.dvc_services_api import DvcServicesApi
 from nautilus_librarian.domain.file_locator import file_locator
 from nautilus_librarian.mods.libvips.domain.process_image import process_image
-from nautilus_librarian.mods.namecodes.domain.filename import MediaLibraryFilename
+from nautilus_librarian.mods.namecodes.domain.media_library_filename import (
+    MediaLibraryFilename,
+)
 from nautilus_librarian.typer.commands.workflows.actions.action_result import (
     ActionResult,
     ErrorMessage,

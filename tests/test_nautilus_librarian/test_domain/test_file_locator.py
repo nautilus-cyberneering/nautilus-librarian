@@ -2,7 +2,9 @@ from nautilus_librarian.domain.file_locator import (
     file_locator,
     get_base_image_filename_from_gold_image,
 )
-from nautilus_librarian.mods.namecodes.domain.filename import MediaLibraryFilename
+from nautilus_librarian.mods.namecodes.domain.media_library_filename import (
+    MediaLibraryFilename,
+)
 
 
 def test_gold_image_localization():

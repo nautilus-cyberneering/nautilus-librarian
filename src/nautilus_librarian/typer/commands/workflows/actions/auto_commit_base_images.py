@@ -14,8 +14,10 @@ from nautilus_librarian.domain.file_locator import (
 from nautilus_librarian.mods.dvc.domain.utils import extract_added_files_from_dvc_diff
 from nautilus_librarian.mods.git.domain.git_user import GitUser
 from nautilus_librarian.mods.git.domain.repo import GitRepo
-from nautilus_librarian.mods.namecodes.domain.filename import MediaLibraryFilename
 from nautilus_librarian.mods.namecodes.domain.filename_filters import filter_gold_images
+from nautilus_librarian.mods.namecodes.domain.media_library_filename import (
+    MediaLibraryFilename,
+)
 from nautilus_librarian.typer.commands.workflows.actions.action_result import (
     ActionResult,
     Message,

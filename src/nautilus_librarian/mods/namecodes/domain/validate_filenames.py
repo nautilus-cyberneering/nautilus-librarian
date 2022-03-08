@@ -1,7 +1,9 @@
 # We are not implementing multiple transformations yet.
 # {ARTWORK_ID}-{PURPOSE_CODE}.{TRANSFORMATION_CODE}.{TYPE_CODE}.{EXTENSION}
 
-from nautilus_librarian.mods.namecodes.domain.filename import MediaLibraryFilename
+from nautilus_librarian.mods.namecodes.domain.media_library_filename import (
+    MediaLibraryFilename,
+)
 
 
 class FilenameException(ValueError):

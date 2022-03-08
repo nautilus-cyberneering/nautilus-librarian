@@ -9,7 +9,9 @@ from test_nautilus_librarian.utils import compact_json
 
 from nautilus_librarian.mods.console.domain.utils import execute_shell_command
 from nautilus_librarian.mods.git.domain.git_command_wrapper import git
-from nautilus_librarian.mods.namecodes.domain.filename import MediaLibraryFilename
+from nautilus_librarian.mods.namecodes.domain.media_library_filename import (
+    MediaLibraryFilename,
+)
 from nautilus_librarian.typer.commands.workflows.actions.action_result import ResultCode
 from nautilus_librarian.typer.commands.workflows.actions.auto_commit_base_images import (
     auto_commit_base_images,

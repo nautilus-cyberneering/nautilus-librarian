@@ -1,4 +1,6 @@
-from nautilus_librarian.mods.namecodes.domain.filename import MediaLibraryFilename
+from nautilus_librarian.mods.namecodes.domain.media_library_filename import (
+    MediaLibraryFilename,
+)
 from nautilus_librarian.mods.namecodes.domain.validate_filenames import (
     is_a_library_file,
 )
