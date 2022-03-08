@@ -1,7 +1,7 @@
 import os
 from typing import List
 
-from nautilus_librarian.domain.dvc_diff_parser import (
+from nautilus_librarian.domain.dvc_diff_media_parser import (
     extract_deleted_files_from_dvc_diff,
     extract_modified_files_from_dvc_diff,
     extract_renamed_files_from_dvc_diff,

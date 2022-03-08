@@ -1,4 +1,4 @@
-from nautilus_librarian.domain.dvc_diff_parser import (
+from nautilus_librarian.domain.dvc_diff_media_parser import (
     extract_list_of_new_or_renamed_files_from_dvc_diff_output,
 )
 from nautilus_librarian.domain.validate_filepaths import validate_filepath

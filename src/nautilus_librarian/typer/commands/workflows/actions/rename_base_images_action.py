@@ -1,6 +1,6 @@
 from os import makedirs, path
 
-from nautilus_librarian.domain.dvc_diff_parser import (
+from nautilus_librarian.domain.dvc_diff_media_parser import (
     extract_renamed_files_from_dvc_diff,
 )
 from nautilus_librarian.domain.dvc_services_api import DvcServicesApi

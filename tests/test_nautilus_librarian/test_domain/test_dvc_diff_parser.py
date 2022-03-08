@@ -1,6 +1,6 @@
 from test_nautilus_librarian.utils import compact_json
 
-from nautilus_librarian.domain.dvc_diff_parser import (
+from nautilus_librarian.domain.dvc_diff_media_parser import (
     extract_added_and_modified_files_from_dvc_diff,
     extract_all_changed_files_from_dvc_diff,
     extract_deleted_files_from_dvc_diff,
