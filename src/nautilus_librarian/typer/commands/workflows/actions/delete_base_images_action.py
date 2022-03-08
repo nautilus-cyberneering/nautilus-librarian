@@ -5,7 +5,7 @@ from nautilus_librarian.domain.dvc_diff_media_parser import (
 )
 from nautilus_librarian.domain.dvc_services_api import DvcServicesApi
 from nautilus_librarian.domain.file_locator import file_locator
-from nautilus_librarian.mods.namecodes.domain.filename import Filename
+from nautilus_librarian.mods.namecodes.domain.filename import MediaLibraryFilename
 from nautilus_librarian.typer.commands.workflows.actions.action_result import (
     ActionResult,
     Message,
@@ -42,7 +42,7 @@ def delete_base_images(dvc_diff, git_repo_dir):
     dvc_services = DvcServicesApi(git_repo_dir)
 
     for filename in filenames:
-        gold_filename = Filename(filename)
+        gold_filename = MediaLibraryFilename(filename)
         base_filename = get_base_image_absolute_path_from_gold(
             git_repo_dir, gold_filename
         )

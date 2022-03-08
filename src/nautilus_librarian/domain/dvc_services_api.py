@@ -2,7 +2,7 @@ from os import path
 from typing import List
 
 from nautilus_librarian.mods.dvc.domain.api import DvcApiWrapper
-from nautilus_librarian.mods.namecodes.domain.filename import Filename
+from nautilus_librarian.mods.namecodes.domain.filename import MediaLibraryFilename
 from nautilus_librarian.mods.namecodes.domain.validate_filenames import (
     is_a_library_file,
 )
@@ -11,7 +11,10 @@ from nautilus_librarian.mods.namecodes.domain.validate_filenames import (
 def check_filename_is_library_image(filepath):
     if not (
         is_a_library_file(filepath)
-        and (Filename(filepath).is_gold_image() or Filename(filepath).is_base_image())
+        and (
+            MediaLibraryFilename(filepath).is_gold_image()
+            or MediaLibraryFilename(filepath).is_base_image()
+        )
     ):
         raise InvalidLibraryImage(
             f"{filepath} is not a valid library Gold or Base image"

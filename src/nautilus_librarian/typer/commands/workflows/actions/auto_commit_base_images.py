@@ -14,7 +14,7 @@ from nautilus_librarian.domain.file_locator import (
 from nautilus_librarian.mods.dvc.domain.utils import extract_added_files_from_dvc_diff
 from nautilus_librarian.mods.git.domain.git_user import GitUser
 from nautilus_librarian.mods.git.domain.repo import GitRepo
-from nautilus_librarian.mods.namecodes.domain.filename import Filename
+from nautilus_librarian.mods.namecodes.domain.filename import MediaLibraryFilename
 from nautilus_librarian.mods.namecodes.domain.filename_filters import filter_gold_images
 from nautilus_librarian.typer.commands.workflows.actions.action_result import (
     ActionResult,
@@ -29,24 +29,28 @@ def format_extracted_files(files):
     images and returns a list of Filenames.
     """
     gold_images = filter_gold_images(files)
-    return [Filename(gold_image) for gold_image in gold_images]
+    return [MediaLibraryFilename(gold_image) for gold_image in gold_images]
 
 
-def get_new_gold_images_filenames_from_dvc_diff(dvc_diff) -> List[Filename]:
+def get_new_gold_images_filenames_from_dvc_diff(dvc_diff) -> List[MediaLibraryFilename]:
     return format_extracted_files(extract_added_files_from_dvc_diff(dvc_diff))
 
 
-def get_modified_gold_images_filenames_from_dvc_diff(dvc_diff) -> List[Filename]:
+def get_modified_gold_images_filenames_from_dvc_diff(
+    dvc_diff,
+) -> List[MediaLibraryFilename]:
     return format_extracted_files(extract_modified_files_from_dvc_diff(dvc_diff))
 
 
-def get_deleted_gold_images_filenames_from_dvc_diff(dvc_diff) -> List[Filename]:
+def get_deleted_gold_images_filenames_from_dvc_diff(
+    dvc_diff,
+) -> List[MediaLibraryFilename]:
     return format_extracted_files(extract_deleted_files_from_dvc_diff(dvc_diff))
 
 
 def get_renamed_gold_images_filenames_from_dvc_diff(
     dvc_diff,
-) -> List[tuple[Filename, Filename]]:
+) -> List[tuple[MediaLibraryFilename, MediaLibraryFilename]]:
     extracted_filenames = extract_renamed_files_from_dvc_diff(dvc_diff)
     old_filenames = [element["old"] for element in extracted_filenames]
     new_filenames = [element["new"] for element in extracted_filenames]
@@ -113,7 +117,7 @@ def calculate_the_corresponding_base_image_from_gold_image(git_repo_dir, gold_im
     """
     Returns the Base image path which correspond to the given Gold image.
 
-    Code Review: LibraryFilePath class? and rename Filename to LibraryFilename?
+    Code Review: LibraryFilePath class?
     """
     corresponding_base_image = gold_image.generate_base_image_filename()
     corresponding_base_image_relative_path = (

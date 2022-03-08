@@ -6,7 +6,7 @@ from typer.testing import CliRunner
 from nautilus_librarian.domain.file_locator import file_locator
 from nautilus_librarian.main import app
 from nautilus_librarian.mods.console.domain.utils import execute_shell_command
-from nautilus_librarian.mods.namecodes.domain.filename import Filename
+from nautilus_librarian.mods.namecodes.domain.filename import MediaLibraryFilename
 
 runner = CliRunner()
 
@@ -47,7 +47,9 @@ def create_initial_state(
         https://dvc.org/doc/command-reference/remote#example-add-a-default-local-remote
     5. Add a example Base image from fixtures dir
     """
-    sample_base_image_dir = file_locator(Filename(sample_base_image_absolute_path))
+    sample_base_image_dir = file_locator(
+        MediaLibraryFilename(sample_base_image_absolute_path)
+    )
 
     execute_shell_command(
         """
@@ -76,7 +78,7 @@ def create_initial_state(
 
 def add_gold_image(git_dir, sample_gold_image_absolute_path, gpg_home_dir, git_user):
     # Copy the Base sample Base image to its folder
-    filename = Filename(sample_gold_image_absolute_path)
+    filename = MediaLibraryFilename(sample_gold_image_absolute_path)
     sample_gold_image_dir = file_locator(filename)
     os.mkdir(f"{git_dir}/{sample_gold_image_dir}")
     copy(sample_gold_image_absolute_path, f"{git_dir}/{sample_gold_image_dir}")
@@ -132,7 +134,7 @@ def copy_media_file_to_its_folder(src_media_file_path, git_dir):
     Given a library file in a source location, it copies it to the git repo in the right folder.
     """
 
-    media_file_relative_dir = file_locator(Filename(src_media_file_path))
+    media_file_relative_dir = file_locator(MediaLibraryFilename(src_media_file_path))
 
     dest_media_file_dir = f"{git_dir}/{media_file_relative_dir}"
 

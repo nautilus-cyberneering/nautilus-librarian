@@ -9,7 +9,7 @@ from test_nautilus_librarian.utils import compact_json
 
 from nautilus_librarian.mods.console.domain.utils import execute_shell_command
 from nautilus_librarian.mods.git.domain.git_command_wrapper import git
-from nautilus_librarian.mods.namecodes.domain.filename import Filename
+from nautilus_librarian.mods.namecodes.domain.filename import MediaLibraryFilename
 from nautilus_librarian.typer.commands.workflows.actions.action_result import ResultCode
 from nautilus_librarian.typer.commands.workflows.actions.auto_commit_base_images import (
     auto_commit_base_images,
@@ -32,12 +32,12 @@ def test_get_new_gold_images_from_dvc_diff():
 
     result = get_new_gold_images_filenames_from_dvc_diff(compact_json(dvc_diff))
 
-    assert result == [Filename("data/000001/32/000001-32.600.2.tif")]
+    assert result == [MediaLibraryFilename("data/000001/32/000001-32.600.2.tif")]
 
 
 def test_calculate_the_corresponding_base_image_from_gold_image():
     git_repo_dir = "/home/repo"
-    gold_image = Filename("000001-32.600.2.tif")
+    gold_image = MediaLibraryFilename("000001-32.600.2.tif")
 
     base_image_path = calculate_the_corresponding_base_image_from_gold_image(
         git_repo_dir, gold_image

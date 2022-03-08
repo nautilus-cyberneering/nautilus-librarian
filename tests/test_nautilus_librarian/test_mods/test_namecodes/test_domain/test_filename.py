@@ -1,8 +1,8 @@
-from nautilus_librarian.mods.namecodes.domain.filename import Filename
+from nautilus_librarian.mods.namecodes.domain.filename import MediaLibraryFilename
 
 
 def test_instantiation_from_string():
-    gold_image_filename = Filename("000001-32.600.2.tif")
+    gold_image_filename = MediaLibraryFilename("000001-32.600.2.tif")
 
     assert gold_image_filename.artwork_id == "000001"
     assert gold_image_filename.is_gold_image()
@@ -12,7 +12,7 @@ def test_instantiation_from_string():
 
 
 def test_instantiation_with_absolute_path():
-    gold_image_filename = Filename("/home/user/000001-32.600.2.tif")
+    gold_image_filename = MediaLibraryFilename("/home/user/000001-32.600.2.tif")
 
     assert gold_image_filename.artwork_id == "000001"
     assert gold_image_filename.is_gold_image()
@@ -22,12 +22,12 @@ def test_instantiation_with_absolute_path():
 
 
 def test_base_image_instantiation_from_gold_image():
-    gold_image_filename = Filename("000001-32.600.2.tif")
+    gold_image_filename = MediaLibraryFilename("000001-32.600.2.tif")
 
     base_image = gold_image_filename.generate_base_image_filename()
 
-    assert str(base_image) == str(Filename("000001-52.600.2.tif"))
+    assert str(base_image) == str(MediaLibraryFilename("000001-52.600.2.tif"))
 
 
 def test_invalid_filename():
-    Filename("invalid filename")
+    MediaLibraryFilename("invalid filename")

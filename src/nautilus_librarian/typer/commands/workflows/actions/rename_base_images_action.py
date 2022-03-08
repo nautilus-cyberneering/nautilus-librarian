@@ -8,7 +8,7 @@ from nautilus_librarian.domain.file_locator import (
     get_base_image_absolute_path_from_gold,
     guard_that_base_image_exists,
 )
-from nautilus_librarian.mods.namecodes.domain.filename import Filename
+from nautilus_librarian.mods.namecodes.domain.filename import MediaLibraryFilename
 from nautilus_librarian.typer.commands.workflows.actions.action_result import (
     ActionResult,
     ErrorMessage,
@@ -32,7 +32,7 @@ def rename_base_images(dvc_diff, git_repo_dir):
     # Filter Gold renamed images
     gold_renamed_images = list(
         filter(
-            lambda filename: Filename(filename["old"]).is_gold_image(),
+            lambda filename: MediaLibraryFilename(filename["old"]).is_gold_image(),
             all_renamed_files,
         )
     )
@@ -46,11 +46,11 @@ def rename_base_images(dvc_diff, git_repo_dir):
 
     for filename in gold_renamed_images:
         try:
-            gold_filename_old = Filename(filename["old"])
+            gold_filename_old = MediaLibraryFilename(filename["old"])
             base_filename_old = get_base_image_absolute_path_from_gold(
                 git_repo_dir, gold_filename_old
             )
-            gold_filename_new = Filename(filename["new"])
+            gold_filename_new = MediaLibraryFilename(filename["new"])
             base_filename_new = get_base_image_absolute_path_from_gold(
                 git_repo_dir, gold_filename_new
             )
