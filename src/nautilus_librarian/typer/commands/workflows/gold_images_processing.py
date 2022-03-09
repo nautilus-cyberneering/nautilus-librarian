@@ -9,8 +9,8 @@ from nautilus_librarian.mods.git.domain.config import (
 )
 from nautilus_librarian.mods.git.domain.git_user import GitUser
 from nautilus_librarian.typer.commands.workflows.actions.action_result import ResultCode
-from nautilus_librarian.typer.commands.workflows.actions.auto_commit_base_images import (
-    auto_commit_base_images,
+from nautilus_librarian.typer.commands.workflows.actions.auto_commit_base_images_action import (
+    auto_commit_base_images_action,
 )
 from nautilus_librarian.typer.commands.workflows.actions.check_images_changes import (
     check_images_changes,
@@ -139,7 +139,7 @@ def gold_images_processing(
     process_action_result(delete_base_images(dvc_diff, git_repo_dir))
 
     process_action_result(
-        auto_commit_base_images(dvc_diff, git_repo_dir, gnupghome, git_user)
+        auto_commit_base_images_action(dvc_diff, git_repo_dir, gnupghome, git_user)
     )
 
 

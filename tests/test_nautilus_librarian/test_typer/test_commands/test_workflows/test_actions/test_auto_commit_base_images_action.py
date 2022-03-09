@@ -13,8 +13,8 @@ from nautilus_librarian.mods.namecodes.domain.media_library_filename import (
     MediaLibraryFilename,
 )
 from nautilus_librarian.typer.commands.workflows.actions.action_result import ResultCode
-from nautilus_librarian.typer.commands.workflows.actions.auto_commit_base_images import (
-    auto_commit_base_images,
+from nautilus_librarian.typer.commands.workflows.actions.auto_commit_base_images_action import (
+    auto_commit_base_images_action,
     calculate_the_corresponding_base_image_from_gold_image,
     get_new_gold_images_filenames_from_dvc_diff,
 )
@@ -95,7 +95,7 @@ def commit_added_base_images(temp_git_dir, temp_gpg_home_dir, git_user):
         "renamed": [],
     }
 
-    return auto_commit_base_images(
+    return auto_commit_base_images_action(
         compact_json(dvc_diff), str(temp_git_dir), str(temp_gpg_home_dir), git_user
     )
 
@@ -191,7 +191,7 @@ def given_a_dvc_diff_object_with_a_gold_image_deleton_it_should_commit_the_base_
         "renamed": [],
     }
 
-    result = auto_commit_base_images(
+    result = auto_commit_base_images_action(
         compact_json(dvc_diff), str(temp_git_dir), str(temp_gpg_home_dir), git_user
     )
 
@@ -251,7 +251,7 @@ def given_a_dvc_diff_object_with_a_gold_image_rename_it_should_commit_the_base_i
             }
         ],
     }
-    result = auto_commit_base_images(
+    result = auto_commit_base_images_action(
         compact_json(dvc_diff), str(temp_git_dir), str(temp_gpg_home_dir), git_user
     )
     assert result.code == ResultCode.CONTINUE
@@ -304,7 +304,7 @@ def given_a_dvc_diff_object_with_a_gold_image_modification_it_should_commit_the_
         "renamed": [],
     }
 
-    result = auto_commit_base_images(
+    result = auto_commit_base_images_action(
         compact_json(dvc_diff), str(temp_git_dir), str(temp_gpg_home_dir), git_user
     )
     assert result.code == ResultCode.CONTINUE
