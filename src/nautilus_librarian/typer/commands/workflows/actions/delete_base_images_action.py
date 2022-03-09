@@ -29,7 +29,7 @@ def remove_base_pointer_and_file_if_exists(base_filename, dvc_services):
         remove(base_filename)
 
 
-def delete_base_images(dvc_diff, git_repo_dir):
+def delete_base_images_action(dvc_diff, git_repo_dir):
     """
     It deletes previously generated base images when gold images are deleted
     """

@@ -16,7 +16,7 @@ from nautilus_librarian.typer.commands.workflows.actions.check_images_changes_ac
     check_images_changes_action,
 )
 from nautilus_librarian.typer.commands.workflows.actions.delete_base_images_action import (
-    delete_base_images,
+    delete_base_images_action,
 )
 from nautilus_librarian.typer.commands.workflows.actions.dvc_pull_action import (
     dvc_pull_action,
@@ -136,7 +136,7 @@ def gold_images_processing(
 
     process_action_result(rename_base_images(dvc_diff, git_repo_dir))
 
-    process_action_result(delete_base_images(dvc_diff, git_repo_dir))
+    process_action_result(delete_base_images_action(dvc_diff, git_repo_dir))
 
     process_action_result(
         auto_commit_base_images_action(dvc_diff, git_repo_dir, gnupghome, git_user)
