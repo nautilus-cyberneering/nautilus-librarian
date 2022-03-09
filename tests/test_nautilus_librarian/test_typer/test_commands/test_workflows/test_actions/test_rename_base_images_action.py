@@ -9,7 +9,7 @@ from test_nautilus_librarian.utils import compact_json
 from nautilus_librarian.mods.console.domain.utils import execute_shell_command
 from nautilus_librarian.typer.commands.workflows.actions.action_result import ResultCode
 from nautilus_librarian.typer.commands.workflows.actions.rename_base_images_action import (
-    rename_base_images,
+    rename_base_images_action,
 )
 
 
@@ -61,7 +61,7 @@ def given_a_diff_structure_with_a_renamed_gold_image_it_should_rename_the_corres
         cwd=temp_git_dir,
     )
 
-    result = rename_base_images(
+    result = rename_base_images_action(
         compact_json(dvc_diff_with_renamed_gold_image), temp_git_dir
     )
 
@@ -102,7 +102,7 @@ def given_a_diff_structure_with_a_renamed_not_gold_image_it_should_not_rename_an
         git_user,
     )
 
-    result = rename_base_images(
+    result = rename_base_images_action(
         compact_json(dvc_diff_with_renamed_base_image), temp_git_dir
     )
 

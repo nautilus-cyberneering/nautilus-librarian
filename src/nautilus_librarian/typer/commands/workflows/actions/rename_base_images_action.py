@@ -23,7 +23,7 @@ def create_output_folder(destination_filename):
     makedirs(path.dirname(destination_filename), exist_ok=True)
 
 
-def rename_base_images(dvc_diff, git_repo_dir):
+def rename_base_images_action(dvc_diff, git_repo_dir):
     """
     It renames previously generated base images when gold images are renamed
     """
