@@ -1,4 +1,4 @@
-from nautilus_librarian.domain.directory import Directory
+from nautilus_librarian.mods.filesystem.domain.directory import Directory
 
 
 def it_could_be_compared_to_other_to_other_directory():

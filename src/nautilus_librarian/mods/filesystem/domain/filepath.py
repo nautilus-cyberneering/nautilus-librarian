@@ -1,5 +1,5 @@
-from nautilus_librarian.domain.directory import Directory
-from nautilus_librarian.domain.filename import Filename
+from nautilus_librarian.mods.filesystem.domain.directory import Directory
+from nautilus_librarian.mods.filesystem.domain.filename import Filename
 
 
 class Filepath:

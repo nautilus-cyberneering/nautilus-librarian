@@ -1,4 +1,4 @@
-from nautilus_librarian.domain.filename import Filename
+from nautilus_librarian.mods.filesystem.domain.filename import Filename
 
 
 def it_could_be_compared_to_other_filename():
