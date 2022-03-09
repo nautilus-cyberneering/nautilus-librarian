@@ -88,7 +88,9 @@ def given_a_diff_structure_and_size_limits_it_should_not_validate_new_image_dime
         "renamed": [],
     }
 
-    result = validate_images_dimensions_action(compact_json(dvc_diff_with_added_image), 8, 16)
+    result = validate_images_dimensions_action(
+        compact_json(dvc_diff_with_added_image), 8, 16
+    )
 
     expected_message = (
         "✗ Dimensions of " + sample_gold_image_absolute_path + " are wrong: "
