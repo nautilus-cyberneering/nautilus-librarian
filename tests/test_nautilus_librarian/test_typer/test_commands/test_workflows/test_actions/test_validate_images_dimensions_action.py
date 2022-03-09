@@ -2,7 +2,7 @@ from test_nautilus_librarian.utils import compact_json
 
 from nautilus_librarian.typer.commands.workflows.actions.action_result import ResultCode
 from nautilus_librarian.typer.commands.workflows.actions.validate_images_dimensions_action import (
-    validate_images_dimensions,
+    validate_images_dimensions_action,
 )
 
 
@@ -19,7 +19,7 @@ def given_a_diff_structure_and_size_limits_it_should_validate_new_image_dimensio
         "renamed": [],
     }
 
-    result = validate_images_dimensions(
+    result = validate_images_dimensions_action(
         compact_json(dvc_diff_with_added_gold_image), 512, 4096
     )
 
@@ -42,7 +42,7 @@ def given_a_diff_structure_and_size_limits_it_should_validate_modified_image_dim
         "renamed": [],
     }
 
-    result = validate_images_dimensions(
+    result = validate_images_dimensions_action(
         compact_json(dvc_diff_with_modified_image), 512, 4096
     )
 
@@ -65,7 +65,7 @@ def given_a_diff_structure_and_size_limits_it_should_not_validate_renamed_image_
         ],
     }
 
-    result = validate_images_dimensions(
+    result = validate_images_dimensions_action(
         compact_json(dvc_diff_with_renamed_image), 512, 4096
     )
 
@@ -88,7 +88,7 @@ def given_a_diff_structure_and_size_limits_it_should_not_validate_new_image_dime
         "renamed": [],
     }
 
-    result = validate_images_dimensions(compact_json(dvc_diff_with_added_image), 8, 16)
+    result = validate_images_dimensions_action(compact_json(dvc_diff_with_added_image), 8, 16)
 
     expected_message = (
         "✗ Dimensions of " + sample_gold_image_absolute_path + " are wrong: "

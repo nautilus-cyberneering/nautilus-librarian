@@ -34,7 +34,7 @@ from nautilus_librarian.typer.commands.workflows.actions.validate_filepaths_acti
     validate_filepaths_action,
 )
 from nautilus_librarian.typer.commands.workflows.actions.validate_images_dimensions_action import (
-    validate_images_dimensions,
+    validate_images_dimensions_action,
 )
 
 app = typer.Typer()
@@ -129,7 +129,7 @@ def gold_images_processing(
     process_action_result(check_images_changes_action(dvc_diff))
 
     process_action_result(
-        validate_images_dimensions(dvc_diff, min_image_size, max_image_size)
+        validate_images_dimensions_action(dvc_diff, min_image_size, max_image_size)
     )
 
     process_action_result(

@@ -15,7 +15,7 @@ from nautilus_librarian.typer.commands.workflows.actions.action_result import (
 )
 
 
-def validate_images_dimensions(dvc_diff, min_image_size, max_image_size):
+def validate_images_dimensions_action(dvc_diff, min_image_size, max_image_size):
     """
     It validates all the media sizes in the dvc diff.
     """
