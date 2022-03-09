@@ -8,7 +8,7 @@ from nautilus_librarian.typer.commands.workflows.actions.action_result import (
 )
 
 
-def check_images_changes(dvc_diff):
+def check_images_changes_action(dvc_diff):
     """
     It checks for any image changes (add/modify/delete/rename).
     """

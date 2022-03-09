@@ -12,8 +12,8 @@ from nautilus_librarian.typer.commands.workflows.actions.action_result import Re
 from nautilus_librarian.typer.commands.workflows.actions.auto_commit_base_images_action import (
     auto_commit_base_images_action,
 )
-from nautilus_librarian.typer.commands.workflows.actions.check_images_changes import (
-    check_images_changes,
+from nautilus_librarian.typer.commands.workflows.actions.check_images_changes_action import (
+    check_images_changes_action,
 )
 from nautilus_librarian.typer.commands.workflows.actions.delete_base_images_action import (
     delete_base_images,
@@ -126,7 +126,7 @@ def gold_images_processing(
 
     process_action_result(dvc_pull_action(dvc_diff, git_repo_dir, dvc_remote))
 
-    process_action_result(check_images_changes(dvc_diff))
+    process_action_result(check_images_changes_action(dvc_diff))
 
     process_action_result(
         validate_images_dimensions(dvc_diff, min_image_size, max_image_size)
