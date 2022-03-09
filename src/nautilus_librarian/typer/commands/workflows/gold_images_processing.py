@@ -27,8 +27,8 @@ from nautilus_librarian.typer.commands.workflows.actions.generate_base_images_ac
 from nautilus_librarian.typer.commands.workflows.actions.rename_base_images_action import (
     rename_base_images_action,
 )
-from nautilus_librarian.typer.commands.workflows.actions.validate_filenames import (
-    validate_filenames,
+from nautilus_librarian.typer.commands.workflows.actions.validate_filenames_action import (
+    validate_filenames_action,
 )
 from nautilus_librarian.typer.commands.workflows.actions.validate_filepaths_action import (
     validate_filepaths_action,
@@ -117,7 +117,7 @@ def gold_images_processing(
         None, git_repo_dir, previous_ref, current_ref
     )
 
-    process_action_result(validate_filenames(dvc_diff))
+    process_action_result(validate_filenames_action(dvc_diff))
 
     process_action_result(validate_filepaths_action(dvc_diff))
 

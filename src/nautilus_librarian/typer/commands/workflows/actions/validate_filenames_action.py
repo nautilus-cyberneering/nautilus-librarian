@@ -13,7 +13,7 @@ from nautilus_librarian.typer.commands.workflows.actions.action_result import (
 )
 
 
-def validate_filenames(dvc_diff):
+def validate_filenames_action(dvc_diff):
     """
     It validates all the filenames in the dvc diff.
     """

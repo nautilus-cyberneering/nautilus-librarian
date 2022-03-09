@@ -1,8 +1,8 @@
 from test_nautilus_librarian.utils import compact_json
 
 from nautilus_librarian.typer.commands.workflows.actions.action_result import ResultCode
-from nautilus_librarian.typer.commands.workflows.actions.validate_filenames import (
-    validate_filenames,
+from nautilus_librarian.typer.commands.workflows.actions.validate_filenames_action import (
+    validate_filenames_action,
 )
 
 
@@ -17,7 +17,7 @@ def given_a_dvc_diff_object_it_should_validate_the_filename_of_the_new_media_fil
         "renamed": [],
     }
 
-    result = validate_filenames(compact_json(dvc_diff_with_added_gold_image))
+    result = validate_filenames_action(compact_json(dvc_diff_with_added_gold_image))
 
     assert result.code == ResultCode.CONTINUE
     assert result.contains_text("000001-32.600.2.tif ✓")
@@ -34,7 +34,7 @@ def given_a_dvc_diff_object_it_should_validate_the_filename_of_the_modified_medi
         "renamed": [],
     }
 
-    result = validate_filenames(compact_json(dvc_diff_with_modified_image))
+    result = validate_filenames_action(compact_json(dvc_diff_with_modified_image))
 
     assert result.code == ResultCode.CONTINUE
     assert result.contains_text("000002-32.600.2.tif ✓")
@@ -56,7 +56,7 @@ def given_a_dvc_diff_object_it_should_validate_the_filename_of_the_renamed_media
         ],
     }
 
-    result = validate_filenames(compact_json(dvc_diff_with_renamed_image))
+    result = validate_filenames_action(compact_json(dvc_diff_with_renamed_image))
 
     assert result.code == ResultCode.CONTINUE
     assert result.contains_text("000004-32.600.2.tif ✓")
@@ -73,7 +73,7 @@ def given_a_wrong_media_filename_it_should_show_an_error():
         "renamed": [],
     }
 
-    result = validate_filenames(compact_json(dvc_diff_with_wrong_filename))
+    result = validate_filenames_action(compact_json(dvc_diff_with_wrong_filename))
 
     assert result.code == ResultCode.ABORT
 
