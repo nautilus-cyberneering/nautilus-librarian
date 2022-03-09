@@ -33,7 +33,7 @@ def add_base_image_to_dvc(git_repo_dir, gold_image):
     dvc_services.push(base_img_relative_path)
 
 
-def generate_base_images(dvc_diff, git_repo_dir, base_images_size):
+def generate_base_images_action(dvc_diff, git_repo_dir, base_images_size):
     """
     It generates the base images of all the media sizes in the dvc diff.
     """

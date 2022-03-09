@@ -10,7 +10,7 @@ from test_nautilus_librarian.utils import compact_json
 from nautilus_librarian.mods.dvc.domain.dvc_command_wrapper import dvc
 from nautilus_librarian.typer.commands.workflows.actions.action_result import ResultCode
 from nautilus_librarian.typer.commands.workflows.actions.generate_base_images_action import (
-    generate_base_images,
+    generate_base_images_action,
 )
 
 
@@ -47,7 +47,7 @@ def given_a_diff_structure_with_added_gold_image_it_should_generate_base_image(
         temp_git_dir, sample_gold_image_absolute_path, temp_gpg_home_dir, git_user
     )
 
-    result = generate_base_images(
+    result = generate_base_images_action(
         compact_json(dvc_diff_with_added_gold_image), temp_git_dir, 512
     )
 
@@ -104,7 +104,7 @@ def given_a_diff_structure_with_modified_gold_image_it_should_generate_base_imag
         temp_git_dir, sample_gold_image_absolute_path, temp_gpg_home_dir, git_user
     )
 
-    result = generate_base_images(
+    result = generate_base_images_action(
         compact_json(dvc_diff_with_added_gold_image), f"{temp_git_dir}", 512
     )
 
@@ -132,7 +132,9 @@ def given_a_diff_structure_with_renamed_gold_image_it_should_not_generate_base_i
         ],
     }
 
-    result = generate_base_images(compact_json(dvc_diff_with_added_gold_image), "", 512)
+    result = generate_base_images_action(
+        compact_json(dvc_diff_with_added_gold_image), "", 512
+    )
 
     assert result.code == ResultCode.CONTINUE
     assert result.contains_text("No Gold image changes found")

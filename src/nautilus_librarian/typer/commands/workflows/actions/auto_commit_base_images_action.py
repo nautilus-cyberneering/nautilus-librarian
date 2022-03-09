@@ -249,7 +249,9 @@ def process_renamed_base_images(
     return
 
 
-def auto_commit_base_images_action(dvc_diff, git_repo_dir, gnupghome, git_user: GitUser):
+def auto_commit_base_images_action(
+    dvc_diff, git_repo_dir, gnupghome, git_user: GitUser
+):
     """
     Workflow step: auto-commit new Base images generated during the workflow execution
     in previous steps.
