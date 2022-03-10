@@ -25,4 +25,6 @@ class Filepath:
         return False
 
     def __str__(self) -> str:
-        return f"{self.directory}/{self.filename}"
+        if self.directory:
+            return f"{self.directory}/{self.filename}"
+        return self.filename

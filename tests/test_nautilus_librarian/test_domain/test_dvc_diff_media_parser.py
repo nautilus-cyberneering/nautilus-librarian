@@ -1,4 +1,4 @@
-from test_nautilus_librarian.test_mods.test_dvc.test_domain.test_dvc_diff_parser import (
+from test_nautilus_librarian.test_mods.test_dvc.test_domain.test_diff.test_parser import (
     dummy_full_dvc_diff,
 )
 

@@ -1,6 +1,6 @@
 import json
 
-from nautilus_librarian.mods.dvc.domain.dvc_diff_parser import DvcDiffParser
+from nautilus_librarian.mods.dvc.domain.diff.parser import Parser
 from nautilus_librarian.mods.namecodes.domain.filename_filters import (
     filter_media_library_files,
 )
@@ -16,7 +16,7 @@ class DvcDiffMediaParser:
         self.deleted_list = None
         self.modified_list = None
         self.renamed_list = None
-        self.dvc_diff_parser = DvcDiffParser(dvc_diff)
+        self.dvc_diff_parser = Parser(dvc_diff)
 
     @staticmethod
     def from_json(dvc_diff):
@@ -204,7 +204,7 @@ def extract_renamed_files_from_dvc_diff(dvc_diff_json, only_basename=True):
         }
     ]
     """
-    dvc_diff = DvcDiffParser.from_json(dvc_diff_json)
+    dvc_diff = Parser.from_json(dvc_diff_json)
     all_files = dvc_diff.filter(
         exclude_added=True,
         exclude_modified=True,

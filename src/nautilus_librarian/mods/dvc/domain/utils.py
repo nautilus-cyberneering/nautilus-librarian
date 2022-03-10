@@ -1,4 +1,4 @@
-from nautilus_librarian.mods.dvc.domain.dvc_diff_parser import DvcDiffParser
+from nautilus_librarian.mods.dvc.domain.diff.parser import Parser
 
 
 def extract_all_added_and_modified_and_renamed_files_from_dvc_diff(
@@ -15,7 +15,7 @@ def extract_all_added_and_modified_and_renamed_files_from_dvc_diff(
     Input: {"added": [{"path": "data/000001/32/000001-32.600.2.tif"}], "deleted": [], "modified": [], "renamed": []}
     Output: ['data/000001/32/000001-32.600.2.tif']
     """
-    dvc_diff = DvcDiffParser.from_json(dvc_diff_json)
+    dvc_diff = Parser.from_json(dvc_diff_json)
     all_files = dvc_diff.filter(exclude_deleted=True, only_basename=only_basename)
     return all_files
 
@@ -40,7 +40,7 @@ def extract_added_files_from_dvc_diff(dvc_diff_json):
     ["000001-32.600.2.tif"]
     Notice Base image should not be included in the result.
     """
-    dvc_diff = DvcDiffParser.from_json(dvc_diff_json)
+    dvc_diff = Parser.from_json(dvc_diff_json)
     return dvc_diff.filter(
         exclude_deleted=True, exclude_modified=True, exclude_renamed=True
     )

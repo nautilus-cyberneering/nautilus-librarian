@@ -2,7 +2,7 @@ import json
 import os
 
 
-class DvcDiffParser:
+class Parser:
     def __init__(self, dvc_diff: dict) -> None:
         self.dvc_diff = dvc_diff
         self.added_list = None
@@ -14,9 +14,10 @@ class DvcDiffParser:
 
     @staticmethod
     def from_json(dvc_diff):
-        return DvcDiffParser(json.loads(dvc_diff))
+        return Parser(json.loads(dvc_diff))
 
     def parse(self):
+        # TODO: refactor. Replace each attribute by a PathList class.
         self.added_list = [element["path"] for element in self.dvc_diff["added"]]
         self.deleted_list = [element["path"] for element in self.dvc_diff["deleted"]]
         self.modified_list = [element["path"] for element in self.dvc_diff["modified"]]

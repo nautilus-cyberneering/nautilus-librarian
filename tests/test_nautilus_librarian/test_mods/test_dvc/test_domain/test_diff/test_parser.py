@@ -2,7 +2,7 @@ import json
 
 from test_nautilus_librarian.utils import compact_json
 
-from nautilus_librarian.mods.dvc.domain.dvc_diff_parser import DvcDiffParser
+from nautilus_librarian.mods.dvc.domain.diff.parser import Parser
 
 
 def dummy_full_dvc_diff():
@@ -39,7 +39,7 @@ def dummy_full_dvc_diff():
 
 def test_dvc_diff_parser_initialization():
 
-    dvc_diff = DvcDiffParser(
+    dvc_diff = Parser(
         {
             "added": [],
             "deleted": [],
@@ -48,7 +48,7 @@ def test_dvc_diff_parser_initialization():
         }
     )
 
-    assert isinstance(dvc_diff, DvcDiffParser)
+    assert isinstance(dvc_diff, Parser)
 
 
 def test_dvc_diff_parser_instantiation_from_json():
@@ -60,14 +60,14 @@ def test_dvc_diff_parser_instantiation_from_json():
         "renamed": [],
     }
 
-    dvc_diff = DvcDiffParser.from_json(json.dumps(dvc_diff_dict))
+    dvc_diff = Parser.from_json(json.dumps(dvc_diff_dict))
 
-    assert isinstance(dvc_diff, DvcDiffParser)
+    assert isinstance(dvc_diff, Parser)
 
 
 def it_should_get_the_added_files():
 
-    dvc_diff = DvcDiffParser(
+    dvc_diff = Parser(
         {
             "added": [
                 {"path": "folder/added_file.txt"},
@@ -85,7 +85,7 @@ def it_should_get_the_added_files():
 
 def it_should_get_only_the_basenames_of_the_added_files():
 
-    dvc_diff = DvcDiffParser(
+    dvc_diff = Parser(
         {
             "added": [
                 {"path": "folder/added_file.txt"},
@@ -103,7 +103,7 @@ def it_should_get_only_the_basenames_of_the_added_files():
 
 def it_should_get_the_deleted_files():
 
-    dvc_diff = DvcDiffParser(
+    dvc_diff = Parser(
         {
             "added": [],
             "deleted": [
@@ -121,7 +121,7 @@ def it_should_get_the_deleted_files():
 
 def it_should_get_only_the_basenames_of_the_deleted_files():
 
-    dvc_diff = DvcDiffParser(
+    dvc_diff = Parser(
         {
             "added": [],
             "deleted": [
@@ -139,7 +139,7 @@ def it_should_get_only_the_basenames_of_the_deleted_files():
 
 def it_should_get_the_modified_files():
 
-    dvc_diff = DvcDiffParser(
+    dvc_diff = Parser(
         {
             "added": [],
             "deleted": [],
@@ -157,7 +157,7 @@ def it_should_get_the_modified_files():
 
 def it_should_get_only_the_basenames_of_the_modified_files():
 
-    dvc_diff = DvcDiffParser(
+    dvc_diff = Parser(
         {
             "added": [],
             "deleted": [],
@@ -175,7 +175,7 @@ def it_should_get_only_the_basenames_of_the_modified_files():
 
 def it_should_get_the_renamed_files():
 
-    dvc_diff = DvcDiffParser.from_json(dummy_full_dvc_diff())
+    dvc_diff = Parser.from_json(dummy_full_dvc_diff())
 
     renamed = dvc_diff.renamed(only_basename=False)
 
@@ -193,7 +193,7 @@ def it_should_get_the_renamed_files():
 
 def it_should_get_only_the_basenames_of_the_renamed_files():
 
-    dvc_diff = DvcDiffParser.from_json(dummy_full_dvc_diff())
+    dvc_diff = Parser.from_json(dummy_full_dvc_diff())
 
     renamed = dvc_diff.renamed(only_basename=True)
 
@@ -211,7 +211,7 @@ def it_should_get_only_the_basenames_of_the_renamed_files():
 
 def it_should_filter_by_type_of_change():
 
-    dvc_diff = DvcDiffParser(
+    dvc_diff = Parser(
         {
             "added": [
                 {"path": "folder/added_file.txt"},
