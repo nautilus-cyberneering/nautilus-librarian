@@ -18,9 +18,7 @@ def dvc_pull_action(dvc_diff, git_repo_dir, remote_name):
     if dvc_diff == "{}":
         return ActionResult(ResultCode.EXIT, [Message("No Gold image changes found")])
 
-    filenames = extract_added_and_modified_files_from_dvc_diff(
-        dvc_diff, only_basename=False
-    )
+    filenames = extract_added_and_modified_files_from_dvc_diff(dvc_diff)
 
     dvc_services = DvcServicesApi(git_repo_dir)
 

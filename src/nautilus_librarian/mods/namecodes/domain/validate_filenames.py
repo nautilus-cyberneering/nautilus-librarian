@@ -86,7 +86,7 @@ def validate_filename(filename):
     return True
 
 
-def is_a_library_file(filename):
+def is_a_library_file(filename: str) -> bool:
     """
     It returns true if the filename is valid, otherwise false.
     """
@@ -97,7 +97,7 @@ def is_a_library_file(filename):
         return False
 
 
-def validate_filenames(filenames):
+def validate_filenames(filenames: list[str]):
     for filename in filenames:
         try:
             validate_filename(filename)

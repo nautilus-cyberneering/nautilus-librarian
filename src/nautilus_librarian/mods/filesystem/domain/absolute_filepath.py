@@ -3,15 +3,15 @@ from nautilus_librarian.mods.filesystem.domain.filename import Filename
 from nautilus_librarian.mods.filesystem.domain.filepath import Filepath
 
 
-class NotARelativeDirectoryError(AssertionError):
+class NotAnAbsoluteDirectoryError(AssertionError):
     pass
 
 
-class RelativeFilepath(Filepath):
+class AbsoluteFilepath(Filepath):
     def __init__(self, filepath: str):
         self.directory = Directory(filepath)
         self.filename = Filename(filepath)
-        if self.directory.is_absolute():
-            raise NotARelativeDirectoryError(
-                f"Expected relative path: {self.directory}"
+        if not self.directory.is_absolute():
+            raise NotAnAbsoluteDirectoryError(
+                f"Expected {self.directory} to be an absolute directory"
             )

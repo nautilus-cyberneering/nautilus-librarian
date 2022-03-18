@@ -18,7 +18,7 @@ class Filepath:
         return self.filename
 
     def __eq__(self, other) -> bool:
-        if isinstance(self, other.__class__):
+        if isinstance(other, Filepath):
             return (self.directory == other.directory) and (
                 self.filename == other.filename
             )

@@ -3,7 +3,7 @@ from nautilus_librarian.mods.filesystem.domain.filename import Filename
 from nautilus_librarian.mods.filesystem.domain.filepath import Filepath
 
 
-def it_could_be_compared_to_other_filepath():
+def it_should_be_comparable():
     filepath1 = Filepath("/a/b/c/1.txt")
     filepath2 = Filepath("/a/b/c/2.txt")
 
@@ -11,7 +11,7 @@ def it_could_be_compared_to_other_filepath():
     assert filepath1 != filepath2
 
 
-def it_could_be_instantiate_from_full_file_path():
+def it_should_be_instantiable_from_full_file_path():
     filepath = Filepath("/a/b/c/1.txt")
 
     assert str(filepath) == "/a/b/c/1.txt"

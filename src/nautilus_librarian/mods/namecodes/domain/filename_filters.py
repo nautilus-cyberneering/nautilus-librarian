@@ -6,12 +6,12 @@ from nautilus_librarian.mods.namecodes.domain.validate_filenames import (
 )
 
 
-def filter_media_library_files(filepaths):
+def filter_media_library_files(filepaths: list[str]):
     images = list(filter(lambda filepath: is_a_library_file(filepath), filepaths))
     return images
 
 
-def filter_gold_images(filepaths):
+def filter_gold_images(filepaths: list):
     media_files = filter_media_library_files(filepaths)
     gold_images = list(
         filter(
@@ -22,7 +22,7 @@ def filter_gold_images(filepaths):
     return gold_images
 
 
-def filter_base_images(filepaths):
+def filter_base_images(filepaths: list):
     media_files = filter_media_library_files(filepaths)
     base_images = list(
         filter(

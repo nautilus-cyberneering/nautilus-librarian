@@ -24,7 +24,7 @@ class Directory:
         self.directory = os.path.dirname(directory_or_file_path)
 
     def __eq__(self, other) -> bool:
-        if isinstance(self, other.__class__):
+        if isinstance(other, Directory):
             return self.directory == other.directory
         return False
 

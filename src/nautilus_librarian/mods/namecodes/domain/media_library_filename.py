@@ -33,7 +33,7 @@ class MediaLibraryFilename:
     to validate and parse the filename.
     """
 
-    def __init__(self, filename):
+    def __init__(self, filename: str):
         basename = os.path.basename(filename)
         self.filename = basename
         self.parse(self.filename)

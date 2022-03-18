@@ -33,7 +33,7 @@ def delete_base_images_action(dvc_diff, git_repo_dir):
     """
     It deletes previously generated base images when gold images are deleted
     """
-    filenames = extract_deleted_files_from_dvc_diff(dvc_diff, only_basename=False)
+    filenames = extract_deleted_files_from_dvc_diff(dvc_diff)
 
     if dvc_diff == "{}" or filenames == []:
         return ActionResult(

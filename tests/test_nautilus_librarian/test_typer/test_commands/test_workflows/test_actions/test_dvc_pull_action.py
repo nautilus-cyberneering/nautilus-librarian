@@ -2,7 +2,7 @@ import os
 
 from test_nautilus_librarian.test_typer.test_commands.test_workflows.test_gold_images_processing import (
     copy_media_file_to_its_folder,
-    create_initial_state,
+    create_initial_state_with_sample_base_image,
 )
 from test_nautilus_librarian.utils import compact_json
 
@@ -23,7 +23,7 @@ def given_a_dvc_diff_object_with_a_new_gold_image_it_should_pull_the_image_from_
 ):
     remote_name = "localremote"
 
-    create_initial_state(
+    create_initial_state_with_sample_base_image(
         temp_git_dir,
         temp_dvc_local_remote_storage_dir,
         sample_base_image_absolute_path,

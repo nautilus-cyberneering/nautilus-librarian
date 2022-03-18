@@ -11,7 +11,7 @@ def it_should_not_be_empty():
         Directory("")
 
 
-def it_could_be_compared_to_other_to_other_directory():
+def it_could_be_compared_to_other_directory():
     directory1 = Directory("/a/b/c")
     directory2 = Directory("/d/e/f")
 
@@ -19,16 +19,24 @@ def it_could_be_compared_to_other_to_other_directory():
     assert directory1 != directory2
 
 
-def it_could_be_instantiate_from_full_file_path():
+def it_should_be_instantiable_from_an_absolute_file_path():
     assert str(Directory("/a/b/c/1.txt")) == "/a/b/c"
     assert str(Directory("/a/b/c/1")) == "/a/b/c"
     assert str(Directory("/a/b/c/")) == "/a/b/c"
 
 
-def it_could_be_instantiate_from_full_dir_path():
-    directory = Directory("/a/b/c/")
+def it_should_be_instantiable_from_an_absolute_dir_path():
+    assert str(Directory("/a/b/c/")) == "/a/b/c"
 
-    assert str(directory) == "/a/b/c"
+
+def it_should_be_instantiable_from_an_relative_file_path():
+    assert str(Directory("a/b/c/1.txt")) == "a/b/c"
+    assert str(Directory("a/b/c/1")) == "a/b/c"
+    assert str(Directory("a/b/c/")) == "a/b/c"
+
+
+def it_should_be_instantiable_from_an_relative_dir_path():
+    assert str(Directory("a/b/c/")) == "a/b/c"
 
 
 def it_should_indicate_wether_the_dir_is_an_absolute_path_or_not():

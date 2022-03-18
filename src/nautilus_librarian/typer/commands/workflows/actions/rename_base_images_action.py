@@ -27,32 +27,26 @@ def rename_base_images_action(dvc_diff, git_repo_dir):
     """
     It renames previously generated base images when gold images are renamed
     """
-    all_renamed_files = extract_renamed_files_from_dvc_diff(
-        dvc_diff, only_basename=False
+    all_renamed_files = extract_renamed_files_from_dvc_diff(dvc_diff)
+
+    gold_renamed_images = all_renamed_files.filter(
+        lambda path: MediaLibraryFilename(str(path.old())).is_gold_image()
     )
 
-    # Filter Gold renamed images
-    gold_renamed_images = list(
-        filter(
-            lambda filename: MediaLibraryFilename(filename["old"]).is_gold_image(),
-            all_renamed_files,
-        )
-    )
-
-    if dvc_diff == "{}" or gold_renamed_images == []:
+    if dvc_diff == "{}" or gold_renamed_images.is_empty():
         return ActionResult(
             ResultCode.CONTINUE, [Message("No Gold renamed images found")]
         )
 
     messages = []
 
-    for filename in gold_renamed_images:
+    for renamed_path in gold_renamed_images:
         try:
-            gold_filename_old = MediaLibraryFilename(filename["old"])
+            gold_filename_old = MediaLibraryFilename(str(renamed_path.old()))
             base_filename_old = get_base_image_absolute_path_from_gold(
                 git_repo_dir, gold_filename_old
             )
-            gold_filename_new = MediaLibraryFilename(filename["new"])
+            gold_filename_new = MediaLibraryFilename(str(renamed_path.new()))
             base_filename_new = get_base_image_absolute_path_from_gold(
                 git_repo_dir, gold_filename_new
             )

@@ -7,6 +7,15 @@ class RenamedPath(Path):
         self.path = RelativeFilepath(new_path)
         self.old_path = RelativeFilepath(old_path)
 
+    def __str__(self) -> str:
+        return str(self.path)
+
+    def new(self) -> RelativeFilepath:
+        return self.path
+
+    def old(self) -> RelativeFilepath:
+        return self.old_path
+
     def as_dict(self):
         return {
             "old": str(self.old_path),

@@ -10,7 +10,7 @@ class Filename:
         self.filename = os.path.basename(filename)
 
     def __eq__(self, other) -> bool:
-        if isinstance(self, other.__class__):
+        if isinstance(other, Filename):
             return self.filename == other.filename
         return False
 

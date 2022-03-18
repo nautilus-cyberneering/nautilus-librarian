@@ -129,7 +129,9 @@ def gold_images_processing(
     process_action_result(check_images_changes_action(dvc_diff))
 
     process_action_result(
-        validate_images_dimensions_action(dvc_diff, min_image_size, max_image_size)
+        validate_images_dimensions_action(
+            dvc_diff, git_repo_dir, min_image_size, max_image_size
+        )
     )
 
     process_action_result(

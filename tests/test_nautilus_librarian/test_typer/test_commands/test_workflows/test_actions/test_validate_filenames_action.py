@@ -6,7 +6,7 @@ from nautilus_librarian.typer.commands.workflows.actions.validate_filenames_acti
 )
 
 
-def given_a_dvc_diff_object_it_should_validate_the_filename_of_the_new_media_files():
+def given_a_dvc_diff_object_it_should_validate_the_filename_of_the_added_media_files():
 
     dvc_diff_with_added_gold_image = {
         "added": [
@@ -21,23 +21,6 @@ def given_a_dvc_diff_object_it_should_validate_the_filename_of_the_new_media_fil
 
     assert result.code == ResultCode.CONTINUE
     assert result.contains_text("000001-32.600.2.tif ✓")
-
-
-def given_a_dvc_diff_object_it_should_validate_the_filename_of_the_modified_media_files():
-
-    dvc_diff_with_modified_image = {
-        "added": [],
-        "deleted": [],
-        "modified": [
-            {"path": "data/000002/32/000002-32.600.2.tif"},
-        ],
-        "renamed": [],
-    }
-
-    result = validate_filenames_action(compact_json(dvc_diff_with_modified_image))
-
-    assert result.code == ResultCode.CONTINUE
-    assert result.contains_text("000002-32.600.2.tif ✓")
 
 
 def given_a_dvc_diff_object_it_should_validate_the_filename_of_the_renamed_media_files():

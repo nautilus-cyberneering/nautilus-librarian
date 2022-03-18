@@ -31,7 +31,7 @@ def assert_expected_output(output, expected_output):
     assert output == expected_output_without_indent
 
 
-def create_initial_state(
+def create_initial_state_with_sample_base_image(
     temp_git_dir,
     temp_dvc_local_remote_storage_dir,
     sample_base_image_absolute_path,
@@ -108,7 +108,7 @@ def it_should_show_a_message_if_there_is_not_any_change_in_gold_images(
     temp_gpg_home_dir,
     git_user,
 ):
-    create_initial_state(
+    create_initial_state_with_sample_base_image(
         temp_git_dir,
         temp_dvc_local_remote_storage_dir,
         sample_base_image_absolute_path,
@@ -158,7 +158,7 @@ def test_gold_images_processing_workflow_command(
     This is the acceptance test for the whole command and for the happy path.
     Every step in the workflow has its own independent unit test.
     """
-    create_initial_state(
+    create_initial_state_with_sample_base_image(
         temp_git_dir,
         temp_dvc_local_remote_storage_dir,
         sample_base_image_absolute_path,

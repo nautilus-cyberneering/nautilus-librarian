@@ -35,11 +35,9 @@ def add_base_image_to_dvc(git_repo_dir, gold_image):
 
 def generate_base_images_action(dvc_diff, git_repo_dir, base_images_size):
     """
-    It generates the base images of all the media sizes in the dvc diff.
+    It generates the Base images of new and modified Gold images in the dvc diff.
     """
-    filenames = extract_added_and_modified_files_from_dvc_diff(
-        dvc_diff, only_basename=False
-    )
+    filenames = extract_added_and_modified_files_from_dvc_diff(dvc_diff)
 
     if dvc_diff == "{}" or filenames == []:
         return ActionResult(
