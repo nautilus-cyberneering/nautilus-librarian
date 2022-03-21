@@ -61,7 +61,7 @@ def commit_added_sample_base_image(temp_git_dir, temp_gpg_home_dir, git_user):
     """
     We use the action to commit the sample Base image.
     If we add the GOld image the action auto-commit the correspinfig Base.
-    
+
     TODO: Code Review. This could have a lot of unexpected side effects. I (JC) would:
         * Do it directly using git.
         * Extract the part of the code which only performs the commit.
@@ -302,7 +302,7 @@ def given_a_dvc_diff_object_with_a_renamed_gold_image_it_should_commit_the_renam
     """,
         cwd=temp_git_dir,
         print_output=True,
-    )    
+    )
 
     commit = repo.commit(repo.heads[0].commit)
 

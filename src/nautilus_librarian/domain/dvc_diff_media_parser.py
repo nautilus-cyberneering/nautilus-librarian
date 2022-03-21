@@ -3,6 +3,7 @@ import json
 from nautilus_librarian.mods.dvc.domain.diff.parser import Parser
 from nautilus_librarian.mods.dvc.domain.diff.path import Path
 from nautilus_librarian.mods.dvc.domain.diff.path_list import PathList
+from nautilus_librarian.mods.dvc.domain.diff.renamed_path_list import RenamedPathList
 from nautilus_librarian.mods.namecodes.domain.filename_filters import (
     filter_media_library_files,
 )
@@ -134,7 +135,7 @@ def extract_list_of_new_and_renamed_files_from_dvc_diff_output(
     )
 
 
-def extract_renamed_files_from_dvc_diff(dvc_diff_json) -> PathList:
+def extract_renamed_files_from_dvc_diff(dvc_diff_json) -> RenamedPathList:
     dvc_diff = DvcDiffMediaParser.from_json(dvc_diff_json)
     return dvc_diff.filter(
         exclude_added=True,

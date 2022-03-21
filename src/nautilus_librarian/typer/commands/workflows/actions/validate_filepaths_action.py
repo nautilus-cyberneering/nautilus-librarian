@@ -25,7 +25,7 @@ def validate_filepaths_action(dvc_diff):
 
     for filepath in filepaths:
         try:
-            validate_filepath(str(filepath))
+            validate_filepath(str(filepath.get_value()))
             messages.append(Message(f"{filepath} ✓"))
         except ValueError as error:
             return ActionResult(

@@ -72,7 +72,7 @@ class PathList:
         return False
 
     def as_plain_list(self) -> list[str]:
-        return [str(element) for element in self.paths]
+        return [str(path.get_value()) for path in self.paths]
 
     def filter(self, fn):
         return PathList(list(filter(fn, self.paths)))

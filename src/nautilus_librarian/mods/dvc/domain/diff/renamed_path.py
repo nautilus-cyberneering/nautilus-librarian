@@ -3,21 +3,21 @@ from nautilus_librarian.mods.filesystem.domain.relative_filepath import Relative
 
 
 class RenamedPath(Path):
-    def __init__(self, new_path: str, old_path: str) -> None:
-        self.path = RelativeFilepath(new_path)
-        self.old_path = RelativeFilepath(old_path)
+    def __init__(self, value: str, old_value: str) -> None:
+        super().__init__(value)
+        self.old_value = RelativeFilepath(old_value)
 
     def __str__(self) -> str:
-        return str(self.path)
+        return f"{str(self.old_value)} -> {str(self.value)}"
 
     def new(self) -> RelativeFilepath:
-        return self.path
+        return self.value
 
     def old(self) -> RelativeFilepath:
-        return self.old_path
+        return self.old_value
 
     def as_dict(self):
         return {
-            "old": str(self.old_path),
-            "new": str(self.path),
+            "old": str(self.old_value),
+            "new": str(self.value),
         }
