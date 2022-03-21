@@ -9,4 +9,6 @@ def extract_all_added_and_renamed_files_from_dvc_diff(dvc_diff_json):
 
 def extract_added_files_from_dvc_diff(dvc_diff_json):
     dvc_diff = Parser.from_json(dvc_diff_json)
-    return dvc_diff.filter(exclude_deleted=True, exclude_modified=True, exclude_renamed=True).as_plain_list()
+    return dvc_diff.filter(
+        exclude_deleted=True, exclude_modified=True, exclude_renamed=True
+    ).as_plain_list()
