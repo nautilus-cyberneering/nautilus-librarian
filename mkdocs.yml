@@ -3,6 +3,8 @@ site_url: https://nautilus-cyberneering.github.io/librarian/
 nav:
   - Home: index.md
   - Install: install.md
+  - Commands: commands.md
   - Development: development.md
   - Documentation: documentation.md
+  - Glossary: glossary.md
 theme: readthedocs

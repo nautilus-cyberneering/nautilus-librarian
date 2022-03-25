@@ -17,7 +17,13 @@ Command 'mkdocs' not found, but can be installed with:
 sudo apt install mkdocs
 ```
 
-You can install it with: `poetry install`.
+You can install it with: `poetry install` and run it via Poetry:
+
+```shell
+poetry run mkdocs serve
+poetry run mkdocs ...
+poetry run mkdocs OPTION
+```
 
 ## Project layout
 
