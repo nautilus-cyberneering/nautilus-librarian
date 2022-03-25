@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="canonical" href="https://nautilus-cyberneering.github.io/librarian/commands/">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Commands - Librarian</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Commands";
+    var mkdocs_page_input_path = "commands.md";
+    var mkdocs_page_url = "/librarian/commands/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Librarian</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../install/">Install</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Commands</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#gold-images-processing">Gold Images Processing</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#description">Description</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#arguments">Arguments</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#options">Options</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#extra-environment-variables">Extra environment variables</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../development/">Development</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../documentation/">Documentation</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../glossary/">Glossary</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Librarian</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Commands</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="commands">Commands</h1>
+<p>The Nautilus Librarian console commands.</p>
+<h2 id="gold-images-processing">Gold Images Processing</h2>
+<p><code>Gold</code> images are a type of image in terms of its purpose,  defined on the <a href="https://github.com/Nautilus-Cyberneering/nautilus-namecodes">Nautilus Filename Specification</a>.</p>
+<p>It is a command to handle <code>Gold</code> image changes in an image dataset (we call it "Library").</p>
+<h3 id="description">Description</h3>
+<p>This command allows you to process all the changes in a library repository affecting <code>Gold</code> images.</p>
+<p>Sample usage:</p>
+<pre><code class="language-shell">nautilus-librarian gold-images-processing \
+    --previous-ref PREVIOUS_REF \
+    --current-ref  CURRENT_REF
+</code></pre>
+<p>Where <code>PREVIOUS_REF</code> and <code>CURRENT_REF</code> ar  the git first and last commit references defining the list of commits you want to process.</p>
+<p>If you handle a dataset of images following the <a href="https://github.com/Nautilus-Cyberneering/nautilus-namecodes">Nautilus Filename Specification</a>, there is a special type of image called "Gold" image. That is the first artifact after the acquired media, for example via scanning.</p>
+<p><a href="https://github.com/Nautilus-Cyberneering/chinese-ideographs">Chinese Ideographs</a> is a sample library which follows the <a href="https://github.com/Nautilus-Cyberneering/nautilus-namecodes">Nautilus Filename Specification</a>. It contains some Chinese drawings related to Chinese ideographs.</p>
+<p>In the data folder you can see all the images:</p>
+<pre><code class="language-text">data
+├── 000000
+│   ├── 32
+│   │   ├── 000000-32.600.2.tif
+│   │   └── 000000-32.600.2.tif.dvc
+│   └── 52
+│       ├── 000000-52.600.2.tif
+│       └── 000000-52.600.2.tif.dvc
+...
+├── 000007
+│   ├── 32
+│   │   ├── 000007-32.600.2.tif
+│   │   └── 000007-32.600.2.tif.dvc
+│   └── 52
+└── 000008
+    ├── 32
+    │   ├── 000008-32.600.2.tif
+    │   └── 000008-32.600.2.tif.dvc
+    └── 52
+
+27 directories, 32 files
+</code></pre>
+<p>In fact, it does not contain the image itself but the "pointer" to the file in the remote DVC storage (<code>.dvc</code> extensions). <a href="https://dvc.org/">DVC</a> is a wrapper on top of Git to version and store binary files. It is an alternative to <a href="https://git-lfs.github.com/">Git LFS</a>. You can get (<code>pull</code>) the real images from the remote DVC storage into your local file system and they are ignored in the Git repository.</p>
+<p><a href="https://dvc.org/">DVC</a> has a command similar to <code>git diff</code> called <code>dvd diff</code> which give you a list of the changes between two commits.</p>
+<p>For example, if you clone that repo:</p>
+<pre><code class="language-shell">git clone https://github.com/Nautilus-Cyberneering/chinese-ideographs
+cd chinese-ideographs
+</code></pre>
+<p>and you run this command:</p>
+<pre><code class="language-shell">dvc diff --json 420ea8d 6e9878f
+</code></pre>
+<p>You will obtain this <code>json</code> object (it's has been truncated here):</p>
+<pre><code class="language-json">{                                                                     
+  &quot;added&quot;: [],
+  &quot;deleted&quot;: [
+    {
+      &quot;path&quot;: &quot;data/000000/32/000000-32.600.2.tif&quot;
+    },
+    {
+      &quot;path&quot;: &quot;data/000008/32/000008-32.600.2.tif&quot;
+    }
+  ],
+  &quot;modified&quot;: [
+    {
+      &quot;path&quot;: &quot;data/000001/32/000001-32.600.2.tif&quot;
+    }
+  ],
+  &quot;renamed&quot;: []
+}
+</code></pre>
+<p>This means that some images were deleted and one image was modified.</p>
+<p>The <code>gold-images-processing</code> command helps you to handle all changes related to <code>Gold</code> images. <code>Gold</code> images are identified by their purpose code <code>32</code>. We know that the modified image is a <code>Gold</code> image because the second code in the name is <code>32</code>, following the art work ID: <code>000001-32.600.2.tif</code>.</p>
+<p>The main goal for this command is to generate <code>Base</code> images automatically. When you add a new <code>Gold</code> image to a library that image is usually too big, and very often you do not need a very high resolution image. <code>Base</code> images are a second type of image that have a lower resolution and can be used for a lot of use cases. The <code>gold-images-processing</code> command automatically generates and keep synced the set of <code>Base</code> images.</p>
+<p>The <code>gold-images-processing</code> command also helps to keep the library clean and tidy. This is the list of all tasks.</p>
+<ul>
+<li>Get new or modified Gold images using <code>dvc diff</code> command.</li>
+<li>Pull images that are going to be processed from DVC remote storage.</li>
+<li>Validate filenames. Make sure the filename follows the <a href="https://github.com/Nautilus-Cyberneering/nautilus-namecodes">Nautilus Filename Specification</a>.</li>
+<li>Validate filepaths. Make sure the file is in the right folder.</li>
+<li>Validate image size.</li>
+<li>Generate Base image from <code>Gold</code> (change size and <a href="https://en.wikipedia.org/wiki/ICC_profile">ICC profile</a>).</li>
+<li>Auto-commit new or changed <code>Base</code> images.</li>
+</ul>
+<p>The way you usually use this command is by invoking it on a GitHub (or other CI/CD tool) workflow. You can see an example <a href="https://github.com/Nautilus-Cyberneering/chinese-ideographs/blob/main/.github/workflows/gold-drawings-processing.yml">here</a>.</p>
+<p>Example of invoking the command in a GitHub workflow:</p>
+<pre><code class="language-yaml">- name: Run librarian gold image processing command
+run: |
+    nautilus-librarian gold-images-processing --previous-ref ${{ env.PREVIOUS_REF }}  --current-ref ${{ env.CURRENT_REF }}
+env:
+    AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
+    AZURE_STORAGE_SAS_TOKEN: ${{ secrets.AZURE_STORAGE_SAS_TOKEN }}
+</code></pre>
+<h3 id="arguments">Arguments</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th>Env Var</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>previous_ref</code></td>
+<td>The <code>a_rev</code> in the dvd diff command. See: <a href="https://dvc.org/doc/command-reference/diff">dvc diff --help</a>.</td>
+<td><code>NL_PREVIOUS_REF</code></td>
+</tr>
+<tr>
+<td><code>current_ref</code></td>
+<td>The <code>b_rev</code> in the dvd diff command. See: <a href="https://dvc.org/doc/command-reference/diff">dvc diff --help</a>.</td>
+<td><code>NL_CURRENT_REF</code></td>
+</tr>
+</tbody>
+</table>
+<p>The <code>previous_ref</code> and <code>current_ref</code> are the positional arguments passed to the <a href="https://dvc.org/doc/command-reference/diff">dvc diff</a> command:</p>
+<pre><code class="language-text">a_rev  Old Git commit to compare (defaults to HEAD)
+b_rev  New Git commit to compare (defaults to the current workspace)
+</code></pre>
+<h3 id="options">Options</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Optional</th>
+<th>Description</th>
+<th>Default</th>
+<th>Env Var</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git_user_name</code></td>
+<td>yes</td>
+<td>Committer name for automatically generated git commits</td>
+<td>Git global config</td>
+<td><code>NL_GIT_USER_NAME</code></td>
+</tr>
+<tr>
+<td><code>git_user_email</code></td>
+<td>yes</td>
+<td>Committer email for automatically generated git commits</td>
+<td>Git global config</td>
+<td><code>NL_GIT_USER_EMAIL</code></td>
+</tr>
+<tr>
+<td><code>git_user_signingkey</code></td>
+<td>yes</td>
+<td>GPG signing key ID to sign commits</td>
+<td>Git global config</td>
+<td><code>NL_GIT_USER_SIGNINGKEY</code></td>
+</tr>
+<tr>
+<td><code>git_repo_dir</code></td>
+<td>yes</td>
+<td>The directory where the Git repository is located</td>
+<td>Current working dir</td>
+<td><code>NL_GIT_REPO_DIR</code></td>
+</tr>
+<tr>
+<td><code>min_image_size</code></td>
+<td>yes</td>
+<td>Minimum <code>Gold</code> image size in pixels for width and height</td>
+<td><code>256</code></td>
+<td><code>NL_MIN_IMAGE_SIZE</code></td>
+</tr>
+<tr>
+<td><code>max_image_size</code></td>
+<td>yes</td>
+<td>Maximum <code>Gold</code> image size in pixels for width and height</td>
+<td><code>16384</code></td>
+<td><code>NL_MAX_IMAGE_SIZE</code></td>
+</tr>
+<tr>
+<td><code>base_image_size</code></td>
+<td>yes</td>
+<td>Size for the longer dimension of the Base image</td>
+<td><code>512</code></td>
+<td><code>NL_BASE_IMAGE_SIZE</code></td>
+</tr>
+<tr>
+<td><code>dvc_diff</code></td>
+<td>yes</td>
+<td>Alternative diff to overwrite <code>previous_ref</code> and <code>current_ref</code> arguments</td>
+<td></td>
+<td><code>NL_DVC_DIFF</code></td>
+</tr>
+<tr>
+<td><code>dvc_remote</code></td>
+<td>yes</td>
+<td>The name of the remote DVC storage in the <code>.dvc\config</code> file. See <a href="https://dvc.org/doc/command-reference/remote">dvc remote command</a>.</td>
+<td><code>None</code></td>
+<td><code>NL_DVC_REMOTE</code></td>
+</tr>
+<tr>
+<td><code>gnupghome</code></td>
+<td>yes</td>
+<td>GPG env var to overwrite default <code>--homedir</code>. <a href="https://www.gnupg.org/documentation/manuals/gnupg/GPG-Configuration.html">More info</a>.</td>
+<td><code>~/.gnupg</code></td>
+<td><code>GNUPGHOME</code></td>
+</tr>
+</tbody>
+</table>
+<p>GPG is used to sign commits. Git relays on GPG to sign commits. You have to setup your GPG configuration in order to sign commits. Right now signing commits is mandatory but we <a href="https://github.com/Nautilus-Cyberneering/nautilus-librarian/issues/90">plan to make it optional</a>.</p>
+<p>Default Git configuration for commits is also obtained from Git global configuration. We are also <a href="https://github.com/Nautilus-Cyberneering/nautilus-librarian/issues/68">planning to change</a> that and let the user preset that configuration before calling this command.</p>
+<h3 id="extra-environment-variables">Extra environment variables</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Optional</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AZURE_STORAGE_ACCOUNT</code></td>
+<td>no</td>
+<td><a href="https://docs.microsoft.com/en-us/azure/storage/common/storage-account-overview">Your Azure Storage Account</a></td>
+</tr>
+<tr>
+<td><code>AZURE_STORAGE_SAS_TOKEN</code></td>
+<td>no</td>
+<td><a href="https://docs.microsoft.com/en-us/azure/storage/common/storage-sas-overview">Your SAS token</a></td>
+</tr>
+</tbody>
+</table>
+<p>You can use environment variables instead of arguments and options, but some env vars are exclusively env vars.</p>
+<p>Some of them, like <code>AZURE_STORAGE_ACCOUNT</code> and <code>AZURE_STORAGE_SAS_TOKEN</code>, are used by DVC to access the remote storage.</p>
+<p>You can find instructions about how to setup a storage for DVC on the <a href="https://dvc.org/doc/command-reference/remote/add">DVC documentation</a>.</p>
+<p>There is also a specific tutorial for <a href="https://github.com/josecelano/data-version-control/blob/master/docs/azure-blob-storage.md">adding remote Azure Storage for DVC</a>.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../development/" class="btn btn-neutral float-right" title="Development">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../install/" class="btn btn-neutral" title="Install"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../install/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../development/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

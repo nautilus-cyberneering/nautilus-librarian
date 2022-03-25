@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="canonical" href="https://nautilus-cyberneering.github.io/librarian/development/">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Development - Librarian</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Development";
+    var mkdocs_page_input_path = "development.md";
+    var mkdocs_page_url = "/librarian/development/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Librarian</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../install/">Install</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../commands/">Commands</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Development</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#run">Run</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#build">Build</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#testing">Testing</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#linting">Linting</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#run-workflows-locally">Run workflows locally</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#releases">Releases</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#commits">Commits</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#security">Security</a>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../documentation/">Documentation</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../glossary/">Glossary</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Librarian</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Development</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="development">Development</h1>
+<h2 id="run">Run</h2>
+<p>With docker:</p>
+<p>Build:</p>
+<pre><code class="language-shell">./bin/docker/build.sh
+</code></pre>
+<p>Run pre-built docker image:</p>
+<pre><code class="language-shell">./bin/docker/run.sh [OPTIONS] COMMAND [ARGS]...
+./bin/docker/run.sh --help
+</code></pre>
+<p>Run mounting current repo:</p>
+<pre><code class="language-shell">./bin/docker/run-dev.sh [OPTIONS] COMMAND [ARGS]...
+./bin/docker/run-dev.sh --help
+</code></pre>
+<p>With Poetry:</p>
+<pre><code class="language-shell">pip install poetry poetry-dynamic-versioning
+poetry install
+poetry run nautilus-librarian [OPTIONS] COMMAND [ARGS]...
+poetry run nautilus-librarian --help
+</code></pre>
+<blockquote>
+<p>NOTE: With Poetry, you have to install the <a href="https://github.com/Nautilus-Cyberneering/librarian-system-dockerfile">Librarian system dependencies</a>.</p>
+</blockquote>
+<h2 id="build">Build</h2>
+<pre><code class="language-shell">pip install poetry poetry-dynamic-versioning
+poetry install
+poetry build
+</code></pre>
+<p>You should have the package in the <code>dist</code> folder.</p>
+<p>You can install the package locally with:</p>
+<pre><code class="language-shell">pip install --user --force-reinstall dist/nautilus_librarian-0.2.1.post2.dev0+871cb83-py3-none-any.whl
+</code></pre>
+<p>Where <code>0.2.1.post2.dev0+871cb83</code> is the package version. You can get the package version with: <code>poetry version</code>.
+Remember to exit from your poetry Python environment. If you open the wheel file (zip) you will find the version in
+the <code>nautilus_librarian/_version.py</code> file:</p>
+<pre><code class="language-text">...
+__version__: str = &quot;0.2.1.post2.dev0+871cb83&quot;
+...
+</code></pre>
+<h2 id="testing">Testing</h2>
+<p>With docker:</p>
+<pre><code class="language-shell">./bin/docker/test.sh
+</code></pre>
+<p>With Poetry:</p>
+<pre><code class="language-shell">poetry shell
+pytest
+</code></pre>
+<p>or:</p>
+<pre><code class="language-shell">poetry run pytest --cov
+</code></pre>
+<p>Some useful test commands:</p>
+<p>Run only one test (<code>-k</code>) with no capture (<code>-s</code>):</p>
+<pre><code class="language-shell">pytest -s -k &quot;test_app&quot;
+</code></pre>
+<h2 id="linting">Linting</h2>
+<p>With <a href="https://megalinter.github.io/latest/mega-linter-runner/#local-installation">MegaLinter</a>:</p>
+<p>Install:</p>
+<pre><code class="language-shell">npm install mega-linter-runner -g
+</code></pre>
+<p>Run with the auto fix:</p>
+<pre><code class="language-shell">mega-linter-runner --fix
+</code></pre>
+<h2 id="run-workflows-locally">Run workflows locally</h2>
+<p>You can use <a href="https://github.com/nektos/act">act</a> to run workflows locally. For example:</p>
+<pre><code class="language-shell">act -W ./.github/workflows/test.yml -j build
+</code></pre>
+<p>With that command, you can run the <code>build</code> job in the <code>test.yml</code> workflow.</p>
+<p>If the workflow requires some environment variables you can add them in a local <code>.secrets</code> file (in the project root dir).
+In the <a href="https://github.com/Nautilus-Cyberneering/nautilus-librarian/blob/main/.secrets.template">.secrets.template</a> file you will find an example with the environment variables you need for the <a href="https://github.com/Nautilus-Cyberneering/nautilus-librarian/blob/main/.github/workflows/test.yml">test.yml</a> workflow.</p>
+<p>Running workflows with <code>act</code> can be very tricky. There are some GitHub Actions features that do not work locally even if you use the full <code>act</code> docker image. We recommend to use <code>act</code> if you are testing the integration between the Librarian and a GitHub workflow.</p>
+<p>If you just want to test a Librarian command with your development version of the Librarian you can run it with Poetry for a different target directory. For example, the <code>poetry run nautilus-librarian gold-images-processing ...</code> generates some auto-commits so you can not run it just like that because it will create commits on your development branch.</p>
+<p>In order to test the command you can create a temporary dir and pass that dir as an argument to the Librarian:</p>
+<p>First, setup for your test directory:</p>
+<pre><code class="language-shell">cd /tmp
+git clone git@github.com:Nautilus-Cyberneering/dvc-test-repo.git
+cd dvc-test-repo/
+...
+</code></pre>
+<p>You can do whatever you need to create the initial state you want to test. And then you can run the command with:</p>
+<pre><code class="language-shell">poetry run nautilus-librarian gold-images-processing --git-repo-dir=/tmp/dvc-test-repo --gnupghome=~/.gnupg --previous-ref=61f51f1 --current-ref=145851a ...
+</code></pre>
+<p>You can also overwrite other directories like the GPG home dir (<code>~/.gnupg</code>), a <a href="https://dvc.org/doc/command-reference/remote/add">DVC local remote storage</a>, etcetera.</p>
+<h2 id="releases">Releases</h2>
+<p>We use <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning 2.0.0</a>. To publish a new release, you only new to
+create the tag (for example, <code>v1.3.0</code>) and push it to <a href="https://github.com/Nautilus-Cyberneering/nautilus-librarian/tags">GitHub</a>.</p>
+<pre><code class="language-shell">git tag v1.3.0
+git push origin v1.3.0
+</code></pre>
+<h2 id="commits">Commits</h2>
+<p>We are using <a href="https://www.conventionalcommits.org/en/v1.0.0/">Conventional Commits</a>.</p>
+<h2 id="security">Security</h2>
+<p>The application uses a lot of console commands. Commands that use arguments taken from user input could be a potential security risk. Please review the rules to avoid command injection before adding a new console command.</p>
+<p>If you want to know more about command injection please read the links below.</p>
+<p>The basic rules to follow when you add a new console command are:</p>
+<ol>
+<li>Always try to use an internal Python API (if it exists) instead of running an OS command.</li>
+<li>Try to use a high-level wrapper instead of executing a command: <code>gpg_connect_agent(...)</code>, <code>git(...)</code>, <code>dvc(...)</code>, <code>gpg(...)</code>.</li>
+<li>Do not pass user-controlled input (if possible). If you need it, consider using validation before passing values. If you expect a file path, check if the file exists. If you expect an email, validate the email, etcetera.</li>
+<li>Do not use "shell" if not needed. Consider using <code>execute_console_command</code> instead of <code>execute_shell_command</code>.</li>
+<li>Do not use "f-string" with <code>execute_console_command</code> and <code>execute_shell_command</code>. Consider using placeholders in the command string and passing variables values as keyword arguments. Those functions use the function <code>shlex.quote(..)</code> to scape the values. For example:</li>
+</ol>
+<pre><code class="language-python">execute_console_command(
+    &quot;dvc remote add -d {remote_name} {remote_dir}&quot;,
+    remote_name=remote_name,
+    remote_dir=remote_dir,
+    cwd=self.git_repo_dir,
+)
+</code></pre>
+<p>instead of:</p>
+<pre><code class="language-python">execute_console_command(
+    f&quot;dvc remote add -d {remote_name} {remote_dir}&quot;,
+    cwd=self.git_repo_dir,
+)
+</code></pre>
+<p>Links:</p>
+<ul>
+<li><a href="https://semgrep.dev/docs/cheat-sheets/python-command-injection/">OS Command Injection in Python</a></li>
+<li><a href="https://knowledge-base.secureflag.com/vulnerabilities/code_injection/os_command_injection_python.html">Command injection prevention for Python</a></li>
+</ul>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../documentation/" class="btn btn-neutral float-right" title="Documentation">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../commands/" class="btn btn-neutral" title="Commands"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../commands/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../documentation/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
