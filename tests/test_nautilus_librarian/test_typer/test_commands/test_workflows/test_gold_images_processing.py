@@ -6,7 +6,9 @@ from typer.testing import CliRunner
 from nautilus_librarian.domain.file_locator import file_locator
 from nautilus_librarian.main import app
 from nautilus_librarian.mods.console.domain.utils import execute_shell_command
-from nautilus_librarian.mods.namecodes.domain.filename import Filename
+from nautilus_librarian.mods.namecodes.domain.media_library_filename import (
+    MediaLibraryFilename,
+)
 
 runner = CliRunner()
 
@@ -29,7 +31,7 @@ def assert_expected_output(output, expected_output):
     assert output == expected_output_without_indent
 
 
-def create_initial_state(
+def create_initial_state_with_sample_base_image(
     temp_git_dir,
     temp_dvc_local_remote_storage_dir,
     sample_base_image_absolute_path,
@@ -47,7 +49,9 @@ def create_initial_state(
         https://dvc.org/doc/command-reference/remote#example-add-a-default-local-remote
     5. Add a example Base image from fixtures dir
     """
-    sample_base_image_dir = file_locator(Filename(sample_base_image_absolute_path))
+    sample_base_image_dir = file_locator(
+        MediaLibraryFilename(sample_base_image_absolute_path)
+    )
 
     execute_shell_command(
         """
@@ -76,7 +80,7 @@ def create_initial_state(
 
 def add_gold_image(git_dir, sample_gold_image_absolute_path, gpg_home_dir, git_user):
     # Copy the Base sample Base image to its folder
-    filename = Filename(sample_gold_image_absolute_path)
+    filename = MediaLibraryFilename(sample_gold_image_absolute_path)
     sample_gold_image_dir = file_locator(filename)
     os.mkdir(f"{git_dir}/{sample_gold_image_dir}")
     copy(sample_gold_image_absolute_path, f"{git_dir}/{sample_gold_image_dir}")
@@ -104,7 +108,7 @@ def it_should_show_a_message_if_there_is_not_any_change_in_gold_images(
     temp_gpg_home_dir,
     git_user,
 ):
-    create_initial_state(
+    create_initial_state_with_sample_base_image(
         temp_git_dir,
         temp_dvc_local_remote_storage_dir,
         sample_base_image_absolute_path,
@@ -132,7 +136,7 @@ def copy_media_file_to_its_folder(src_media_file_path, git_dir):
     Given a library file in a source location, it copies it to the git repo in the right folder.
     """
 
-    media_file_relative_dir = file_locator(Filename(src_media_file_path))
+    media_file_relative_dir = file_locator(MediaLibraryFilename(src_media_file_path))
 
     dest_media_file_dir = f"{git_dir}/{media_file_relative_dir}"
 
@@ -154,7 +158,7 @@ def test_gold_images_processing_workflow_command(
     This is the acceptance test for the whole command and for the happy path.
     Every step in the workflow has its own independent unit test.
     """
-    create_initial_state(
+    create_initial_state_with_sample_base_image(
         temp_git_dir,
         temp_dvc_local_remote_storage_dir,
         sample_base_image_absolute_path,
@@ -183,7 +187,7 @@ def test_gold_images_processing_workflow_command(
     assert result.exit_code == 0
 
     expected_output = """
-    000001-32.600.2.tif ✓
+    data/000001/32/000001-32.600.2.tif ✓
     data/000001/32/000001-32.600.2.tif ✓
     ✓ data/000001/32/000001-32.600.2.tif pulled from dvc storage
     ✓ Dimensions of data/000001/32/000001-32.600.2.tif are 1740 x 1160

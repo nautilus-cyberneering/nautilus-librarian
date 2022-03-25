@@ -1,6 +1,8 @@
 import os
 
-from nautilus_librarian.mods.namecodes.domain.filename import Filename
+from nautilus_librarian.mods.namecodes.domain.media_library_filename import (
+    MediaLibraryFilename,
+)
 
 
 class FileNotFoundException(Exception):
@@ -21,15 +23,19 @@ class ExpectedGoldImageError(Exception):
     pass
 
 
-def file_locator(filename: Filename) -> str:
+def file_locator(filename: MediaLibraryFilename) -> str:
     return f"data/{filename.artwork_id}/{filename.purpose_code}"
 
 
-def get_base_image_filename_from_gold_image(gold_image: Filename) -> Filename:
+def get_base_image_filename_from_gold_image(
+    gold_image: MediaLibraryFilename,
+) -> MediaLibraryFilename:
     return gold_image.generate_base_image_filename()
 
 
-def get_base_image_absolute_path_from_gold(git_repo_dir, gold_image: Filename):
+def get_base_image_absolute_path_from_gold(
+    git_repo_dir, gold_image: MediaLibraryFilename
+):
     if not gold_image.is_gold_image:
         raise ExpectedGoldImageError(f"Expected Gold image: {gold_image}")
 

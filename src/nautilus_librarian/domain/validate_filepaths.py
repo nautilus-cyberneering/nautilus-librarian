@@ -1,7 +1,9 @@
 import os
 
 from nautilus_librarian.domain.file_locator import file_locator
-from nautilus_librarian.mods.namecodes.domain.filename import Filename
+from nautilus_librarian.mods.namecodes.domain.media_library_filename import (
+    MediaLibraryFilename,
+)
 
 
 class InvalidImageFolderException(ValueError):
@@ -13,7 +15,7 @@ class InvalidImageFolderException(ValueError):
 def validate_filepath(filepath):
     actual_folder = os.path.dirname(filepath)
 
-    filename = Filename(os.path.basename(filepath))
+    filename = MediaLibraryFilename(os.path.basename(filepath))
 
     expected_folder = file_locator(filename)
 

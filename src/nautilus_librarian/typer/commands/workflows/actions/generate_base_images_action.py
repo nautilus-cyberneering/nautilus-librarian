@@ -1,10 +1,12 @@
-from nautilus_librarian.domain.dvc_services_api import DvcServicesApi
-from nautilus_librarian.domain.file_locator import file_locator
-from nautilus_librarian.mods.dvc.domain.utils import (
+from nautilus_librarian.domain.dvc_diff_media_parser import (
     extract_added_and_modified_files_from_dvc_diff,
 )
+from nautilus_librarian.domain.dvc_services_api import DvcServicesApi
+from nautilus_librarian.domain.file_locator import file_locator
 from nautilus_librarian.mods.libvips.domain.process_image import process_image
-from nautilus_librarian.mods.namecodes.domain.filename import Filename
+from nautilus_librarian.mods.namecodes.domain.media_library_filename import (
+    MediaLibraryFilename,
+)
 from nautilus_librarian.typer.commands.workflows.actions.action_result import (
     ActionResult,
     ErrorMessage,
@@ -31,13 +33,11 @@ def add_base_image_to_dvc(git_repo_dir, gold_image):
     dvc_services.push(base_img_relative_path)
 
 
-def generate_base_images(dvc_diff, git_repo_dir, base_images_size):
+def generate_base_images_action(dvc_diff, git_repo_dir, base_images_size):
     """
-    It generates the base images of all the media sizes in the dvc diff.
+    It generates the Base images of new and modified Gold images in the dvc diff.
     """
-    filenames = extract_added_and_modified_files_from_dvc_diff(
-        dvc_diff, only_basename=False
-    )
+    filenames = extract_added_and_modified_files_from_dvc_diff(dvc_diff)
 
     if dvc_diff == "{}" or filenames == []:
         return ActionResult(
@@ -48,7 +48,7 @@ def generate_base_images(dvc_diff, git_repo_dir, base_images_size):
 
     for filename in filenames:
         try:
-            gold_filename = Filename(filename)
+            gold_filename = MediaLibraryFilename(filename)
             base_filename = get_base_image_path(git_repo_dir, gold_filename)
             process_image(
                 f"{git_repo_dir}/{filename}",

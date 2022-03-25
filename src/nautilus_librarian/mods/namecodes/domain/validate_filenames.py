@@ -1,7 +1,9 @@
 # We are not implementing multiple transformations yet.
 # {ARTWORK_ID}-{PURPOSE_CODE}.{TRANSFORMATION_CODE}.{TYPE_CODE}.{EXTENSION}
 
-from nautilus_librarian.mods.namecodes.domain.filename import Filename
+from nautilus_librarian.mods.namecodes.domain.media_library_filename import (
+    MediaLibraryFilename,
+)
 
 
 class FilenameException(ValueError):
@@ -65,7 +67,7 @@ def validate_filename(filename):
     """
     It returns true if the filename is valid, otherwise it throws an exception.
     """
-    fn = Filename(filename)
+    fn = MediaLibraryFilename(filename)
 
     (
         artwork_id,
@@ -84,7 +86,7 @@ def validate_filename(filename):
     return True
 
 
-def is_a_library_file(filename):
+def is_a_library_file(filename: str) -> bool:
     """
     It returns true if the filename is valid, otherwise false.
     """
@@ -95,7 +97,7 @@ def is_a_library_file(filename):
         return False
 
 
-def validate_filenames(filenames):
+def validate_filenames(filenames: list[str]):
     for filename in filenames:
         try:
             validate_filename(filename)

@@ -1,21 +1,23 @@
 import os
 from typing import List
 
+from nautilus_librarian.domain.dvc_diff_media_parser import (
+    extract_deleted_files_from_dvc_diff,
+    extract_modified_files_from_dvc_diff,
+    extract_renamed_files_from_dvc_diff,
+)
 from nautilus_librarian.domain.dvc_services_api import DvcServicesApi
 from nautilus_librarian.domain.file_locator import (
     file_locator,
     guard_that_base_image_exists,
 )
-from nautilus_librarian.mods.dvc.domain.utils import (
-    extract_added_files_from_dvc_diff,
-    extract_deleted_files_from_dvc_diff,
-    extract_modified_files_from_dvc_diff,
-    extract_renamed_files_from_dvc_diff,
-)
+from nautilus_librarian.mods.dvc.domain.utils import extract_added_files_from_dvc_diff
 from nautilus_librarian.mods.git.domain.git_user import GitUser
 from nautilus_librarian.mods.git.domain.repo import GitRepo
-from nautilus_librarian.mods.namecodes.domain.filename import Filename
 from nautilus_librarian.mods.namecodes.domain.filename_filters import filter_gold_images
+from nautilus_librarian.mods.namecodes.domain.media_library_filename import (
+    MediaLibraryFilename,
+)
 from nautilus_librarian.typer.commands.workflows.actions.action_result import (
     ActionResult,
     Message,
@@ -23,33 +25,40 @@ from nautilus_librarian.typer.commands.workflows.actions.action_result import (
 )
 
 
-def format_extracted_files(files):
+def format_extracted_files(files: list[str]) -> list[str]:
     """
     Parses a list of images from dvc diff output in json format, filters the Gold
     images and returns a list of Filenames.
     """
     gold_images = filter_gold_images(files)
-    return [Filename(gold_image) for gold_image in gold_images]
+    return [MediaLibraryFilename(gold_image) for gold_image in gold_images]
 
 
-def get_new_gold_images_filenames_from_dvc_diff(dvc_diff) -> List[Filename]:
+def get_added_gold_images_filenames_from_dvc_diff(
+    dvc_diff,
+) -> List[MediaLibraryFilename]:
     return format_extracted_files(extract_added_files_from_dvc_diff(dvc_diff))
 
 
-def get_modified_gold_images_filenames_from_dvc_diff(dvc_diff) -> List[Filename]:
+def get_modified_gold_images_filenames_from_dvc_diff(
+    dvc_diff,
+) -> List[MediaLibraryFilename]:
     return format_extracted_files(extract_modified_files_from_dvc_diff(dvc_diff))
 
 
-def get_deleted_gold_images_filenames_from_dvc_diff(dvc_diff) -> List[Filename]:
+def get_deleted_gold_images_filenames_from_dvc_diff(
+    dvc_diff,
+) -> List[MediaLibraryFilename]:
     return format_extracted_files(extract_deleted_files_from_dvc_diff(dvc_diff))
 
 
 def get_renamed_gold_images_filenames_from_dvc_diff(
     dvc_diff,
-) -> List[tuple[Filename, Filename]]:
+) -> List[tuple[MediaLibraryFilename, MediaLibraryFilename]]:
+    # TODO: now we can use the Path object and remove this function
     extracted_filenames = extract_renamed_files_from_dvc_diff(dvc_diff)
-    old_filenames = [element["old"] for element in extracted_filenames]
-    new_filenames = [element["new"] for element in extracted_filenames]
+    old_filenames = [str(path.old()) for path in extracted_filenames]
+    new_filenames = [str(path.new()) for path in extracted_filenames]
     return list(
         zip(
             format_extracted_files(old_filenames), format_extracted_files(new_filenames)
@@ -109,11 +118,11 @@ def commit_renamed_base_image(
     )
 
 
-def calculate_the_corresponding_base_image_from_gold_image(git_repo_dir, gold_image):
+def calculate_the_corresponding_base_image_from_gold_image(
+    git_repo_dir, gold_image: MediaLibraryFilename
+):
     """
     Returns the Base image path which correspond to the given Gold image.
-
-    Code Review: LibraryFilePath class? and rename Filename to LibraryFilename?
     """
     corresponding_base_image = gold_image.generate_base_image_filename()
     corresponding_base_image_relative_path = (
@@ -208,16 +217,19 @@ def process_renamed_base_images(
 ):
     # See note at https://dvc.org/doc/command-reference/diff#example-renamed-files
     # dvc diff only detects files which have been renamed but are otherwise unmodified.
-    # Also, remember to commit new and OLD pointers
-    for gold_image_duple in old_and_new_gold_images_list:
-        old_gold_image = gold_image_duple[0]
-        new_gold_image = gold_image_duple[1]
+    # Also, remember to commit NEW and OLD pointers
+
+    for gold_image_tuple in old_and_new_gold_images_list:
+        old_gold_image = gold_image_tuple[0]
+        new_gold_image = gold_image_tuple[1]
+
         (
             old_base_img_relative_path,
             _,
         ) = calculate_the_corresponding_base_image_from_gold_image(
             git_repo_dir, old_gold_image
         )
+
         (
             new_base_img_relative_path,
             _,
@@ -235,53 +247,24 @@ def process_renamed_base_images(
 
         messages.append(
             Message(
-                f"New Gold image renamed: {old_gold_image} -> {new_gold_image} "
-                f"Base image: {new_base_img_relative_path} -> {old_base_img_relative_path} ✓"
+                f"✓ Gold image renamed: {old_gold_image} -> {new_gold_image}"
+                f"✓ Base image renamed: {old_base_img_relative_path} -> {new_base_img_relative_path}"
             )
         )
+
+    # TODO: why don't we return the Messages?
 
     return
 
 
-def auto_commit_base_images(dvc_diff, git_repo_dir, gnupghome, git_user: GitUser):
-    """
-    Workflow step: auto-commit new Base images generated during the workflow execution
-    in previous steps.
-
-    Case 1. Added Gold images.
-    For each added Gold image:
-      [✓] 1. Calculate the corresponding Base image filename and filepath.
-      [✓] 2. Check if the Base image exists.
-      [✓] 3. Add the image to dvc.
-      [✓] 4. Push the image to remote dvc storage.
-      [✓] 5. Commit the image to the current branch with a signed commit.
-
-    Points 2 to 5 are different depending on whether we are adding,
-    modifying or renaming the Gold image.
-
-    TODO:
-    Case 2. Modified Gold images.
-    For each modified Gold image:
-      [ ] 1. ??
-      [ ] 2. ...
-      [ ] 3. ??
-    Pending to define:
-    https://github.com/Nautilus-Cyberneering/chinese-ideographs/pull/122#issuecomment-972844365
-
-    Case 3. Renamed Gold images.
-    For each renamed Gold image:
-      [ ] 1. ??
-      [ ] 2. ...
-      [ ] 3. ??
-    Pending to define:
-    https://github.com/Nautilus-Cyberneering/chinese-ideographs/pull/122#issuecomment-972844365
-    """
-
+def auto_commit_base_images_action(
+    dvc_diff, git_repo_dir, gnupghome, git_user: GitUser
+):
     messages: List[str] = []
 
-    new_gold_images = get_new_gold_images_filenames_from_dvc_diff(dvc_diff)
+    added_gold_images = get_added_gold_images_filenames_from_dvc_diff(dvc_diff)
     process_added_base_images(
-        new_gold_images, messages, git_repo_dir, gnupghome, git_user
+        added_gold_images, messages, git_repo_dir, gnupghome, git_user
     )
 
     modified_gold_images = get_modified_gold_images_filenames_from_dvc_diff(dvc_diff)
@@ -289,14 +272,14 @@ def auto_commit_base_images(dvc_diff, git_repo_dir, gnupghome, git_user: GitUser
         modified_gold_images, messages, git_repo_dir, gnupghome, git_user
     )
 
-    renamed_gold_images = get_renamed_gold_images_filenames_from_dvc_diff(dvc_diff)
-    process_renamed_base_images(
-        renamed_gold_images, messages, git_repo_dir, gnupghome, git_user
-    )
-
     deleted_gold_images = get_deleted_gold_images_filenames_from_dvc_diff(dvc_diff)
     process_deleted_base_images(
         deleted_gold_images, messages, git_repo_dir, gnupghome, git_user
+    )
+
+    renamed_gold_images = get_renamed_gold_images_filenames_from_dvc_diff(dvc_diff)
+    process_renamed_base_images(
+        renamed_gold_images, messages, git_repo_dir, gnupghome, git_user
     )
 
     return ActionResult(ResultCode.CONTINUE, messages)

@@ -23,9 +23,9 @@ class TypeCode(Enum):
         return "%s" % self.value
 
 
-class Filename:
+class MediaLibraryFilename:
     """
-    A library media file name.
+    A media library file name.
 
     It allows you to create an invalid filename because the parser do not fail.
     We could use the "validate_filename" function in the constructor but the final
@@ -33,7 +33,7 @@ class Filename:
     to validate and parse the filename.
     """
 
-    def __init__(self, filename):
+    def __init__(self, filename: str):
         basename = os.path.basename(filename)
         self.filename = basename
         self.parse(self.filename)
@@ -65,12 +65,12 @@ class Filename:
         ) and self.type_code == str(TypeCode.IMAGE)
 
     def generate_base_image_filename(self):
-        return Filename(
+        return MediaLibraryFilename(
             f"""{self.artwork_id}-{str(PurposeCode.BASE_IMAGE)}.{self.transformation_code}.{self.type_code}.{self.extension}"""  # noqa
         )
 
     def __eq__(self, other):
-        if isinstance(other, Filename):
+        if isinstance(other, MediaLibraryFilename):
             return self.filename == other.filename
         return False
 

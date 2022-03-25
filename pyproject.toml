@@ -43,7 +43,7 @@ testpaths = [
     "tests"
 ]
 python_files = "test_*.py *_test.py"
-python_functions = "test_* it_should_* given_*"
+python_functions = "test_* it_should_* it_could_* given_*"
 
 [tool.poetry-dynamic-versioning]
 enable = true

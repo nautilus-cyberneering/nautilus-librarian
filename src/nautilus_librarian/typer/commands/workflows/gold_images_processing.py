@@ -9,32 +9,32 @@ from nautilus_librarian.mods.git.domain.config import (
 )
 from nautilus_librarian.mods.git.domain.git_user import GitUser
 from nautilus_librarian.typer.commands.workflows.actions.action_result import ResultCode
-from nautilus_librarian.typer.commands.workflows.actions.auto_commit_base_images import (
-    auto_commit_base_images,
+from nautilus_librarian.typer.commands.workflows.actions.auto_commit_base_images_action import (
+    auto_commit_base_images_action,
 )
-from nautilus_librarian.typer.commands.workflows.actions.check_images_changes import (
-    check_images_changes,
+from nautilus_librarian.typer.commands.workflows.actions.check_images_changes_action import (
+    check_images_changes_action,
 )
 from nautilus_librarian.typer.commands.workflows.actions.delete_base_images_action import (
-    delete_base_images,
+    delete_base_images_action,
 )
 from nautilus_librarian.typer.commands.workflows.actions.dvc_pull_action import (
     dvc_pull_action,
 )
 from nautilus_librarian.typer.commands.workflows.actions.generate_base_images_action import (
-    generate_base_images,
+    generate_base_images_action,
 )
 from nautilus_librarian.typer.commands.workflows.actions.rename_base_images_action import (
-    rename_base_images,
+    rename_base_images_action,
 )
-from nautilus_librarian.typer.commands.workflows.actions.validate_filenames import (
-    validate_filenames,
+from nautilus_librarian.typer.commands.workflows.actions.validate_filenames_action import (
+    validate_filenames_action,
 )
 from nautilus_librarian.typer.commands.workflows.actions.validate_filepaths_action import (
     validate_filepaths_action,
 )
 from nautilus_librarian.typer.commands.workflows.actions.validate_images_dimensions_action import (
-    validate_images_dimensions,
+    validate_images_dimensions_action,
 )
 
 app = typer.Typer()
@@ -117,7 +117,7 @@ def gold_images_processing(
         None, git_repo_dir, previous_ref, current_ref
     )
 
-    process_action_result(validate_filenames(dvc_diff))
+    process_action_result(validate_filenames_action(dvc_diff))
 
     process_action_result(validate_filepaths_action(dvc_diff))
 
@@ -126,20 +126,24 @@ def gold_images_processing(
 
     process_action_result(dvc_pull_action(dvc_diff, git_repo_dir, dvc_remote))
 
-    process_action_result(check_images_changes(dvc_diff))
+    process_action_result(check_images_changes_action(dvc_diff))
 
     process_action_result(
-        validate_images_dimensions(dvc_diff, min_image_size, max_image_size)
+        validate_images_dimensions_action(
+            dvc_diff, git_repo_dir, min_image_size, max_image_size
+        )
     )
 
-    process_action_result(generate_base_images(dvc_diff, git_repo_dir, base_image_size))
+    process_action_result(
+        generate_base_images_action(dvc_diff, git_repo_dir, base_image_size)
+    )
 
-    process_action_result(rename_base_images(dvc_diff, git_repo_dir))
+    process_action_result(rename_base_images_action(dvc_diff, git_repo_dir))
 
-    process_action_result(delete_base_images(dvc_diff, git_repo_dir))
+    process_action_result(delete_base_images_action(dvc_diff, git_repo_dir))
 
     process_action_result(
-        auto_commit_base_images(dvc_diff, git_repo_dir, gnupghome, git_user)
+        auto_commit_base_images_action(dvc_diff, git_repo_dir, gnupghome, git_user)
     )
 
 

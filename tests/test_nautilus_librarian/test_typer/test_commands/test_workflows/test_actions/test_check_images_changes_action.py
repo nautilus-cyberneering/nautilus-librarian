@@ -1,8 +1,8 @@
 from test_nautilus_librarian.utils import compact_json
 
 from nautilus_librarian.typer.commands.workflows.actions.action_result import ResultCode
-from nautilus_librarian.typer.commands.workflows.actions.check_images_changes import (
-    check_images_changes,
+from nautilus_librarian.typer.commands.workflows.actions.check_images_changes_action import (
+    check_images_changes_action,
 )
 
 
@@ -10,7 +10,7 @@ def given_an_empty_dvc_diff_it_should_exit():
 
     dvc_diff_with_added_gold_image = {}
 
-    result = check_images_changes(compact_json(dvc_diff_with_added_gold_image))
+    result = check_images_changes_action(compact_json(dvc_diff_with_added_gold_image))
 
     assert result.code == ResultCode.EXIT
 
@@ -24,7 +24,7 @@ def given_a_diff_structure_with_no_changes_it_should_exit():
         "renamed": [],
     }
 
-    result = check_images_changes(compact_json(dvc_diff_with_added_gold_image))
+    result = check_images_changes_action(compact_json(dvc_diff_with_added_gold_image))
 
     assert result.code == ResultCode.EXIT
 
@@ -40,7 +40,7 @@ def given_a_diff_structure_with_added_files_it_should_continue():
         "renamed": [],
     }
 
-    result = check_images_changes(compact_json(dvc_diff_with_added_gold_image))
+    result = check_images_changes_action(compact_json(dvc_diff_with_added_gold_image))
 
     assert result.code == ResultCode.CONTINUE
 
@@ -56,7 +56,7 @@ def given_a_diff_structure_with_deleted_files_it_should_continue():
         "renamed": [],
     }
 
-    result = check_images_changes(compact_json(dvc_diff_with_added_gold_image))
+    result = check_images_changes_action(compact_json(dvc_diff_with_added_gold_image))
 
     assert result.code == ResultCode.CONTINUE
 
@@ -72,7 +72,7 @@ def given_a_diff_structure_with_modified_files_it_should_continue():
         "renamed": [],
     }
 
-    result = check_images_changes(compact_json(dvc_diff_with_added_gold_image))
+    result = check_images_changes_action(compact_json(dvc_diff_with_added_gold_image))
 
     assert result.code == ResultCode.CONTINUE
 
@@ -93,6 +93,6 @@ def given_a_diff_structure_with_renamed_files_it_should_continue():
         ],
     }
 
-    result = check_images_changes(compact_json(dvc_diff_with_added_gold_image))
+    result = check_images_changes_action(compact_json(dvc_diff_with_added_gold_image))
 
     assert result.code == ResultCode.CONTINUE

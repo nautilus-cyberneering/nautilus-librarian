@@ -3,14 +3,14 @@ from shutil import copytree
 
 from test_nautilus_librarian.test_typer.test_commands.test_workflows.test_gold_images_processing import (
     add_gold_image,
-    create_initial_state,
+    create_initial_state_with_sample_base_image,
 )
 from test_nautilus_librarian.utils import compact_json
 
 from nautilus_librarian.mods.dvc.domain.dvc_command_wrapper import dvc
 from nautilus_librarian.typer.commands.workflows.actions.action_result import ResultCode
 from nautilus_librarian.typer.commands.workflows.actions.generate_base_images_action import (
-    generate_base_images,
+    generate_base_images_action,
 )
 
 
@@ -18,7 +18,7 @@ def copy_fixtures_to_tmp_path(fixtures_dir, temp_path):
     copytree(fixtures_dir, temp_path)
 
 
-def given_a_diff_structure_with_added_gold_image_it_should_generate_base_image(
+def given_a_diff_structure_with_an_added_gold_image_it_should_generate_the_corresponding_base_image(
     temp_git_dir,
     temp_dvc_local_remote_storage_dir,
     sample_base_image_absolute_path,
@@ -36,7 +36,7 @@ def given_a_diff_structure_with_added_gold_image_it_should_generate_base_image(
         "renamed": [],
     }
 
-    create_initial_state(
+    create_initial_state_with_sample_base_image(
         temp_git_dir,
         temp_dvc_local_remote_storage_dir,
         sample_base_image_absolute_path,
@@ -47,7 +47,7 @@ def given_a_diff_structure_with_added_gold_image_it_should_generate_base_image(
         temp_git_dir, sample_gold_image_absolute_path, temp_gpg_home_dir, git_user
     )
 
-    result = generate_base_images(
+    result = generate_base_images_action(
         compact_json(dvc_diff_with_added_gold_image), temp_git_dir, 512
     )
 
@@ -75,7 +75,7 @@ def given_a_diff_structure_with_added_gold_image_it_should_generate_base_image(
     )
 
 
-def given_a_diff_structure_with_modified_gold_image_it_should_generate_base_image(
+def given_a_diff_structure_with_a_modified_gold_image_it_should_regenerate_the_corresponding_base_image(
     temp_git_dir,
     temp_dvc_local_remote_storage_dir,
     sample_base_image_absolute_path,
@@ -93,7 +93,7 @@ def given_a_diff_structure_with_modified_gold_image_it_should_generate_base_imag
         "renamed": [],
     }
 
-    create_initial_state(
+    create_initial_state_with_sample_base_image(
         temp_git_dir,
         temp_dvc_local_remote_storage_dir,
         sample_base_image_absolute_path,
@@ -104,7 +104,7 @@ def given_a_diff_structure_with_modified_gold_image_it_should_generate_base_imag
         temp_git_dir, sample_gold_image_absolute_path, temp_gpg_home_dir, git_user
     )
 
-    result = generate_base_images(
+    result = generate_base_images_action(
         compact_json(dvc_diff_with_added_gold_image), f"{temp_git_dir}", 512
     )
 
@@ -114,9 +114,10 @@ def given_a_diff_structure_with_modified_gold_image_it_should_generate_base_imag
     )
 
 
-def given_a_diff_structure_with_renamed_gold_image_it_should_not_generate_base_images(
-    sample_gold_image_absolute_path,
+def given_a_diff_structure_with_a_renamed_gold_image_it_should_not_generate_again_the_correspoding_base_images(
+    sample_gold_image_relative_path,
 ):
+    # Since the Base image does not change, they are are renamed with a separated action instead of regenerated.
 
     dvc_diff_with_added_gold_image = {
         "added": [],
@@ -125,14 +126,16 @@ def given_a_diff_structure_with_renamed_gold_image_it_should_not_generate_base_i
         "renamed": [
             {
                 "path": {
-                    "old": sample_gold_image_absolute_path,
-                    "new": sample_gold_image_absolute_path,
+                    "old": sample_gold_image_relative_path,
+                    "new": sample_gold_image_relative_path,
                 }
             },
         ],
     }
 
-    result = generate_base_images(compact_json(dvc_diff_with_added_gold_image), "", 512)
+    result = generate_base_images_action(
+        compact_json(dvc_diff_with_added_gold_image), "", 512
+    )
 
     assert result.code == ResultCode.CONTINUE
     assert result.contains_text("No Gold image changes found")

@@ -1,9 +1,13 @@
 from os import path, remove
 
+from nautilus_librarian.domain.dvc_diff_media_parser import (
+    extract_deleted_files_from_dvc_diff,
+)
 from nautilus_librarian.domain.dvc_services_api import DvcServicesApi
 from nautilus_librarian.domain.file_locator import file_locator
-from nautilus_librarian.mods.dvc.domain.utils import extract_deleted_files_from_dvc_diff
-from nautilus_librarian.mods.namecodes.domain.filename import Filename
+from nautilus_librarian.mods.namecodes.domain.media_library_filename import (
+    MediaLibraryFilename,
+)
 from nautilus_librarian.typer.commands.workflows.actions.action_result import (
     ActionResult,
     Message,
@@ -25,11 +29,11 @@ def remove_base_pointer_and_file_if_exists(base_filename, dvc_services):
         remove(base_filename)
 
 
-def delete_base_images(dvc_diff, git_repo_dir):
+def delete_base_images_action(dvc_diff, git_repo_dir):
     """
     It deletes previously generated base images when gold images are deleted
     """
-    filenames = extract_deleted_files_from_dvc_diff(dvc_diff, only_basename=False)
+    filenames = extract_deleted_files_from_dvc_diff(dvc_diff)
 
     if dvc_diff == "{}" or filenames == []:
         return ActionResult(
@@ -40,7 +44,7 @@ def delete_base_images(dvc_diff, git_repo_dir):
     dvc_services = DvcServicesApi(git_repo_dir)
 
     for filename in filenames:
-        gold_filename = Filename(filename)
+        gold_filename = MediaLibraryFilename(filename)
         base_filename = get_base_image_absolute_path_from_gold(
             git_repo_dir, gold_filename
         )

@@ -46,6 +46,9 @@ class DvcApiWrapper:
         DvcApiWrapper.git_init(path)
         DvcApiWrapper.dvc_init(path, no_scm)
 
+    def get_repo_path(self):
+        return self.repo_path
+
     # Native API methods
 
     def get_url(self, path, repo=None, rev=None, remote=None):

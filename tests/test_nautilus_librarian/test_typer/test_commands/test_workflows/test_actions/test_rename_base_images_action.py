@@ -2,14 +2,14 @@ from os import makedirs, path
 from shutil import copy
 
 from test_nautilus_librarian.test_typer.test_commands.test_workflows.test_gold_images_processing import (
-    create_initial_state,
+    create_initial_state_with_sample_base_image,
 )
 from test_nautilus_librarian.utils import compact_json
 
 from nautilus_librarian.mods.console.domain.utils import execute_shell_command
 from nautilus_librarian.typer.commands.workflows.actions.action_result import ResultCode
 from nautilus_librarian.typer.commands.workflows.actions.rename_base_images_action import (
-    rename_base_images,
+    rename_base_images_action,
 )
 
 
@@ -44,7 +44,7 @@ def given_a_diff_structure_with_a_renamed_gold_image_it_should_rename_the_corres
         ],
     }
 
-    create_initial_state(
+    create_initial_state_with_sample_base_image(
         temp_git_dir,
         temp_dvc_local_remote_storage_dir,
         sample_gold_image_absolute_path,
@@ -61,11 +61,10 @@ def given_a_diff_structure_with_a_renamed_gold_image_it_should_rename_the_corres
         cwd=temp_git_dir,
     )
 
-    result = rename_base_images(
+    result = rename_base_images_action(
         compact_json(dvc_diff_with_renamed_gold_image), temp_git_dir
     )
 
-    print(f"{result.messages[0]}")
     assert result.code == ResultCode.CONTINUE
     assert path.exists(f"{temp_git_dir}/data/000002/52/000002-52.600.2.tif")
     assert result.contains_text("successfully renamed to")
@@ -94,7 +93,7 @@ def given_a_diff_structure_with_a_renamed_not_gold_image_it_should_not_rename_an
         ],
     }
 
-    create_initial_state(
+    create_initial_state_with_sample_base_image(
         temp_git_dir,
         temp_dvc_local_remote_storage_dir,
         sample_gold_image_absolute_path,
@@ -102,7 +101,7 @@ def given_a_diff_structure_with_a_renamed_not_gold_image_it_should_not_rename_an
         git_user,
     )
 
-    result = rename_base_images(
+    result = rename_base_images_action(
         compact_json(dvc_diff_with_renamed_base_image), temp_git_dir
     )
 
