@@ -8,13 +8,8 @@ class GitRepo:
         self.repo = Repo(git_repo_dir)
         self.git_user = git_user
         self.gnupghome = gnupghome
-        self.set_git_global_user_config(git_user)
 
-    # def add(self, filepaths):
-
-    # def commit(self, commit_message)
-
-    def commit(self, filepaths, commit_message):
+    def commit(self, filepaths, commit_message: str, env: dict[str, str] = {}):
         """
         It creates a commit.
         Filepath is an object with four optional file lists:
@@ -39,12 +34,13 @@ class GitRepo:
         # https://github.com/gitpython-developers/GitPython/issues/580#issuecomment-282474086
         self.repo.index.write()
 
+        # Unsigned commit
         if self.git_user.signingkey is None:
-            # Unsigned commit
-            return self.repo.git.commit("-m", f"{commit_message}")
+            with self.repo.git.custom_environment(**env):
+                return self.repo.git.commit("-m", f"{commit_message}")
 
         # Signed commit
-        with self.repo.git.custom_environment(GNUPGHOME=self.gnupghome):
+        with self.repo.git.custom_environment(GNUPGHOME=self.gnupghome, **env):
             return self.repo.git.commit(
                 "-S",
                 f"--gpg-sign={self.git_user.signingkey}",
