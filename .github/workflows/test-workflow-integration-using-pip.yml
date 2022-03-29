@@ -28,7 +28,7 @@ jobs:
         run: pip3 install wheel
 
       - name: Setup Nautilus Librarian
-        run: pip3 install wheel nautilus-librarian
+        run: pip3 install nautilus-librarian
 
       - name: Invoke Librarian
         run: nautilus-librarian --help
