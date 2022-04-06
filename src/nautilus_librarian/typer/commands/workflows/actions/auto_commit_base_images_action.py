@@ -67,7 +67,7 @@ def get_renamed_gold_images_filenames_from_dvc_diff(
 
 
 def commit_new_and_modified_base_image(
-    git_repo_dir, base_img_relative_path, gnupghome, git_user, is_new=True
+    git_repo_dir, base_img_relative_path, gnupghome, git_user: GitUser, is_new=True
 ):
 
     repo = GitRepo(git_repo_dir, git_user, gnupghome)
@@ -79,6 +79,10 @@ def commit_new_and_modified_base_image(
     return repo.commit(
         {"added": files_to_commit},
         commit_message=f"feat: {verb} base image: {os.path.basename(base_img_relative_path)}",
+        env={
+            "GIT_COMMITTER_NAME": git_user.name,
+            "GIT_COMMITTER_EMAIL": git_user.email,
+        },
     )
 
 
@@ -91,6 +95,10 @@ def commit_deleted_base_image(
     return repo.commit(
         {"deleted": dvc_services.get_files_to_commit(base_img_relative_path)},
         commit_message=f"feat: deleted base image: {os.path.basename(base_img_relative_path)}",
+        env={
+            "GIT_COMMITTER_NAME": git_user.name,
+            "GIT_COMMITTER_EMAIL": git_user.email,
+        },
     )
 
 
@@ -115,6 +123,10 @@ def commit_renamed_base_image(
             f"feat: renamed base image: {os.path.basename(old_base_img_relative_path)}"
             f" -> {os.path.basename(new_base_img_relative_path)}"
         ),
+        env={
+            "GIT_COMMITTER_NAME": git_user.name,
+            "GIT_COMMITTER_EMAIL": git_user.email,
+        },
     )
 
 

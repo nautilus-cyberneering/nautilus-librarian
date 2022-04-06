@@ -2,11 +2,6 @@ import typer
 
 from nautilus_librarian.domain.dvc_services_api import DvcServicesApi
 from nautilus_librarian.mods.console.domain.utils import get_current_working_directory
-from nautilus_librarian.mods.git.domain.config import (
-    default_git_user_email,
-    default_git_user_name,
-    default_git_user_signingkey,
-)
 from nautilus_librarian.mods.git.domain.git_user import GitUser
 from nautilus_librarian.typer.commands.workflows.actions.action_result import ResultCode
 from nautilus_librarian.typer.commands.workflows.actions.auto_commit_base_images_action import (
@@ -62,15 +57,9 @@ def get_dvc_diff_if_not_provided(dvc_diff, repo_dir, previous_ref, current_ref):
 
 @app.command("gold-images-processing")
 def gold_images_processing(
-    git_user_name: str = typer.Argument(
-        default_git_user_name, envvar="NL_GIT_USER_NAME"
-    ),
-    git_user_email: str = typer.Argument(
-        default_git_user_email, envvar="NL_GIT_USER_EMAIL"
-    ),
-    git_user_signingkey: str = typer.Argument(
-        default_git_user_signingkey, envvar="NL_GIT_USER_SIGNINGKEY"
-    ),
+    git_user_name: str = typer.Option(None, envvar="NL_GIT_USER_NAME"),
+    git_user_email: str = typer.Option(None, envvar="NL_GIT_USER_EMAIL"),
+    git_user_signingkey: str = typer.Option(None, envvar="NL_GIT_USER_SIGNINGKEY"),
     git_repo_dir: str = typer.Option(
         get_current_working_directory, envvar="NL_GIT_REPO_DIR"
     ),
