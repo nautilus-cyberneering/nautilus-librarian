@@ -311,13 +311,10 @@ def given_a_dvc_diff_object_with_a_renamed_gold_image_it_should_commit_the_renam
     )
 
     expected_commit_stats_files = {
-        "data/000001/52/.gitignore": {"insertions": 0, "deletions": 1, "lines": 1},
-        "data/000002/52/.gitignore": {"insertions": 3, "deletions": 0, "lines": 3},
-        "data/{000001/52/000001-52.600.2.tif.dvc => 000002/52/000002-52.600.2.tif.dvc}": {
-            "insertions": 1,
-            "deletions": 1,
-            "lines": 2,
-        },
+        "data/000001/52/.gitignore": {"deletions": 1, "insertions": 0, "lines": 1},
+        "data/000001/52/000001-52.600.2.tif.dvc": {"deletions": 4, "insertions": 0, 'lines': 4},
+        "data/000002/52/.gitignore": {"deletions": 0, "insertions": 3, "lines": 3},
+        "data/000002/52/000002-52.600.2.tif.dvc": {"deletions": 0, "insertions": 4, "lines": 4}
     }
     assert_commit_content(commit, expected_commit_stats_files, git_user)
     assert_commit_signingkey(commit, temp_git_dir, git_user)
